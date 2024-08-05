@@ -12,4 +12,4 @@ if (!$conn) {
 } else {
   // echo "<h1> connect success!! </h1>";
 }
-date_default_timezone_set('Asia/Bangkok');
+// date_default_timezone_set('Asia/Bangkok');
