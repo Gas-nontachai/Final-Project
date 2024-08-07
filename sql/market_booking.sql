@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2024 at 07:15 AM
+-- Generation Time: Aug 07, 2024 at 05:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -67,6 +67,7 @@ CREATE TABLE `booking` (
   `product_type` int(6) UNSIGNED NOT NULL COMMENT 'ประเภทสินค้า',
   `sub_product_type` varchar(45) NOT NULL,
   `slip_img` varchar(45) DEFAULT NULL,
+  `book_lock_number` varchar(45) DEFAULT NULL,
   `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -74,10 +75,10 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `booking_date`) VALUES
-(0000000003, 000004, 2, 'PerDay', 016, 1, 50, 3, '21', 'slip_20240805_090841_66b0342990296.jpg', '2024-08-05 02:08:41'),
-(0000000004, 000004, 6, 'PerMonth', 022, 1, 100, 4, '25', NULL, '2024-08-07 05:12:03'),
-(0000000005, 000004, 2, 'PerDay', 016, 3, 150, 3, '22', 'slip_20240805_102106_66b045222fbba.jpg', '2024-08-05 03:21:06');
+INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `book_lock_number`, `booking_date`) VALUES
+(0000000003, 000004, 4, 'PerDay', 016, 1, 50, 3, '21', 'slip_20240805_090841_66b0342990296.jpg', 'A1', '2024-08-07 09:26:07'),
+(0000000004, 000004, 6, 'PerMonth', 022, 1, 100, 4, '25', NULL, NULL, '2024-08-07 05:12:03'),
+(0000000005, 000004, 4, 'PerDay', 016, 3, 150, 3, '22', 'slip_20240805_102106_66b045222fbba.jpg', 'A2, A3, A4', '2024-08-07 09:26:33');
 
 -- --------------------------------------------------------
 
@@ -141,10 +142,10 @@ CREATE TABLE `locks` (
 --
 
 INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `available`) VALUES
-(257, 'A1', 016, NULL, 0),
-(258, 'A2', 016, NULL, 0),
-(259, 'A3', 016, NULL, 0),
-(260, 'A4', 016, NULL, 0),
+(257, 'A1', 016, 0000000003, 1),
+(258, 'A2', 016, 0000000005, 1),
+(259, 'A3', 016, 0000000005, 1),
+(260, 'A4', 016, 0000000005, 1),
 (261, 'A5', 016, NULL, 0),
 (262, 'A6', 016, NULL, 0),
 (263, 'A7', 016, NULL, 0),
@@ -325,7 +326,8 @@ CREATE TABLE `tbl_user` (
 INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `email`, `username`, `password`, `userrole`, `shop_name`) VALUES
 (000001, 'นาย', 'Nontachai', 'Prosri', '0885639233', 'bigboy2546.77@gmail.com', 'GGas', 'nontachai01', 1, 'GGasShop'),
 (000003, 'นาง', 'Kanokwan', 'Phakdee', '0888888888', 'Kanokwan.ph@gmail.com', 'Kanok', 'kanok123', 1, 'KanokShop'),
-(000004, 'นาย', 'Nontachai', 'Prosri', '0889999999', 'bigboy2546.77@gmail.com', 'GGas2', 'nontachai01', 0, 'GGasShop');
+(000004, 'นาย', 'Nontachai', 'Prosri', '0889999999', 'bigboy2546.77@gmail.com', 'GGas2', 'nontachai01', 0, 'GGasShop'),
+(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin');
 
 -- --------------------------------------------------------
 
@@ -521,7 +523,7 @@ ALTER TABLE `tbl_payments`
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=5;
+  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `zone_detail`

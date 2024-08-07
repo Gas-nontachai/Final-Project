@@ -380,20 +380,18 @@ if (isset($_GET['category_id'])) {
                                             case 1:
                                                 echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    <button class='btn btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='" . $row["booking_id"] . "'>ชำระเงิน</button>
-                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
                                     </td>";
                                                 break;
                                             case 2:
                                                 echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                     </td>";
                                                 break;
                                             case 3:
                                                 echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                     </td>";
                                                 break;
                                             case 4:
@@ -471,20 +469,6 @@ if (isset($_GET['category_id'])) {
                             </div>
                         </div>
                     </div>
-                    <!-- Confirm Modal -->
-                    <div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="ConfirmModalLabel"><strong>ยืนัยนการจอง/ปรับเปลี่ยนสถานะ</strong></h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <strong></strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {
@@ -523,6 +507,7 @@ if (isset($_GET['category_id'])) {
                                                     <p><strong>จำนวนเงินการจอง:</strong> ${data.booking_amount}</p>
                                                     <p><strong>สถานะ:</strong> ${data.status}</p>
                                                     <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
+                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number}</p>
                                                 `;
                                             if (data.slip_img) {
                                                 content += `<img src="../asset./slip_img./${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
@@ -544,6 +529,9 @@ if (isset($_GET['category_id'])) {
                                                     case 5:
                                                         content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button>`;
                                                         break;
+                                                    case 6:
+                                                        content += `<strong style="color: red;">ยกเลิกเรียบร้อยแล้ว</strong>`;
+                                                        break;
                                                     default:
                                                         content += `<p>ไม่ทราบสถานะ</p>`;
                                                         break;
@@ -559,6 +547,103 @@ if (isset($_GET['category_id'])) {
                             }
                         });
                     </script>
+                    <!-- Confirm Modal -->
+                    <div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="ConfirmModalLabel"><strong>ยืนยันการจอง/ปรับเปลี่ยนสถานะ</strong></h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="updateForm" method="POST" action="update_locks.php">
+                                        <input type="hidden" id="bookingId" name="booking_id" value="">
+                                        <input type="hidden" id="zoneId" name="zone_id" value="">
+                                        <div class="mb-3">
+                                            <label for="zoneSelect" class="form-label">เลือกโซน</label>
+                                            <select class="form-select" id="zoneSelect" name="zone_id">
+                                                <option value="" selected>กรุณาเลือกโซน</option>
+                                                <?php
+                                                include('connect.php'); // รวมการเชื่อมต่อฐานข้อมูล
+
+                                                $sql = "SELECT * FROM zone_detail";
+                                                $result = $conn->query($sql);
+
+                                                if ($result->num_rows > 0) {
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        echo '<option value="' . htmlspecialchars($row['zone_id']) . '">' . htmlspecialchars($row['zone_name']) . '</option>';
+                                                    }
+                                                } else {
+                                                    echo '<option value="">ไม่มีข้อมูล</option>';
+                                                }
+
+                                                $conn->close();
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="display_locks">
+                                            <!-- ข้อมูลจะถูกแสดงที่นี่ -->
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3">อัพเดตข้อมูล</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            $('#zoneSelect').on('change', function() {
+                                var selectedZone = $(this).val();
+
+                                if (selectedZone) {
+                                    $.ajax({
+                                        url: 'fetch_locks.php',
+                                        method: 'POST',
+                                        data: {
+                                            zone_id: selectedZone
+                                        },
+                                        success: function(response) {
+                                            $('.display_locks').html(response);
+                                        },
+                                        error: function() {
+                                            $('.display_locks').html('<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>');
+                                        }
+                                    });
+                                } else {
+                                    $('.display_locks').html('กรุณาเลือกโซน');
+                                }
+                            });
+
+                            $(document).on('click', '.lock-btn', function() {
+                                var checkbox = $(this).siblings('.lock-checkbox');
+                                var isChecked = checkbox.prop('checked');
+                                checkbox.prop('checked', !isChecked);
+                                $(this).toggleClass('active', !isChecked);
+                            });
+
+                            // Event listener for modal button to set hidden fields
+                            $('#ConfirmModal').on('show.bs.modal', function(event) {
+                                var button = $(event.relatedTarget); // Button that triggered the modal
+                                var bookingId = button.data('id'); // Extract info from data-* attributes
+                                var zoneId = button.data('zone-id'); // Extract info from data-* attributes (if applicable)
+                                var modal = $(this);
+                                modal.find('#bookingId').val(bookingId);
+                                modal.find('#zoneId').val(zoneId);
+                            });
+                        });
+                    </script>
+
+                    <style>
+                        .lock-btn.active {
+                            background-color: #007bff;
+                            color: white;
+                            border-color: #007bff;
+                        }
+                    </style>
+
+
 
     </nav>
 </body>
