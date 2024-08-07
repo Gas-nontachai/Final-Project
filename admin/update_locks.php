@@ -34,22 +34,43 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
         }
         $lock_names_str = implode(', ', $lock_names);
 
-        // Update booking status and lock names
-        $sql_booking = "UPDATE booking SET booking_status = 4, book_lock_number = ? WHERE booking_id = ?";
-        $stmt_booking = $conn->prepare($sql_booking);
-        $stmt_booking->bind_param('si', $lock_names_str, $booking_id);
-        $stmt_booking->execute();
+        // Fetch booking type and booking date for calculating expiration date
+        $sql_booking_info = "SELECT booking_type, booking_date FROM booking WHERE booking_id = ?";
+        $stmt_booking_info = $conn->prepare($sql_booking_info);
+        $stmt_booking_info->bind_param('i', $booking_id);
+        $stmt_booking_info->execute();
+        $result_booking_info = $stmt_booking_info->get_result();
 
-        // Commit the transaction
-        $conn->commit();
-        
-        // Redirect to a success page or show a success message
-        echo '<script>
-                alert("ทำการปรับเปลี่ยนสถานะเรียบร้อย");
-                window.location.href = "./confirm_reserve.php";
-              </script>';
-        exit();
-        
+        if ($row_booking_info = $result_booking_info->fetch_assoc()) {
+            $booking_type = $row_booking_info['booking_type'];
+            $booking_date = $row_booking_info['booking_date'];
+            
+            // Calculate expiration date
+            if ($booking_type == 'PerDay') {
+                $expiration_date = date('Y-m-d 23:59:58');
+            } elseif ($booking_type == 'PerMonth') {
+                $expiration_date = date('Y-m-d H:i:s', strtotime($booking_date . ' +1 month'));
+            }
+            
+            // Update booking status, lock names, and expiration date
+            $sql_booking = "UPDATE booking SET booking_status = 4, book_lock_number = ?, expiration_date = ? WHERE booking_id = ?";
+            $stmt_booking = $conn->prepare($sql_booking);
+            $stmt_booking->bind_param('ssi', $lock_names_str, $expiration_date, $booking_id);
+            $stmt_booking->execute();
+            
+            // Commit the transaction
+            $conn->commit();
+            
+            // Redirect to a success page or show a success message
+            echo '<script>
+                    alert("ทำการปรับเปลี่ยนสถานะเรียบร้อย");
+                    window.location.href = "./confirm_reserve.php";
+                  </script>';
+            exit();
+        } else {
+            throw new Exception("Booking not found.");
+        }
+
     } catch (Exception $e) {
         // Rollback the transaction on error
         $conn->rollback();
@@ -59,7 +80,12 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
     } finally {
         $stmt_locks->close();
         $stmt_lock_names->close();
-        $stmt_booking->close();
+        if (isset($stmt_booking_info)) {
+            $stmt_booking_info->close();
+        }
+        if (isset($stmt_booking)) {
+            $stmt_booking->close();
+        }
         $conn->close();
     }
 } else {
