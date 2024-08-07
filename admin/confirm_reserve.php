@@ -316,7 +316,7 @@ if (isset($_GET['category_id'])) {
                                 $offset = ($currentPage - 1) * $recordsPerPage;
 
                                 // Base SQL query
-                                $sql = "SELECT BK.booking_id, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BS.status, BK.booking_date 
+                                $sql = "SELECT BK.booking_id, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BS.status, BK.booking_date 
                                         FROM booking AS BK 
                                         INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                                         INNER JOIN category AS C ON BK.product_type = C.id_category
@@ -375,11 +375,47 @@ if (isset($_GET['category_id'])) {
                             <td>" . htmlspecialchars($row["booking_type"]) . "</td>
                             <td>" . htmlspecialchars($row["booking_amount"]) . "</td>
                             <td>" . htmlspecialchars($row["status"]) . "</td>
-                            <td>" . $booking_date  . "</td>
-                            <td>
-                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . htmlspecialchars($row["booking_id"]) . "'>ดู</button>
-                            </td>
-                          </tr>";
+                            <td>" . $booking_date  . "</td>";
+                                        switch ($row["booking_status"]) {
+                                            case 1:
+                                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                    <button class='btn btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='" . $row["booking_id"] . "'>ชำระเงิน</button>
+                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    </td>";
+                                                break;
+                                            case 2:
+                                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    </td>";
+                                                break;
+                                            case 3:
+                                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    </td>";
+                                                break;
+                                            case 4:
+                                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                    </td>";
+                                                break;
+                                            case 5:
+                                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                    <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    </td>";
+                                                break;
+                                            case 6:
+                                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                    </td>";
+                                                break;
+                                            default:
+                                                echo "ไม่ทราบสถานะ";
+                                        }
+                                        echo "</tr>";
                                     }
 
                                     echo "</tbody></table>";
@@ -435,6 +471,20 @@ if (isset($_GET['category_id'])) {
                             </div>
                         </div>
                     </div>
+                    <!-- Confirm Modal -->
+                    <div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="ConfirmModalLabel"><strong>ยืนัยนการจอง/ปรับเปลี่ยนสถานะ</strong></h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {
@@ -464,16 +514,16 @@ if (isset($_GET['category_id'])) {
                                             content = `<p>${data.error}</p>`;
                                         } else {
                                             content = `
-                        <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                        <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
-                        <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
-                        <p><strong>ชื่อหมวดหมู่:</strong> ${data.cat_name}</p>
-                        <p><strong>ชื่อหมวดหมู่ย่อย:</strong> ${data.sub_cat_name}</p>
-                        <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                        <p><strong>จำนวนเงินการจอง:</strong> ${data.booking_amount}</p>
-                        <p><strong>สถานะ:</strong> ${data.status}</p>
-                        <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                    `;
+                                                    <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
+                                                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
+                                                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
+                                                    <p><strong>ชื่อหมวดหมู่:</strong> ${data.cat_name}</p>
+                                                    <p><strong>ชื่อหมวดหมู่ย่อย:</strong> ${data.sub_cat_name}</p>
+                                                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
+                                                    <p><strong>จำนวนเงินการจอง:</strong> ${data.booking_amount}</p>
+                                                    <p><strong>สถานะ:</strong> ${data.status}</p>
+                                                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
+                                                `;
                                             if (data.slip_img) {
                                                 content += `<img src="../asset./slip_img./${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
                                                 content += `<button class="btn btn-success">ยืนยันการชำระเงิน</button>`;
@@ -492,7 +542,7 @@ if (isset($_GET['category_id'])) {
                                                         content += `<button class="btn btn-success">ระ</button>`;
                                                         break;
                                                     case 5:
-                                                        content += `<button class="btn btn-success">เงิน</button>`;
+                                                        content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button>`;
                                                         break;
                                                     default:
                                                         content += `<p>ไม่ทราบสถานะ</p>`;
