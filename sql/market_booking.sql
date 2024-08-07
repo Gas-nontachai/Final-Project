@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2024 at 08:00 AM
+-- Generation Time: Aug 07, 2024 at 07:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -30,13 +30,25 @@ SET time_zone = "+00:00";
 CREATE TABLE `booked` (
   `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว',
   `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL COMMENT 'รหัสการจอง',
-  `booked_lock_number` varchar(10) NOT NULL COMMENT 'เลขล็อคที่จะได้',
-  `zone_id` int(3) UNSIGNED NOT NULL COMMENT 'รหัสประเภทโซน',
+  `booking_amount` varchar(45) NOT NULL,
+  `total_price` varchar(45) NOT NULL,
+  `product_type` varchar(45) NOT NULL,
+  `sub_product_type` varchar(45) NOT NULL,
   `member_id` int(6) UNSIGNED NOT NULL COMMENT 'รหัสลูกค้า',
-  `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง',
   `booking_status` int(3) UNSIGNED NOT NULL COMMENT 'สถานะการจอง',
-  `logadmin` varchar(20) NOT NULL COMMENT 'log'
+  `booking_type` varchar(45) NOT NULL,
+  `zone_id` int(3) UNSIGNED NOT NULL COMMENT 'รหัสประเภทโซน',
+  `slip_img` varchar(20) NOT NULL COMMENT 'log',
+  `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง',
+  `booked_lock_number` varchar(10) DEFAULT NULL COMMENT 'เลขล็อคที่จะได้'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `booked`
+--
+
+INSERT INTO `booked` (`id_booked`, `booking_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `slip_img`, `booking_date`, `booked_lock_number`) VALUES
+(0000000001, 0000000004, '1', '100', '4', '25', 4, 6, 'PerMonth', 22, '', '2024-08-07 05:12:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -63,9 +75,9 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `booking_date`) VALUES
-(0000000003, 000004, 1, 'PerDay', 016, 1, 50, 3, '21', NULL, '2024-07-31 17:19:34'),
-(0000000004, 000004, 5, 'PerMonth', 022, 1, 100, 4, '25', NULL, '2024-08-03 05:45:32'),
-(0000000005, 000004, 1, 'PerDay', 016, 3, 150, 3, '22', NULL, '2024-08-03 10:50:41');
+(0000000003, 000004, 2, 'PerDay', 016, 1, 50, 3, '21', 'slip_20240805_090841_66b0342990296.jpg', '2024-08-05 02:08:41'),
+(0000000004, 000004, 6, 'PerMonth', 022, 1, 100, 4, '25', NULL, '2024-08-07 05:12:03'),
+(0000000005, 000004, 2, 'PerDay', 016, 3, 150, 3, '22', 'slip_20240805_102106_66b045222fbba.jpg', '2024-08-05 03:21:06');
 
 -- --------------------------------------------------------
 
@@ -455,7 +467,7 @@ ALTER TABLE `zone_detail`
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
-  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว';
+  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `booking`
