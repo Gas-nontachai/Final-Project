@@ -22,8 +22,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     WHERE booking_id = '$booking_id'";
 
             if (mysqli_query($conn, $sql)) {
-                echo '<script>alert("อัปโหลดสลิปสำเร็จ กำลังรอการตรวจสอบ"); window.location.href = "index.php";</script>';
-                exit();
+                echo '<!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>อัปโหลดสลิปสำเร็จ กำลังรอการตรวจสอบ</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                </head>
+                <body>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "อัปโหลดสลิปสำเร็จ กำลังรอการตรวจสอบ",
+                                icon: "success",
+                                timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                                }
+                            });
+                        });
+                    </script>
+                </body>
+                </html>';                exit();
             } else {
                 echo "ข้อผิดพลาด: ไม่สามารถดำเนินการตามคำสั่ง SQL ได้ " . mysqli_error($conn);
             }

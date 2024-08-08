@@ -66,6 +66,7 @@ if (isset($_GET['category_id'])) {
     <title>หน้าแรก</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -73,17 +74,17 @@ if (isset($_GET['category_id'])) {
     <?php
     include('./user_nav.php');
     ?>
-        <!-- Display -->
-        <div class="container mt-4">
-            <div class="container ">
-                <div class="row d-flex justify-content-center align-item-center">
-                    <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">
-                        <?php
-                        $sql = "SELECT * FROM zone_detail";
-                        if ($result = $conn->query($sql)) {
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '
+    <!-- Display -->
+    <div class="container mt-4">
+        <div class="container ">
+            <div class="row d-flex justify-content-center align-item-center">
+                <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">
+                    <?php
+                    $sql = "SELECT * FROM zone_detail";
+                    if ($result = $conn->query($sql)) {
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo '
                                     <div class="">
                                        <div class="row ">
                                             <div class="col">
@@ -100,81 +101,81 @@ if (isset($_GET['category_id'])) {
                                         </div>
                                     </div>
                                     ';
-                                    $sql2 = "SELECT * FROM locks WHERE zone_id = " . $row["zone_id"];
-                                    if ($result2 = $conn->query($sql2)) {
-                                        if ($result2->num_rows > 0) {
-                                            echo '<div class="d-flex flex-wrap container-md">';
-                                            while ($row2 = $result2->fetch_assoc()) {
-                                                echo '<div class="mx-2">';
-                                                echo '<p>';
-                                                if ($row2["available"] == 0) {
-                                                    echo '
+                                $sql2 = "SELECT * FROM locks WHERE zone_id = " . $row["zone_id"];
+                                if ($result2 = $conn->query($sql2)) {
+                                    if ($result2->num_rows > 0) {
+                                        echo '<div class="d-flex flex-wrap container-md">';
+                                        while ($row2 = $result2->fetch_assoc()) {
+                                            echo '<div class="mx-2">';
+                                            echo '<p>';
+                                            if ($row2["available"] == 0) {
+                                                echo '
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
                                                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                                                     </svg>';
-                                                } else if ($row2["available"] == 1) {
-                                                    echo '
+                                            } else if ($row2["available"] == 1) {
+                                                echo '
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
                                                     <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
                                                 </svg>';
-                                                }
-                                                echo '</p>';
-                                                echo '</div>';
                                             }
+                                            echo '</p>';
                                             echo '</div>';
-                                        } else {
-                                            echo "<p>ยังไม่มีการสร้างข้อมูลพื้นที่การขาย</p>";
                                         }
-                                        $result2->free();
+                                        echo '</div>';
                                     } else {
-                                        echo "<p>Error in nested query: " . $conn->error . "</p>";
+                                        echo "<p>ยังไม่มีการสร้างข้อมูลพื้นที่การขาย</p>";
                                     }
+                                    $result2->free();
+                                } else {
+                                    echo "<p>Error in nested query: " . $conn->error . "</p>";
                                 }
-                            } else {
-                                echo "<p><strong>ยังไม่มีการสร้างข้อมูลพื้นที่การขาย</strong></p>";
                             }
-                            $result->free();
                         } else {
-                            echo "<p>Error in main query: " . $conn->error . "</p>";
+                            echo "<p><strong>ยังไม่มีการสร้างข้อมูลพื้นที่การขาย</strong></p>";
                         }
-                        ?>
+                        $result->free();
+                    } else {
+                        echo "<p>Error in main query: " . $conn->error . "</p>";
+                    }
+                    ?>
+                </div>
+                <!--Avaliable--->
+                <div class="container-md d-flex justify-content-center p-2 m-2">
+                    <div class="px-2 mx-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                        </svg>
+                        <strong>ว่าง</strong>
                     </div>
-                    <!--Avaliable--->
-                    <div class="container-md d-flex justify-content-center p-2 m-2">
-                        <div class="px-2 mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
-                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                            </svg>
-                            <strong>ว่าง</strong>
-                        </div>
-                        <div class="px-2 mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
-                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z" />
-                            </svg>
-                            <strong>ไม่ว่าง</strong>
-                        </div>
+                    <div class="px-2 mx-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
+                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z" />
+                        </svg>
+                        <strong>ไม่ว่าง</strong>
                     </div>
-                    <!-- BTN -->
-                    <div class="col-12 d-flex justify-content-evenly px-3">
-                        <button class="btn btn-success m-2" type="button" data-bs-toggle="modal" data-bs-target="#ReserveModal">
-                            จองพื้นที่การขาย
-                        </button>
-                    </div>
+                </div>
+                <!-- BTN -->
+                <div class="col-12 d-flex justify-content-evenly px-3">
+                    <button class="btn btn-success m-2" type="button" data-bs-toggle="modal" data-bs-target="#ReserveModal">
+                        จองพื้นที่การขาย
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
 
-        <!--Dispaly-->
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active mt-2 mx-2 p-2 border" id="categort">
-                <div>
-                    <h1>คำขอจองพื้นที่</h1>
-                </div>
-                <div class="mt-2">
-                    <?php
-                    // Assuming you have a connection to your database in $conn
-                    $sql = "SELECT BK.booking_id, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount , BK.booking_status , BK.slip_img, BS.status, BK.booking_date ,BK.total_price
+    <!--Dispaly-->
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active mt-2 mx-2 p-2 border" id="categort">
+            <div>
+                <h1>คำขอจองพื้นที่</h1>
+            </div>
+            <div class="mt-2">
+                <?php
+                // Assuming you have a connection to your database in $conn
+                $sql = "SELECT BK.booking_id, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount , BK.booking_status , BK.slip_img, BS.status, BK.booking_date ,BK.total_price
                             FROM booking AS BK 
                             INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                             INNER JOIN category AS C ON BK.product_type = C.id_category
@@ -184,11 +185,11 @@ if (isset($_GET['category_id'])) {
                             ORDER BY booking_id 
                             ";
 
-                    $result = $conn->query($sql);
+                $result = $conn->query($sql);
 
-                    if ($result->num_rows > 0) {
-                        echo "<table class='table table-striped'>";
-                        echo "<thead>
+                if ($result->num_rows > 0) {
+                    echo "<table class='table table-striped'>";
+                    echo "<thead>
                         <tr>
                             <th>ชื่อโซน</th>
                             <th>สินค้าที่ขาย</th>
@@ -200,13 +201,13 @@ if (isset($_GET['category_id'])) {
                             <th>การกระทำ</th>
                         </tr>
                     </thead>";
-                        echo "<tbody>";
+                    echo "<tbody>";
 
-                        while ($row = $result->fetch_assoc()) {
-                            $booking_date = date("d/m/Y เวลา H:i", strtotime($row["booking_date"]));
-                            $slip_img = $row["slip_img"] ? "<img src='" . $row["slip_img"] . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
+                    while ($row = $result->fetch_assoc()) {
+                        $booking_date = date("d/m/Y เวลา H:i", strtotime($row["booking_date"]));
+                        $slip_img = $row["slip_img"] ? "<img src='" . $row["slip_img"] . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
 
-                            echo "<tr>
+                        echo "<tr>
                             <td>" . $row["zone_name"] . " (" . $row["zone_detail"] . ")</td>
                             <td>" . $row["cat_name"] . " (" . $row["sub_cat_name"] . ")</td>
                             <td>" . $row["booking_type"] . "</td>
@@ -215,136 +216,162 @@ if (isset($_GET['category_id'])) {
                             <td>" . $booking_date  . "</td>
                             <td>" . $row["total_price"]  . " บาท</td>
                             ";
-                            switch ($row["booking_status"]) {
-                                case 1:
-                                        echo " <td>
+                        switch ($row["booking_status"]) {
+                            case 1:
+                                echo "<td>
+                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $bookingId . "'>ดู</button>
+                                <button class='btn btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='" . $bookingId . "'>ชำระเงิน</button>
+                                <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                 </td>";
+                                break;
+                            case 2:
+                                echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    <button class='btn btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='" . $row["booking_id"] . "'>ชำระเงิน</button>
-                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
+                                    <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
                                     </td>";
                                 break;
-                                case 2:
-                                    echo " <td>
+                            case 3:
+                                echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
-                                    </td>";                                  break;
-                                case 3:
-                                    echo " <td>
+                                    <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                    </td>";
+                                break;
+                            case 4:
+                                echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
-                                    </td>";                                   break;
-                                case 4:
-                                    echo " <td>
+                                    </td>";
+                                break;
+                            case 5:
+                                echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    </td>";                                   break;
-                                case 5:
-                                    echo " <td>
+                                    </td>";
+                                break;
+                            case 6:
+                                echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    </td>";                                   break;
-                                case 6:
-                                    echo " <td>
-                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    </td>";                                   break;
-                                default:
-                                echo "ไม่ทราบสถานะ";                              }  
-                       echo " </tr>";
+                                    </td>";
+                                break;
+                            default:
+                                echo "ไม่ทราบสถานะ";
                         }
-
-                        echo "</tbody></table>";
-                    } else {
-                        echo "ยังไม่ได้มีการจอง";
+                        echo " </tr>";
                     }
-                    ?>
-                </div>
-            </div>
 
-        </div>
-        <!-- View Modal -->
-        <div class="modal fade" id="viewBookingModal" tabindex="-1" aria-labelledby="viewBookingModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="viewBookingModalLabel"><strong>รายละเอียดการจอง</strong></h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Content will be dynamically filled by JavaScript -->
-                    </div>
-                </div>
+                    echo "</tbody></table>";
+                } else {
+                    echo "ยังไม่ได้มีการจอง";
+                }
+                ?>
             </div>
         </div>
-
-        <!-- Pay Modal -->
-        <div class="modal fade" id="PayModal" tabindex="-1" aria-labelledby="PayModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="PayModalLabel"><strong>ชำระเงิน</strong></h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p style="color: red;"><strong>*กรุณาตรวจสอบให้แน่ใจว่าข้อมูลถูกต้อง*</strong></p>
-                        <h3><strong>ช่องทางการชำระเงินสำหรับ booking id: <span id="payModalBookingId"></span></strong></h3>
-                        <p><strong>ชื่อบัญชี บ.จองล็อค ไม่จำกัด ธนาคาร XXXXXXXXX</strong></p>
-                        <p><strong>หมายเลขบัญชี : 1212312121</strong></p>
-                        <form action="upload_slip.php" id="paymentForm" method="post" enctype="multipart/form-data">
-                            <input type="hidden" id="hiddenBookingId" name="booking_id">
-                            <div class="mt-3 border border-round p-2">
-                                <label for="formFile" class="form-label">อัพโหลดรูปภาพหลักฐานการชำระเงิน</label>
-                                <input class="form-control" type="file" id="formFile" name="receipt" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3">อัพโหลด</button>
-                            <p id="error-message" style="color: red; display: none;">กรุณาเลือกไฟล์เพื่ออัปโหลด</p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <script>
-            // JavaScript to update the modal with the booking ID
-            var payModal = document.getElementById('PayModal');
-            payModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var bookingId = button.getAttribute('data-id');
-                var modalBookingId = payModal.querySelector('#payModalBookingId');
-                modalBookingId.textContent = bookingId;
-                document.getElementById('hiddenBookingId').value = bookingId;
-            });
+            function confirmCancel(booking_id) {
+                Swal.fire({
+                    title: "คุณแน่ใจหรือไม่?",
+                    text: "คุณกำลังจะยกเลิกการจองน้า",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "ใช่, ยกเลิก!",
+                    cancelButtonText: "ยกเลิก"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // หากผู้ใช้ยืนยันการยกเลิก, รีไดเร็กต์ไปยัง cancel_booking.php พร้อม booking_id
+                        window.location.href = 'cancel_booking.php?booking_id=' + booking_id;
+                    }
+                });
+            }
         </script>
 
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const bookingId = this.getAttribute('data-id');
-                        const targetModal = this.getAttribute('data-bs-target');
+    </div>
+    <!-- View Modal -->
+    <div class="modal fade" id="viewBookingModal" tabindex="-1" aria-labelledby="viewBookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="viewBookingModalLabel"><strong>รายละเอียดการจอง</strong></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content will be dynamically filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        if (targetModal === '#viewBookingModal') {
-                            fetchBookingDetails(bookingId);
-                        }
-                    });
+    <!-- Pay Modal -->
+    <div class="modal fade" id="PayModal" tabindex="-1" aria-labelledby="PayModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="PayModalLabel"><strong>ชำระเงิน</strong></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: red;"><strong>*กรุณาตรวจสอบให้แน่ใจว่าข้อมูลถูกต้อง*</strong></p>
+                    <h3><strong>ช่องทางการชำระเงินสำหรับ booking id: <span id="payModalBookingId"></span></strong></h3>
+                    <p><strong>ชื่อบัญชี บ.จองล็อค ไม่จำกัด ธนาคาร XXXXXXXXX</strong></p>
+                    <p><strong>หมายเลขบัญชี : 1212312121</strong></p>
+                    <form action="upload_slip.php" id="paymentForm" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="hiddenBookingId" name="booking_id">
+                        <div class="mt-3 border border-round p-2">
+                            <label for="formFile" class="form-label">อัพโหลดรูปภาพหลักฐานการชำระเงิน</label>
+                            <input class="form-control" type="file" id="formFile" name="receipt" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">อัพโหลด</button>
+                        <p id="error-message" style="color: red; display: none;">กรุณาเลือกไฟล์เพื่ออัปโหลด</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to update the modal with the booking ID
+        var payModal = document.getElementById('PayModal');
+        payModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var bookingId = button.getAttribute('data-id');
+            var modalBookingId = payModal.querySelector('#payModalBookingId');
+            modalBookingId.textContent = bookingId;
+            document.getElementById('hiddenBookingId').value = bookingId;
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const bookingId = this.getAttribute('data-id');
+                    const targetModal = this.getAttribute('data-bs-target');
+
+                    if (targetModal === '#viewBookingModal') {
+                        fetchBookingDetails(bookingId);
+                    }
                 });
+            });
 
-                function fetchBookingDetails(bookingId) {
-                    fetch('fetch_booking_details.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: new URLSearchParams({
-                                'fetch_booking_details': 1,
-                                'booking_id': bookingId
-                            })
+            function fetchBookingDetails(bookingId) {
+                fetch('fetch_booking_details.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            'fetch_booking_details': 1,
+                            'booking_id': bookingId
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            let content = '';
-                            if (data.error) {
-                                content = `<p>${data.error}</p>`;
-                            } else {
-                                content = `
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        let content = '';
+                        if (data.error) {
+                            content = `<p>${data.error}</p>`;
+                        } else {
+                            content = `
                                             <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
                                             <p><strong>ชื่อโซน:</strong> ${data.zone_name} (${data.zone_detail})</p>
                                             <p><strong>สินค้าที่ขาย:</strong> ${data.cat_name} (${data.sub_cat_name})</p>
@@ -354,142 +381,142 @@ if (isset($_GET['category_id'])) {
                                             <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
                                             <p><strong>ยอดชำระเงิน: ${data.total_price} บาท</strong></p>
                                         `;
-                                if (data.slip_img) {
-                                    content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
-                                } else {
-                                    content += `<button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='${data.booking_id}'>ชำระเงิน</button>`;
-                                }
+                            if (data.slip_img) {
+                                content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
+                            } else {
+                                content += `<button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='${data.booking_id}'>ชำระเงิน</button>`;
                             }
-                            document.querySelector('#viewBookingModal .modal-body').innerHTML = content;
-                        })
-                        .catch(error => {
-                            console.error('เกิดข้อผิดพลาดในการดึงข้อมูลการจอง:', error);
-                            document.querySelector('#viewBookingModal .modal-body').innerHTML = '<p>มีข้อผิดพลาดในการดึงข้อมูลการจอง</p>';
-                        });
-                }
-            });
-        </script>
+                        }
+                        document.querySelector('#viewBookingModal .modal-body').innerHTML = content;
+                    })
+                    .catch(error => {
+                        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลการจอง:', error);
+                        document.querySelector('#viewBookingModal .modal-body').innerHTML = '<p>มีข้อผิดพลาดในการดึงข้อมูลการจอง</p>';
+                    });
+            }
+        });
+    </script>
 
 
 
 
-        <!-- Reserve Modal -->
-        <div class="modal fade" id="ReserveModal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>ReserveModal</strong></h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h1>จองพื้นที่การขาย</h1>
-                        <form action="./reserve_order.php" method="post">
-                            <div class="mb-3 row">
-                                <label for="fullname" class="col-sm-3 col-form-label">
-                                    <strong>ชื่อผู้จอง :</strong>
-                                </label>
-                                <div class="col-sm-9">
-                                    <p><strong><?php echo $fullname; ?></strong></p>
-                                </div>
+    <!-- Reserve Modal -->
+    <div class="modal fade" id="ReserveModal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>ReserveModal</strong></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h1>จองพื้นที่การขาย</h1>
+                    <form action="./reserve_order.php" method="post">
+                        <div class="mb-3 row">
+                            <label for="fullname" class="col-sm-3 col-form-label">
+                                <strong>ชื่อผู้จอง :</strong>
+                            </label>
+                            <div class="col-sm-9">
+                                <p><strong><?php echo $fullname; ?></strong></p>
                             </div>
-                            <div class="mb-3 row">
-                                <label for="shop_name" class="col-sm-3 col-form-label">
-                                    <strong>ชื่อร้าน :</strong>
-                                </label>
-                                <div class="col-sm-9">
-                                    <p><strong><?php echo $shop_name; ?></strong></p>
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="shop_name" class="col-sm-3 col-form-label">
+                                <strong>ชื่อร้าน :</strong>
+                            </label>
+                            <div class="col-sm-9">
+                                <p><strong><?php echo $shop_name; ?></strong></p>
                             </div>
-                            <div class="mb-4 row">
-                                <label for="category" class="col-sm-3 col-form-label">
-                                    <strong>ประเภทสินค้า :</strong>
-                                </label>
-                                <div class="col-sm-4">
-                                    <select name="category" id="category" class="form-select">
-                                        <option value="#">กรุณาเลือกประเภทสินค้า</option>
-                                        <?php
-                                        $sql = "SELECT * FROM category";
-                                        $result = $conn->query($sql);
+                        </div>
+                        <div class="mb-4 row">
+                            <label for="category" class="col-sm-3 col-form-label">
+                                <strong>ประเภทสินค้า :</strong>
+                            </label>
+                            <div class="col-sm-4">
+                                <select name="category" id="category" class="form-select">
+                                    <option value="#">กรุณาเลือกประเภทสินค้า</option>
+                                    <?php
+                                    $sql = "SELECT * FROM category";
+                                    $result = $conn->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="">No categories found</option>';
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
                                         }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-sm-4">
-                                    <select name="subcategory" id="subcategory" class="form-select">
-                                        <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
-                                    </select>
-                                </div>
+                                    } else {
+                                        echo '<option value="">No categories found</option>';
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <div class="mb-3 row">
-                                <label for="zone" class="col-sm-3 col-form-label">
-                                    <strong>โซน :</strong>
-                                </label>
-                                <div class="col-sm-9">
-                                    <select name="zone" id="zone" class="form-select" onchange="updatePrices()">
-                                        <option value="#">กรุณาเลือกโซน</option>
-                                        <?php
-                                        $sql = "SELECT * FROM zone_detail";
-                                        $result = $conn->query($sql);
+                            <div class="col-sm-4">
+                                <select name="subcategory" id="subcategory" class="form-select">
+                                    <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="zone" class="col-sm-3 col-form-label">
+                                <strong>โซน :</strong>
+                            </label>
+                            <div class="col-sm-9">
+                                <select name="zone" id="zone" class="form-select" onchange="updatePrices()">
+                                    <option value="#">กรุณาเลือกโซน</option>
+                                    <?php
+                                    $sql = "SELECT * FROM zone_detail";
+                                    $result = $conn->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo '<option value="' . $row['zone_id'] . '">' . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="">No categories found</option>';
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<option value="' . $row['zone_id'] . '">' . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . '</option>';
                                         }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-sm-12">
-                                    <strong id="priceDisplay">
-                                        ราคาต่อวัน: ฿ ราคาต่อเดือน: ฿
-                                    </strong>
-                                </div>
+                                    } else {
+                                        echo '<option value="">No categories found</option>';
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <div class="mb-3 row">
-                                <label for="typeReserve" class="col-sm-3 col-form-label">
-                                    <strong>จำนวน :</strong>
-                                </label>
-                                <div class="col-sm-9">
-                                    <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
-                                        <option value="PerDay">รายวัน</option>
-                                        <option value="PerMonth">รายเดือน</option>
-                                    </select>
-                                </div>
+                            <div class="col-sm-12">
+                                <strong id="priceDisplay">
+                                    ราคาต่อวัน: ฿ ราคาต่อเดือน: ฿
+                                </strong>
                             </div>
-                            <div class="mb-3 row">
-                                <label for="amount" class="col-sm-3 col-form-label">
-                                    <strong>จำนวน :</strong>
-                                </label>
-                                <div class="col-sm-9">
-                                    <input type="number" class="form-control" name="amount" id="amount" oninput="updateTotalPrice()" required>
-                                </div>
-                                <div class="col-sm-12">
-                                    <strong id="TotalPrice">
-                                        ราคาสุทธิ : ฿
-                                    </strong>
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="typeReserve" class="col-sm-3 col-form-label">
+                                <strong>จำนวน :</strong>
+                            </label>
+                            <div class="col-sm-9">
+                                <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
+                                    <option value="PerDay">รายวัน</option>
+                                    <option value="PerMonth">รายเดือน</option>
+                                </select>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <input class="btn btn-success" type="submit" name="submit" value="Submit">
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="amount" class="col-sm-3 col-form-label">
+                                <strong>จำนวน :</strong>
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" name="amount" id="amount" oninput="updateTotalPrice()" required>
                             </div>
-                        </form>
-                    </div>
+                            <div class="col-sm-12">
+                                <strong id="TotalPrice">
+                                    ราคาสุทธิ : ฿
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input class="btn btn-success" type="submit" name="submit" value="Submit">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-    </nav>
 </body>
+
 <script>
     document.getElementById('category').addEventListener('change', function() {
         var categoryId = this.value;
