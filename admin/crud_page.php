@@ -28,6 +28,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <title>จัดการพื้นที่การขาย</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -70,8 +71,10 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                                 data-bs-date="' . $row['pricePerDate'] . '"
                                                                 data-bs-month="' . $row['pricePerMonth'] . '">
                                                             แก้ไขรายละเอียด</button>                                             
-                                                                <a href="delete_zone.php?zone_id=' . $row['zone_id'] . '" class="btn btn-sm btn-danger" 
-                                                                onclick="return confirm(\'คุณแน่ใจไหมว่าจะลบโซนนี้?\')">ลบโซน</a>                                
+                                                        <a href="#" class="btn btn-sm btn-danger" 
+                                                            onclick="confirmDelete(\'' . $row['zone_id'] . '\', \'' . addslashes($row['zone_name']) . '\'); return false;">
+                                                            ลบโซน
+                                                            </a>
                                                         </div>
                                                 </div>
                                         </div>
@@ -115,6 +118,27 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         echo "<p>Error in main query: " . $conn->error . "</p>";
                     }
                     ?>
+                    <script>
+                        function confirmDelete(zoneId, zoneName) {
+                            Swal.fire({
+                                title: "คุณแน่ใจหรือไม่?",
+                                text: "คุณกำลังจะลบโซน " + zoneName + " น้า",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "ใช่, ลบเลย!",
+                                cancelButtonText: "ยกเลิก"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // หากผู้ใช้ยืนยันการลบ, รีไดเร็กต์ไปยัง delete_zone.php พร้อม zone_id
+                                    window.location.href = 'delete_zone.php?zone_id=' + zoneId;
+                                }
+                            });
+                        }
+                    </script>
+
+
                 </div>
                 <!--Avaliable--->
                 <div class="container-md d-flex justify-content-center p-2 m-2">

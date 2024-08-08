@@ -51,7 +51,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssss", $zone_name, $zone_detail, $pricePerDate, $pricePerMonth, $zone_id);
 
         if ($stmt->execute()) {
-            echo '<script>alert("Zone updated successfully!"); window.location.href = "./crud_page.php";</script>';
+            echo '<!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>อัพเดตโซนสำเร็จ</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                </head>
+                <body>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "อัพเดตโซนสำเร็จ",
+                                icon: "success",
+                                timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "./crud_page.php";
+                                }
+                            });
+                        });
+                    </script>
+                </body>
+                </html>';
         } else {
             echo "Error updating zone: " . $stmt->error;
         }

@@ -32,7 +32,33 @@ if (isset($_GET['zone_id'])) {
 
         if ($delete_zone_detail_stmt->execute()) {
             // ข้อความแจ้งเตือนว่าลบโซนสำเร็จ
-            echo '<script>alert("ลบโซนสำเร็จ!"); window.location.href = "./crud_page.php";</script>';
+            echo '<!DOCTYPE html>
+            <html lang="th">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>ลบโซนสำเร็จ</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            </head>
+            <body>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: "ลบโซนสำเร็จ",
+                            icon: "success",
+                            timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                            showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                window.location.href = "./crud_page.php";
+                            }
+                        });
+                    });
+                </script>
+            </body>
+            </html>';
         } else {
             echo json_encode(['success' => false, 'error' => $conn->error]);
         }
@@ -48,4 +74,3 @@ if (isset($_GET['zone_id'])) {
 }
 
 $conn->close();
-?>

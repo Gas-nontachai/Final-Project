@@ -46,7 +46,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        echo '<script>alert("เพิ่มโซนเรียบร้อย!"); window.location.href = "./crud_page.php";</script>';
+        // ตั้งค่าการแสดงการแจ้งเตือนด้วย SweetAlert2
+        echo '<!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>เพิ่มโซนสำเร็จ</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                </head>
+                <body>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "เพิ่มโซนสำเร็จ",
+                                icon: "success",
+                                timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "./crud_page.php";
+                                }
+                            });
+                        });
+                    </script>
+                </body>
+                </html>';
         $lock_stmt->close();
     } else {
         echo "เพิ่มโซนไม่สำเร็จ: " . $stmt->error;
