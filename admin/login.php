@@ -138,7 +138,7 @@ if (isset($_POST["submit"])) {
                 Swal.fire({
                     title: messageText,
                     icon: redirectUrl ? 'success' : 'error',
-                    timer: 1500,
+                    timer: 2000,
                     timerProgressBar: true, // แสดงแถบความก้าวหน้า
                     showConfirmButton: false, // ซ่อนปุ่ม "OK"
                 }).then((result) => {
