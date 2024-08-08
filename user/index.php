@@ -63,151 +63,16 @@ if (isset($_GET['category_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>หน้าแรก</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
-    <nav class="row g-2">
-        <!-- btn sidebar -->
-        <div class="col-12 d-flex justify-content-between px-3 py-3">
-            <div class="col-4">
-                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-window-sidebar" viewBox="0 0 16 16">
-                        <path d="M2.5 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1 .5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
-                        <path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v2H1V3a1 1 0 0 1 1-1zM1 13V6h4v8H2a1 1 0 0 1-1-1m5 1V6h9v7a1 1 0 0 1-1 1z" />
-                    </svg>
-                </button>
-                <!-- sidebar -->
-                <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-                    <div class="offcanvas-header">
-                        <h3 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"><strong>เมนูเพิ่มเติม</strong></h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body d-flex flex-column mb-3 ">
-                        <a href="#" type="button" class="btn btn-primary m-2">ประวัติการจอง</a>
-                        <a href="#" type="button" class="btn btn-primary m-2">แสดงความคิดเห็น</a>
-                    </div>
-                </div>
-            </div>
-            <!-- profile btn -->
-            <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#ProfileModal">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                </svg>
-            </button>
-            <!-- Modal -->
-            <div class="modal fade" id="ProfileModal" tabindex="-1" aria-labelledby="ProfileModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="ProfileModalLabel"><strong>โปรไฟล์ผู้ใช้งาน</strong></h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>UserID:</strong> <?php echo $user_id; ?></p>
-                            <p><strong>Username:</strong> <?php echo $username; ?></p>
-                            <p><strong>shop_name:</strong> <?php echo $shop_name; ?></p>
-                            <p><strong>ชื่อ-นามสกุล:</strong> <?php echo $fullname; ?></p>
-                            <p><strong>เบอร์โทรศัพท์:</strong> <?php echo $tel; ?></p>
-                            <p><strong>อีเมล:</strong> <?php echo $email; ?></p>
-                            <div class=" d-flex align-items-start">
-                                <p><strong>ประเภทผู้ใช้งาน:</strong> <?php echo $userrole; ?></p>
-                                <span class="question-icon mx-2" data-bs-toggle="tooltip" data-bs-placement="right" title="0 ผู้ใช้งานทั่วไป&lt;br&gt;1 แอดมิน/ผู้ดูแลระบบ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question-fill" viewBox="0 0 16 16">
-                                        <path d="M5.933.87a2.89 2.89 0 0 1 4.134 0l.622.638.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622-.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01zM7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0m1.602-2.027c.04-.534.198-.815.846-1.26.674-.475 1.05-1.09 1.05-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.7 1.7 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745.336 0 .504-.24.554-.627" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#EditModal">Edit Profile</button>
-                            <a href="./logout.php" type="button" class="btn btn-danger">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Edit Profile Modal -->
-            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="update_profile.php" method="POST">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="EditModalLabel"><strong>โปรไฟล์ผู้ใช้งาน</strong></h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>UserID:</strong> <?php echo $user_id; ?></p>
-                                <p><strong>Username:</strong> <?php echo $username; ?></p>
-                                <div class="mb-3 row">
-                                    <label for="shopname" class="col-sm-3 col-form-label"><strong>shop_name:</strong></label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="editshopname" id="editshopname" value="<?php echo $shop_name; ?>">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3 row">
-                                    <label for="fullname" class="col-sm-3 col-form-label"><strong>ชื่อ-นามสกุล:</strong></label>
-                                    <div class="col-sm-3">
-                                        <select id="prefixSelect" class="form-control" name="editprefix">
-                                            <option value="นาย">นาย</option>
-                                            <option value="นาง">นาง</option>
-                                            <option value="นางสาว">นางสาว</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control" name="editfirstname" value="<?php echo $firstname; ?>">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control" name="editlastname" value="<?php echo $lastname; ?>">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3 row">
-                                    <label for="tel" class="col-sm-3 col-form-label"><strong>เบอร์โทรศัพท์:</strong></label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="edittel" id="edittel" value="<?php echo $tel; ?>">
-                                    </div>
-                                </div>
-                                <div class="mb-3 row">
-                                    <label for="email" class="col-sm-3 col-form-label"><strong>อีเมล:</strong></label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="editemail" id="editemail" value="<?php echo $email; ?>">
-                                    </div>
-                                </div>
-
-                                <div class="d-flex align-items-start">
-                                    <p><strong>ประเภทผู้ใช้งาน:</strong> <?php echo $userrole; ?></p>
-                                    <span class="question-icon mx-2" data-bs-toggle="tooltip" data-bs-placement="right" title="0 ผู้ใช้งานทั่วไป&lt;br&gt;1 แอดมิน/ผู้ดูแลระบบ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question-fill" viewBox="0 0 16 16">
-                                            <path d="M5.933.87a2.89 2.89 0 0 1 4.134 0l.622.638.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622-.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01zM7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0m1.602-2.027c.04-.534.198-.815.846-1.26.674-.475 1.05-1.09 1.05-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.7 1.7 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745.336 0 .504-.24.554-.627" />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">อัพเดตโปรไฟล์</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- timer -->
-        <div class="col-12 d-flex justify-content-between px-3">
-            <strong>
-                <div id="time"></div>
-                <div id="#">(ระบบปิด)</div>
-            </strong>
-            <strong>
-                <div id="#">ระบบเปิดเวลา : 00:00:00</div>
-            </strong>
-        </div>
+    <!-- Nav -->
+    <?php
+    include('./user_nav.php');
+    ?>
         <!-- Display -->
         <div class="container mt-4">
             <div class="container ">

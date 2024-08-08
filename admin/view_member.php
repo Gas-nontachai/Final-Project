@@ -25,7 +25,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>ข้อมูลสมาชิก</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -36,7 +36,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     include('./admin_nav.php');
     ?>
     <!-- Display -->
-    <div class="container mt-2 p-2 border border-dark-subtle rounded overflow-auto" style="width: 60%; height: 40rem;">
+    <div class="container my-4 p-2 border border-dark-subtle rounded overflow-auto" style="width: 80%; height: 40rem;">
         <ul class="nav nav-tabs" id="myTab">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>สมาชิกในระบบ</strong> </a>
@@ -146,137 +146,6 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
-    <!-- Add Category Modal -->
-    <div class="modal fade" id="AddCatModal" tabindex="-1" aria-labelledby="AddCatModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="AddCatModalLabel"><strong>AddCatModal</strong></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h1>เพิ่ม Category และ Subcategory</h1>
-                    <form action="./add_cat.php" method="post">
-                        <div class="mb-3 row">
-                            <label for="category" class="col-sm-3 col-form-label">
-                                <strong>Category:</strong>
-                            </label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" name="category" id="category" required>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="sub_category" class="col-sm-3 col-form-label">
-                                <strong>Subcategories (แยกคำด้วยการเว้นวรรค):</strong>
-                                <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
-                            </label>
-                            <div class="col-sm-9">
-                                <textarea style="height: 200px;" class="form-control" type="text" name="sub_category" id="sub_category" required></textarea>
-                            </div>
-                        </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <input class="btn btn-success" type="submit" value="Submit">
-
-                </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- AddSubCatModal Modal -->
-    <div class="modal fade" id="AddSubCatModal" tabindex="-1" aria-labelledby="AddSubCatModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="AddSubCatModalLabel"><strong>AddSubCatModal</strong></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h1>เพิ่ม Subcategory</h1>
-                    <form action="./add_sub_cat.php" method="post">
-                        <div class="mb-3 row">
-                            <label for="category" class="col-sm-3 col-form-label">
-                                <strong>Category:</strong>
-                            </label>
-                            <div class="col-sm-9">
-                                <select name="category" id="category" class="form-select">
-                                    <?php
-                                    $sql = "SELECT * FROM category";
-                                    $result = $conn->query($sql);
-
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No categories found</option>';
-                                    }
-                                    $conn->close();
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="sub_category" class="col-sm-3 col-form-label">
-                                <strong>Subcategories (แยกคำด้วยการเว้นวรรค):</strong>
-                                <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
-                            </label>
-                            <div class="col-sm-9">
-                                <textarea style="height: 200px;" class="form-control" type="text" name="sub_category" id="sub_category" required></textarea>
-                            </div>
-                        </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <input class="btn btn-success" type="submit" value="Submit">
-
-                </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-    <!-- EDIT MODAL -->
-    <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="update_category.php" method="POST">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="EditModalLabel"><strong>Edit Zone</strong></h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h1>เพิ่ม Category และ Subcategory</h1>
-                        <input type="hidden" name="cat_id" id="zone_id">
-                        <div class="mb-3 row">
-                            <label for="zone_name" class="col-sm-3 col-form-label"><strong>Category:</strong></label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" name="cat_name" id="zone_name" required>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>Subcategories (แยกคำด้วยการเว้นวรรค):</strong></label>
-                            <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
-                            <div class="col-sm-9">
-                                <textarea style="height: 200px;" class="form-control" type="text" name="sub_cat_name" id="zone_detail" required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">อัพเดต</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var editButtons = document.querySelectorAll('.edit-btn');

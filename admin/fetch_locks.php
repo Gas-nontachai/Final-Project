@@ -18,10 +18,10 @@ if (isset($_POST['zone_id'])) {
         while ($row = $result->fetch_assoc()) {
             $isAvailable = $row['available']; // Assume available is 1 or 0
 
-            // Add class and disabled attribute based on availability
+            // เพิ่ม class และ disabled attribute ตามสถานะของล็อก
             $btnClass = $isAvailable ? 'btn-secondary' : 'btn-outline-primary';
             $btnDisabled = $isAvailable ? 'disabled' : '';
-            $btnText = $isAvailable ? htmlspecialchars($row['lock_name']): htmlspecialchars($row['lock_name']);
+            $btnText = htmlspecialchars($row['lock_name']);
 
             echo '
                 <div class="form-check">
@@ -38,3 +38,4 @@ if (isset($_POST['zone_id'])) {
     $stmt->close();
     $conn->close();
 }
+?>

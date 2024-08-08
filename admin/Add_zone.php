@@ -39,17 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $lock_name = $zone_name . $i; // You can format the lock name as needed
             $lock_stmt->bind_param("si", $lock_name, $zone_id);
             if (!$lock_stmt->execute()) {
-                echo "Error adding lock $i: " . $lock_stmt->error;
+                echo "เพิ่มล็อค $i: ไม่สำเร็จ" . $lock_stmt->error;
                 $lock_stmt->close();
                 $stmt->close();
                 exit();
             }
         }
 
-        echo '<script>alert("Add Zone successfully!"); window.location.href = "./crud_page.php";</script>';
+        echo '<script>alert("เพิ่มโซนเรียบร้อย!"); window.location.href = "./crud_page.php";</script>';
         $lock_stmt->close();
     } else {
-        echo "Error adding zone: " . $stmt->error;
+        echo "เพิ่มโซนไม่สำเร็จ: " . $stmt->error;
     }
     $stmt->close();
 }

@@ -2,15 +2,15 @@
 session_start();
 require("../condb.php");
 
-// Check if the user is logged in
+// ตรวจสอบว่าผู้ใช้ล็อกอินอยู่หรือไม่
 if (!isset($_SESSION["username"])) {
     echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
     exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and sanitize form data
-    $user_id = $_SESSION['user_id']; // Assuming user_id is stored in the session
+    // ดึงและทำความสะอาดข้อมูลฟอร์ม
+    $user_id = $_SESSION['user_id']; // สมมติว่า user_id ถูกเก็บในเซสชัน
     $shop_name = htmlspecialchars($_POST['editshopname']);
     $prefix = htmlspecialchars($_POST['editprefix']);
     $firstname = htmlspecialchars($_POST['editfirstname']);
@@ -18,13 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tel = htmlspecialchars($_POST['edittel']);
     $email = htmlspecialchars($_POST['editemail']);
 
-    // Validate input data
+    // ตรวจสอบข้อมูลที่กรอก
     if (empty($shop_name) || empty($prefix) || empty($firstname) || empty($lastname) || empty($tel) || empty($email)) {
-        echo '<script>alert("Please fill in all the fields."); window.history.back();</script>';
+        echo '<script>alert("กรุณากรอกข้อมูลให้ครบถ้วน."); window.history.back();</script>';
         exit();
     }
 
-    // Prepare the SQL statement
+    // เตรียมคำสั่ง SQL
     $sql = "UPDATE tbl_user SET 
                 shop_name = ?, 
                 prefix = ?, 
@@ -34,25 +34,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 email = ? 
             WHERE user_id = ?";
 
-    // Initialize and execute the prepared statement
+    // เริ่มต้นและดำเนินการคำสั่ง SQL ที่เตรียมไว้
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("ssssssi", $shop_name, $prefix, $firstname, $lastname, $tel, $email, $user_id);
 
         if ($stmt->execute()) {
             echo '<script>alert("อัพเดตข้อมูลแล้ว กรุณาล็อกอินใหม่"); window.location.href = "./logout.php";</script>';
         } else {
-            echo "Error updating profile: " . $stmt->error;
+            echo "ข้อผิดพลาดในการอัพเดตข้อมูลโปรไฟล์: " . $stmt->error;
         }
 
         $stmt->close();
     } else {
-        echo "Error preparing the statement: " . $conn->error;
+        echo "ข้อผิดพลาดในการเตรียมคำสั่ง: " . $conn->error;
     }
 } else {
     header("Location: ../admin/logout.php");
     exit();
 }
 
-// Close the database connection
+// ปิดการเชื่อมต่อฐานข้อมูล
 $conn->close();
 ?>

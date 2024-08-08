@@ -3,7 +3,7 @@ session_start();
 require("../condb.php");
 
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("Please log in first."); window.location.href = "./login.php";</script>';
+    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
     exit();
 }
 
@@ -30,20 +30,20 @@ if (isset($_GET['id_category'])) {
 
             if ($stmt->affected_rows > 0) {
                 $conn->commit();
-                echo '<script>alert("Category and its subcategories deleted successfully!"); window.location.href = "./manage_cat.php";</script>';
+                echo '<script>alert("ลบประเภทหลักและประเภทย่อยสำเร็จ!"); window.location.href = "./manage_cat.php";</script>';
             } else {
-                throw new Exception("Failed to delete category.");
+                throw new Exception("ลบประเภทหลักไม่สำเร็จ.");
             }
         } else {
-            throw new Exception("Failed to delete subcategories.");
+            throw new Exception("ลบประเภทย่อยไม่สำเร็จ.");
         }
     } catch (Exception $e) {
         $conn->rollback();
-        echo '<script>alert("Error: ' . $e->getMessage() . '"); window.location.href = "./manage_cat.php";</script>';
+        echo '<script>alert("เออเร่อ: ' . $e->getMessage() . '"); window.location.href = "./manage_cat.php";</script>';
     }
 
     $stmt->close();
     $conn->close();
 } else {
-    echo '<script>alert("Invalid request."); window.location.href = "./manage_cat.php";</script>';
+    echo '<script>alert("คำขอผิดพลาด."); window.location.href = "./manage_cat.php";</script>';
 }

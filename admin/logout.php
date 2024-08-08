@@ -5,6 +5,6 @@ $_SESSION = array();
 
 session_destroy();
 
-echo '<script>alert("Logout successful"); window.location.href = "../admin/login.php";</script>';
+echo '<script>alert("ออกจากระบบเรียบร้อย"); window.location.href = "../admin/login.php";</script>';
 exit();
 ?>

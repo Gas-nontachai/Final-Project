@@ -2,17 +2,17 @@
 session_start();
 require("../condb.php");
 
-// Check if form data is posted
+// ตรวจสอบว่ามีข้อมูลฟอร์มที่ถูกโพสต์หรือไม่
 if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_locks'])) {
     $booking_id = $_POST['booking_id'];
     $zone_id = $_POST['zone_id'];
-    $lock_ids = $_POST['id_locks']; // Array of selected lock IDs
+    $lock_ids = $_POST['id_locks']; // อาร์เรย์ของ ID ล็อคที่เลือก
 
-    // Start a transaction
+    // เริ่มต้นการทำธุรกรรม
     $conn->begin_transaction();
 
     try {
-        // Update the status of selected locks
+        // อัพเดทสถานะของล็อคที่เลือก
         $sql_locks = "UPDATE locks SET available = 1, booking_id = ? WHERE id_locks = ? AND zone_id = ?";
         $stmt_locks = $conn->prepare($sql_locks);
 
@@ -21,7 +21,7 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
             $stmt_locks->execute();
         }
 
-        // Get lock names for updating booking
+        // ดึงชื่อล็อคสำหรับการอัพเดทการจอง
         $sql_lock_names = "SELECT lock_name FROM locks WHERE id_locks IN (" . implode(',', array_fill(0, count($lock_ids), '?')) . ")";
         $stmt_lock_names = $conn->prepare($sql_lock_names);
         $stmt_lock_names->bind_param(str_repeat('i', count($lock_ids)), ...$lock_ids);
@@ -34,7 +34,7 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
         }
         $lock_names_str = implode(', ', $lock_names);
 
-        // Fetch booking type and booking date for calculating expiration date
+        // ดึงประเภทการจองและวันที่การจองเพื่อคำนวณวันที่หมดอายุ
         $sql_booking_info = "SELECT booking_type, booking_date FROM booking WHERE booking_id = ?";
         $stmt_booking_info = $conn->prepare($sql_booking_info);
         $stmt_booking_info->bind_param('i', $booking_id);
@@ -45,38 +45,38 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
             $booking_type = $row_booking_info['booking_type'];
             $booking_date = $row_booking_info['booking_date'];
             
-            // Calculate expiration date
+            // คำนวณวันที่หมดอายุ
             if ($booking_type == 'PerDay') {
                 $expiration_date = date('Y-m-d 23:59:58');
             } elseif ($booking_type == 'PerMonth') {
                 $expiration_date = date('Y-m-d H:i:s', strtotime($booking_date . ' +1 month'));
             }
             
-            // Update booking status, lock names, and expiration date
+            // อัพเดทสถานะการจอง ชื่อล็อค และวันที่หมดอายุ
             $sql_booking = "UPDATE booking SET booking_status = 4, book_lock_number = ?, expiration_date = ? WHERE booking_id = ?";
             $stmt_booking = $conn->prepare($sql_booking);
             $stmt_booking->bind_param('ssi', $lock_names_str, $expiration_date, $booking_id);
             $stmt_booking->execute();
             
-            // Commit the transaction
+            // คอมมิตธุรกรรม
             $conn->commit();
             
-            // Redirect to a success page or show a success message
+            // เปลี่ยนเส้นทางไปยังหน้าสำเร็จหรือแสดงข้อความสำเร็จ
             echo '<script>
                     alert("ทำการปรับเปลี่ยนสถานะเรียบร้อย");
                     window.location.href = "./confirm_reserve.php";
                   </script>';
             exit();
         } else {
-            throw new Exception("Booking not found.");
+            throw new Exception("ไม่พบการจอง.");
         }
 
     } catch (Exception $e) {
-        // Rollback the transaction on error
+        // ยกเลิกธุรกรรมหากเกิดข้อผิดพลาด
         $conn->rollback();
         
-        // Output or log the error
-        echo 'Error: ' . htmlspecialchars($e->getMessage());
+        // แสดงข้อผิดพลาดหรือบันทึกข้อผิดพลาด
+        echo 'ข้อผิดพลาด: ' . htmlspecialchars($e->getMessage());
     } finally {
         $stmt_locks->close();
         $stmt_lock_names->close();
@@ -89,6 +89,6 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
         $conn->close();
     }
 } else {
-    echo 'Invalid request: Missing data.';
+    echo 'คำขอไม่ถูกต้อง: ข้อมูลหายไป.';
 }
 ?>

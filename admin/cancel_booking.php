@@ -16,7 +16,7 @@ try {
     // อัปเดตข้อมูลใน booking
     $updateSql = "UPDATE booking SET booking_status = '6' WHERE booking_id = $booking_id";
     if (!$conn->query($updateSql)) {
-        throw new Exception("Error updating record: " . $conn->error);
+        throw new Exception("อัพเดตผิดพลาด: " . $conn->error);
     }
 
     // ดึงข้อมูลที่อัปเดตจาก booking
@@ -29,10 +29,10 @@ try {
         $insertSql = "INSERT INTO booked (booking_id, member_id, booking_status, booking_type, zone_id, booking_amount, total_price, product_type, sub_product_type, slip_img, booking_date) 
                       VALUES ('" . $row['booking_id'] . "', '" . $row['member_id'] . "', '" . $row['booking_status'] . "', '" . $row['booking_type'] . "', '" . $row['zone_id'] . "', '" . $row['booking_amount'] . "', '" . $row['total_price'] . "', '" . $row['product_type'] . "', '" . $row['sub_product_type'] . "', '" . $row['slip_img'] . "', '" . $row['booking_date'] . "')";
         if (!$conn->query($insertSql)) {
-            throw new Exception("Error inserting record: " . $conn->error);
+            throw new Exception("ย้ายข้อมูลผิดพลาด: " . $conn->error);
         }
     } else {
-        throw new Exception("No record found with booking_id: " . $booking_id);
+        throw new Exception("ไม่มีผลการค้นหาจากรหัสการจอง: " . $booking_id);
     }
 
     // ยืนยันการทำธุรกรรม (commit)

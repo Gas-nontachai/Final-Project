@@ -9,21 +9,20 @@ if (!isset($_SESSION["username"])) {
 
 if (isset($_POST['category']) && isset($_POST['sub_category'])) {
     $category = mysqli_real_escape_string($conn, $_POST['category']);
-    $subcategories = explode(' ', $_POST['sub_category']); 
+    $subcategories = explode(' ', $_POST['sub_category']);
 
     foreach ($subcategories as $sub_category) {
         $sql = "INSERT INTO sub_category (id_category, sub_cat_name) VALUES ('$category', '$sub_category')";
-        
+
         if ($conn->query($sql) !== TRUE) {
             echo "Error: " . $sql . "<br>" . $conn->error;
-            exit(); 
+            exit();
         }
     }
 
-    echo '<script>alert("Add Sub Category successfully!"); window.location.href = "./manage_cat.php";</script>';
+    echo '<script>alert("เพิ่มประเภทย่อยเรียบร้อย!"); window.location.href = "./manage_cat.php";</script>';
 } else {
-    echo '<script>alert("Missing form data!"); window.location.href = "./manage_cat.php";</script>';
+    echo '<script>alert("ข้อมูลผิดพลาด/สูญหาย!"); window.location.href = "./manage_cat.php";</script>';
 }
 
 $conn->close();
-?>

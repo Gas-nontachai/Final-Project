@@ -25,7 +25,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>จัดการประเภทสินค้า</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -97,8 +97,8 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         data-bs-target='#EditModal' 
                         data-bs-id='" . $row["id_category"] . "' 
                         data-bs-cat_name='" . $row["cat_name"] . "'
-                        data-bs-sub_cat_name='" . $subcategories_str . "'>Edit</button>";
-                            echo "<a href='delete_category.php?id=" . $row["id_category"] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this category?\");'>Delete</a>";
+                        data-bs-sub_cat_name='" . $subcategories_str . "'>แก้ไข</button>";
+                            echo "<a href='delete_category.php?id=" . $row["id_category"] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this category?\");'>ลบ</a>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -152,11 +152,11 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="AddCatModalLabel"><strong>AddCatModal</strong></h1>
+                    <h1 class="modal-title fs-5" id="AddCatModalLabel"><strong>เพิ่ม ประเภทหลัก และ ประเภทย่อย</strong></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h1>เพิ่ม Category และ Subcategory</h1>
+                    <h1>เพิ่ม ประเภทหลัก และ ประเภทย่อย</h1>
                     <form action="./add_cat.php" method="post">
                         <div class="mb-3 row">
                             <label for="category" class="col-sm-3 col-form-label">
@@ -168,7 +168,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         </div>
                         <div class="mb-3 row">
                             <label for="sub_category" class="col-sm-3 col-form-label">
-                                <strong>Subcategories (แยกคำด้วยการเว้นวรรค):</strong>
+                                <strong>ประเภทย่อย (แยกคำด้วยการเว้นวรรค):</strong>
                                 <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
                             </label>
                             <div class="col-sm-9">
@@ -178,7 +178,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                     <input class="btn btn-success" type="submit" value="Submit">
 
                 </div>
@@ -194,14 +194,14 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="AddSubCatModalLabel"><strong>AddSubCatModal</strong></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
                 </div>
                 <div class="modal-body">
-                    <h1>เพิ่ม Subcategory</h1>
+                    <h1>เพิ่มประเภทย่อย</h1>
                     <form action="./add_sub_cat.php" method="post">
                         <div class="mb-3 row">
                             <label for="category" class="col-sm-3 col-form-label">
-                                <strong>Category:</strong>
+                                <strong>ประเภทหลัก:</strong>
                             </label>
                             <div class="col-sm-9">
                                 <select name="category" id="category" class="form-select">
@@ -214,7 +214,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                             echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
                                         }
                                     } else {
-                                        echo '<option value="">No categories found</option>';
+                                        echo '<option value="">ยังไม่มีการสร้างระเภทสินค้า</option>';
                                     }
                                     $conn->close();
                                     ?>
@@ -223,7 +223,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         </div>
                         <div class="mb-3 row">
                             <label for="sub_category" class="col-sm-3 col-form-label">
-                                <strong>Subcategories (แยกคำด้วยการเว้นวรรค):</strong>
+                                <strong>ประเภทย่อย (แยกคำด้วยการเว้นวรรค):</strong>
                                 <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
                             </label>
                             <div class="col-sm-9">
@@ -233,7 +233,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                     <input class="btn btn-success" type="submit" value="Submit">
 
                 </div>
@@ -248,20 +248,20 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             <div class="modal-content">
                 <form action="update_category.php" method="POST">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="EditModalLabel"><strong>Edit Zone</strong></h1>
+                        <h1 class="modal-title fs-5" id="EditModalLabel"><strong>อัพเดตประเภทหลักและประเภทย่อย</strong></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h1>เพิ่ม Category และ Subcategory</h1>
+                        <h1>เพิ่ม ประเภทหลัก และ ประเภทย่อย</h1>
                         <input type="hidden" name="cat_id" id="zone_id">
                         <div class="mb-3 row">
-                            <label for="zone_name" class="col-sm-3 col-form-label"><strong>Category:</strong></label>
+                            <label for="zone_name" class="col-sm-3 col-form-label"><strong>ประเภทหลัก:</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="cat_name" id="zone_name" required>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>Subcategories (แยกคำด้วยการเว้นวรรค):</strong></label>
+                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>ประเภทย่อย (แยกคำด้วยการเว้นวรรค):</strong></label>
                             <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
                             <div class="col-sm-9">
                                 <textarea style="height: 200px;" class="form-control" type="text" name="sub_cat_name" id="zone_detail" required></textarea>
@@ -269,7 +269,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
                         <button type="submit" class="btn btn-success">อัพเดต</button>
                     </div>
                 </form>

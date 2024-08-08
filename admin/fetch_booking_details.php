@@ -21,7 +21,7 @@ if (isset($_POST['fetch_booking_details'])) {
         $bookingDetails = $result->fetch_assoc();
         echo json_encode($bookingDetails);
     } else {
-        echo json_encode(['error' => 'No booking found']);
+        echo json_encode(['error' => 'ไม่พบการจอง']);
     }
     $stmt->close();
     $conn->close();

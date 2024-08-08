@@ -25,7 +25,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>จัดการพื้นที่การขาย</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -68,9 +68,9 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                                 data-bs-name="' . $row['zone_name'] . '"
                                                                 data-bs-detail="' . $row['zone_detail'] . '"
                                                                 data-bs-date="' . $row['pricePerDate'] . '"
-                                                                data-bs-month="' . $row['pricePerMonth'] . '">Edit</button>                                             
+                                                                data-bs-month="' . $row['pricePerMonth'] . '">แก้ไขรายละเอียด</button>                                             
                                                                 <a href="delete_zone.php?zone_id=' . $row['zone_id'] . '" class="btn btn-sm btn-danger" 
-                                                                onclick="return confirm(\'Are you sure you want to delete this zone?\')">Delete</a>                                
+                                                                onclick="return confirm(\'คุณแน่ใจไหมว่าจะลบโซนนี้?\')">ลบโซน</a>                                
                                                         </div>
                                                 </div>
                                         </div>
@@ -133,7 +133,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                 <!-- BTN -->
                 <div class="col-12 d-flex justify-content-evenly px-3">
                     <button class="btn btn-success m-2" type="button" data-bs-toggle="modal" data-bs-target="#AddZoneModal">
-                        เพิ่มZone(พื้นที่การขาย)
+                        เพิ่มโซน(พื้นที่การขาย)
                     </button>
                 </div>
             </div>
@@ -145,38 +145,38 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             <div class="modal-content">
                 <form action="update_zone.php" method="POST">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="EditModalLabel"><strong>Edit Zone</strong></h1>
+                        <h1 class="modal-title fs-5" id="EditModalLabel"><strong>แก้ไขรายละเอียดโซน</strong></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="zone_id" id="zone_id">
                         <div class="mb-3 row">
-                            <label for="zone_name" class="col-sm-3 col-form-label"><strong>Zone name:</strong></label>
+                            <label for="zone_name" class="col-sm-3 col-form-label"><strong>ชื่อโซน:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="zone_name" id="zone_name">
+                                <input type="text" class="form-control" name="zone_name" id="zone_name"> 
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>Detail:</strong></label>
+                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>รายละเอียดโซน:</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="zone_detail" id="zone_detail">
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="pricePerDate" class="col-sm-3 col-form-label"><strong>pricePerDate:</strong></label>
+                            <label for="pricePerDate" class="col-sm-3 col-form-label"><strong>ราคาต่อวัน:</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="pricePerDate" id="pricePerDate">
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="pricePerMonth" class="col-sm-3 col-form-label"><strong>pricePerMonth:</strong></label>
+                            <label for="pricePerMonth" class="col-sm-3 col-form-label"><strong>ราคาต่อเดือน:</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="pricePerMonth" id="pricePerMonth">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
                         <button type="submit" class="btn btn-success">อัพเดต</button>
                     </div>
                 </form>

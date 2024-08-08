@@ -19,7 +19,7 @@ if (isset($_POST["submit"])) {
         $firstname = mysqli_real_escape_string($conn, $_POST["firstname"]);
         $lastname = mysqli_real_escape_string($conn, $_POST["lastname"]);
         $tel = mysqli_real_escape_string($conn, $_POST["tel"]);
-        $Email = mysqli_real_escape_string($conn, $_POST["email"]);
+        $email = mysqli_real_escape_string($conn, $_POST["email"]);
         $password = mysqli_real_escape_string($conn, $_POST["pw"]);
         $userrole = "0";
 
@@ -36,13 +36,13 @@ if (isset($_POST["submit"])) {
             exit();
         } else {
             $sql = "INSERT INTO tbl_user (username, shop_name, prefix, firstname, lastname, tel, email, password, userrole) VALUES 
-            ('$username', '$shopname', '$prefix', '$firstname', '$lastname', '$tel', '$Email', '$password', '$userrole')";
+            ('$username', '$shopname', '$prefix', '$firstname', '$lastname', '$tel', '$email', '$password', '$userrole')";
 
             if (mysqli_query($conn, $sql)) {
-                echo '<script>alert("Registration successful"); window.location.href = "login.php";</script>';
+                echo '<script>alert("สมัครสมาชิกสำเร็จ"); window.location.href = "login.php";</script>';
                 exit();
             } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                echo "ข้อผิดพลาด: " . $sql . "<br>" . mysqli_error($conn);
             }
         }
 
@@ -52,17 +52,17 @@ if (isset($_POST["submit"])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register-Spacebooker</title>
+    <title>ลงทะเบียน - Spacebooker</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.15.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        /* Additional styling for your form */
+        /* การตกแต่งเพิ่มเติมสำหรับแบบฟอร์มของคุณ */
         body {
             padding: 20px;
         }
@@ -106,11 +106,12 @@ if (isset($_POST["submit"])) {
 </head>
 
 <body>
+    
     <h1>สมัครสมาชิก</h1>
     <form action="register.php" method="POST" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="username">Username (ใช้ในการล็อกอิน)</label>
-            <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Usernameไว้เพื่อใช้ในการLogin">
+            <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Username ไว้เพื่อใช้ในการ Login">
             <span id="span_id" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -158,7 +159,7 @@ if (isset($_POST["submit"])) {
         </div>
         <div class="form-group checkbox-group">
             <input type="checkbox" name="showPassword" id="showPassword" onchange="showpw()" class="form-check-input">
-            <label for="showPassword" class="form-check-label">Show Password</label>
+            <label for="showPassword" class="form-check-label">แสดงรหัสผ่าน</label>
         </div>
         <ul>
             <li id="length">ความยาวอย่างน้อย 8 หลัก</li>
@@ -175,9 +176,6 @@ if (isset($_POST["submit"])) {
     </form>
 
     <script>
-        let passwordInput = document.getElementById('pw');
-        let eyeIcon = document.getElementById('eyeIcon');
-
         function togglePasswordVisibility(inputId, eyeIconId) {
             let passwordInput = document.getElementById(inputId);
             let eyeIcon = document.getElementById(eyeIconId);
@@ -247,8 +245,6 @@ if (isset($_POST["submit"])) {
             } else {
                 length.style.color = "green";
             }
-
-
         }
 
         function recheck_pass() {
@@ -269,9 +265,7 @@ if (isset($_POST["submit"])) {
 
         function showpw() {
             const pw = document.getElementById("pw");
-            const value = pw.value;
             const re_pw = document.getElementById("re-pw");
-            const re_value = re_pw.value;
             var x = document.getElementById("pw");
             var y = document.getElementById("re-pw");
 

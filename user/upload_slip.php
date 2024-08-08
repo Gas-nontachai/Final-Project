@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file_name = "slip_" . $date . "_" . uniqid() . "." . $file_ext;
         $file_tmp = $_FILES['receipt']['tmp_name'];
 
-        // Move the file to the desired folder and add the file extension
+        // ย้ายไฟล์ไปยังโฟลเดอร์ที่ต้องการและเพิ่มนามสกุลไฟล์
         if (move_uploaded_file($file_tmp, "../asset/slip_img/" . $file_name)) {
-            // Update the database
+            // อัพเดทฐานข้อมูล
             $sql = "UPDATE booking
                     SET booking_status = '$status', slip_img = '$file_name' 
                     WHERE booking_id = '$booking_id'";
@@ -25,16 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo '<script>alert("อัปโหลดสลิปสำเร็จ กำลังรอการตรวจสอบ"); window.location.href = "index.php";</script>';
                 exit();
             } else {
-                echo "ERROR: Could not execute $sql. " . mysqli_error($conn);
+                echo "ข้อผิดพลาด: ไม่สามารถดำเนินการตามคำสั่ง SQL ได้ " . mysqli_error($conn);
             }
         } else {
-            echo "Failed to move the uploaded file.";
+            echo "ไม่สามารถย้ายไฟล์ที่อัปโหลดได้.";
         }
     } else {
-        echo "No file was uploaded or there was an upload error.";
+        echo "ไม่มีไฟล์ถูกอัปโหลดหรือเกิดข้อผิดพลาดในการอัปโหลด.";
     }
 
-    // Close the connection
+    // ปิดการเชื่อมต่อ
     mysqli_close($conn);
 }
 ?>

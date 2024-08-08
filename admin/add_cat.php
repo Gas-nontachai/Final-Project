@@ -24,7 +24,7 @@ if ($conn->query($sql) === TRUE) {
         }
     }
 
-    echo '<script>alert("Zone updated successfully!"); window.location.href = "./manage_cat.php";</script>';
+    echo '<script>alert("อัพเดตโซนเรียบร้อย!"); window.location.href = "./manage_cat.php";</script>';
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
