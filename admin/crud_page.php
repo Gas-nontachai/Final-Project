@@ -68,7 +68,8 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                                 data-bs-name="' . $row['zone_name'] . '"
                                                                 data-bs-detail="' . $row['zone_detail'] . '"
                                                                 data-bs-date="' . $row['pricePerDate'] . '"
-                                                                data-bs-month="' . $row['pricePerMonth'] . '">แก้ไขรายละเอียด</button>                                             
+                                                                data-bs-month="' . $row['pricePerMonth'] . '">
+                                                            แก้ไขรายละเอียด</button>                                             
                                                                 <a href="delete_zone.php?zone_id=' . $row['zone_id'] . '" class="btn btn-sm btn-danger" 
                                                                 onclick="return confirm(\'คุณแน่ใจไหมว่าจะลบโซนนี้?\')">ลบโซน</a>                                
                                                         </div>
@@ -153,7 +154,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         <div class="mb-3 row">
                             <label for="zone_name" class="col-sm-3 col-form-label"><strong>ชื่อโซน:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="zone_name" id="zone_name"> 
+                                <input type="text" class="form-control" name="zone_name" id="zone_name">
                             </div>
                         </div>
                         <div class="mb-3 row">

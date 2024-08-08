@@ -7,6 +7,8 @@ if (isset($_SESSION["username"])) {
     exit();
 }
 
+$message = ''; // ตัวแปรเก็บข้อความแจ้งเตือน
+
 if (isset($_POST["submit"])) {
     if (isset($_POST['username']) && isset($_POST['pw'])) {
         $username = $_POST["username"];
@@ -16,7 +18,7 @@ if (isset($_POST["submit"])) {
         $stmt->bind_param("ss", $username, $password);
         $stmt->execute();
         if ($stmt->error) {
-            echo "ข้อผิดพลาดในการสอบถามฐานข้อมูล: " . $stmt->error;
+            $message = "ข้อผิดพลาดในการสอบถามฐานข้อมูล: " . $stmt->error;
         } else {
             $result = $stmt->get_result();
 
@@ -30,17 +32,17 @@ if (isset($_POST["submit"])) {
                 $_SESSION["lastname"] = $row['lastname'];
                 $_SESSION["tel"] = $row['tel'];
                 $_SESSION["email"] = $row['email'];
-                $_SESSION["userrole"] = $row['userrole'];            
+                $_SESSION["userrole"] = $row['userrole'];
 
                 if ($row['userrole'] == 0) {
-                    echo '<script>alert("ล็อคอินสำเร็จ"); window.location.href = "../user/index.php";</script>';
+                    $message = 'ล็อคอินสำเร็จ|../user/index.php';
                 } elseif ($row['userrole'] == 1) {
-                    echo '<script>alert("ล็อคอินสำเร็จ"); window.location.href = "./index.php";</script>';
+                    $message = 'ล็อคอินสำเร็จ|./index.php';
                 } else {
-                    echo '<script>alert("บทบาทไม่รู้จัก");</script>';
+                    $message = 'บทบาทไม่รู้จัก';
                 }
             } else {
-                echo '<script>alert("รหัสผ่านไม่ถูกต้อง");</script>';
+                $message = 'รหัสผ่านไม่ถูกต้อง';
             }
         }
     }
@@ -65,6 +67,7 @@ if (isset($_POST["submit"])) {
             align-items: center;
             height: 100vh;
         }
+
         .login-form {
             background-color: #fff;
             padding: 30px;
@@ -73,19 +76,24 @@ if (isset($_POST["submit"])) {
             width: 100%;
             max-width: 400px;
         }
+
         .login-form h1 {
             margin-bottom: 20px;
             text-align: center;
         }
+
         .input-group-text {
             cursor: pointer;
         }
+
         .form-check-label a {
             color: #007bff;
         }
+
         .form-check-label a:hover {
             text-decoration: underline;
         }
+
         .btn-primary:disabled {
             background-color: #adb5bd;
         }
@@ -120,7 +128,28 @@ if (isset($_POST["submit"])) {
             </div>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php if ($message): ?>
+                var messageParts = "<?php echo $message; ?>".split('|');
+                var messageText = messageParts[0];
+                var redirectUrl = messageParts[1] || null;
 
+                Swal.fire({
+                    title: messageText,
+                    icon: redirectUrl ? 'success' : 'error',
+                    timer: 1500,
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false, // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer && redirectUrl) {
+                        window.location.href = redirectUrl;
+                    }
+                });
+
+            <?php endif; ?>
+        });
+    </script>
     <script>
         function togglePasswordVisibility(inputId, eyeIconId) {
             let passwordInput = document.getElementById(inputId);

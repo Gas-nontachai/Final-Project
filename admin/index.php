@@ -45,7 +45,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     include('./fetch_zone_detail.php');
                     ?>
                 </div>
-                
+
                 <!-- BTN -->
                 <div class="col-12 d-flex justify-content-evenly px-3">
                     <a href="./confirm_reserve.php" type="button" class="btn btn-success m-2">ตรวจสอบการชำระเงิน / ยืนยันการจอง / ยกเลิกการจอง</a>
