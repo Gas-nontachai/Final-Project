@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 require("../condb.php");
 
 do {
@@ -28,7 +27,7 @@ do {
 
         $lock_names = [];
         while ($row = $result->fetch_assoc()) {
-            $lock_names[] = $row['book_lock_number']; // Corrected key
+            $lock_names[] = $row['book_lock_number']; // เก็บข้อมูลจากทุกแถว
         }
 
         // อัปเดตล็อก
@@ -40,6 +39,9 @@ do {
                                        SET booking_id = NULL, available = 0 
                                        WHERE lock_name = ?";
                 $stmt = $conn->prepare($update_locks_query);
+                if ($stmt === FALSE) {
+                    throw new Exception("ไม่สามารถเตรียมคำสั่งอัปเดตล็อกได้: " . $conn->error);
+                }
                 $stmt->bind_param('s', $number);
                 if ($stmt->execute() === FALSE) {
                     throw new Exception("ไม่สามารถอัปเดตล็อก: " . $stmt->error);
@@ -73,7 +75,6 @@ do {
             // ถ้าไม่มีข้อมูลที่ได้รับผลกระทบ ให้หยุดลูป
             break;
         }
-
     } catch (Exception $e) {
         // ทำการ rollback ธุรกรรมหากเกิดข้อผิดพลาด
         $conn->rollback();
@@ -86,4 +87,3 @@ do {
 } while (true);
 
 $conn->close();
-?>
