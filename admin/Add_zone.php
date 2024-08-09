@@ -3,7 +3,33 @@ session_start();
 require("../condb.php");
 
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>กรุณาล็อคอินก่อน</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "กรุณาล็อคอินก่อน",
+                    icon: "error",
+                    timer: 2000,
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "../admin/login.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
     exit();
 }
 
@@ -15,7 +41,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST["amount"];
 
     if (empty($zone_name) || empty($zone_detail) || empty($pricePerDate) || empty($pricePerMonth) || empty($amount)) {
-        echo '<script>alert("Please fill in all the fields."); window.location.href = "./crud_page.php";</script>';
+        echo '<!DOCTYPE html>
+        <html lang="th">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </head>
+        <body>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
+                        icon: "error",
+                        timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "./crud_page.php";
+                        }
+                    });
+                });
+            </script>
+        </body>
+        </html>';
         exit();
     }
 
@@ -62,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             Swal.fire({
                                 title: "เพิ่มโซนสำเร็จ",
                                 icon: "success",
-                                timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                                timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: false // ซ่อนปุ่ม "OK"
                             }).then((result) => {

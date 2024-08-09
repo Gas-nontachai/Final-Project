@@ -3,7 +3,33 @@ session_start();
 require("../condb.php");
 
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "./login.php";</script>';
+    echo '<!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>กรุณาล็อคอินก่อน</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                </head>
+                <body>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "กรุณาล็อคอินก่อน",
+                                icon: "error",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "./login.php";
+                                }
+                            });
+                        });
+                    </script>
+                </body>
+                </html>';
     exit();
 }
 
@@ -19,10 +45,61 @@ if (isset($_POST['category']) && isset($_POST['sub_category'])) {
             exit();
         }
     }
-
-    echo '<script>alert("เพิ่มประเภทย่อยเรียบร้อย!"); window.location.href = "./manage_cat.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>เพิ่มประเภทย่อยเรียบร้อย</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "เพิ่มประเภทย่อยเรียบร้อย",
+                    icon: "success",
+                    timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "./manage_cat.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
 } else {
-    echo '<script>alert("ข้อมูลผิดพลาด/สูญหาย!"); window.location.href = "./manage_cat.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ข้อมูลผิดพลาด/สูญหาย!</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "ข้อมูลผิดพลาด/สูญหาย!",
+                    icon: "error",
+                    timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "./manage_cat.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
 }
 
 $conn->close();

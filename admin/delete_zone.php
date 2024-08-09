@@ -15,7 +15,33 @@ if (isset($_GET['zone_id'])) {
 
     // หากมีล็อกที่ว่างอยู่ ให้แจ้งเตือนและหยุดการทำงาน
     if ($count > 0) {
-        echo '<script>alert("ไม่สามารถลบโซนได้ เนื่องจากยังมีล็อกที่ว่างอยู่."); window.location.href = "./crud_page.php";</script>';
+        echo '<!DOCTYPE html>
+        <html lang="th">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>ไม่สามารถลบโซนได้ เนื่องจากยังมีล็อกที่ใช้งานอยู่.</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </head>
+        <body>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "ไม่สามารถลบโซนได้ เนื่องจากยังมีล็อกที่ใช้งานอยู่.",
+                        icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "./crud_page.php";
+                        }
+                    });
+                });
+            </script>
+        </body>
+        </html>';
         exit();
     }
 
@@ -47,7 +73,7 @@ if (isset($_GET['zone_id'])) {
                         Swal.fire({
                             title: "ลบโซนสำเร็จ",
                             icon: "success",
-                            timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                            timer: 2000, 
                             timerProgressBar: true, // แสดงแถบความก้าวหน้า
                             showConfirmButton: false // ซ่อนปุ่ม "OK"
                         }).then((result) => {

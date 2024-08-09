@@ -4,7 +4,33 @@ require("../condb.php");
 
 // ตรวจสอบว่าผู้ใช้ล็อกอินอยู่หรือไม่
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>กรุณาล็อคอินก่อน</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "กรุณาล็อคอินก่อน",
+                    icon: "error",
+                    timer: 2000,
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "../admin/login.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
     exit();
 }
 
@@ -20,7 +46,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // ตรวจสอบข้อมูลที่กรอก
     if (empty($shop_name) || empty($prefix) || empty($firstname) || empty($lastname) || empty($tel) || empty($email)) {
-        echo '<script>alert("กรุณากรอกข้อมูลให้ครบถ้วน."); window.history.back();</script>';
+        echo '<!DOCTYPE html>
+        <html lang="th">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </head>
+        <body>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
+                        icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                           window.history.back();
+                        }
+                    });
+                });
+            </script>
+        </body>
+        </html>';
         exit();
     }
 
@@ -39,7 +91,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("ssssssi", $shop_name, $prefix, $firstname, $lastname, $tel, $email, $user_id);
 
         if ($stmt->execute()) {
-            echo '<script>alert("อัพเดตข้อมูลแล้ว กรุณาล็อกอินใหม่"); window.location.href = "./logout.php";</script>';
+
+            echo '<!DOCTYPE html>
+                    <html lang="th">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>อัพเดตข้อมูลแล้ว กรุณาล็อกอินใหม่</title>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    </head>
+                    <body>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                Swal.fire({
+                                    title: "อัพเดตข้อมูลแล้ว กรุณาล็อกอินใหม่",
+                                    icon: "success",
+                                    timer: 2000, 
+                                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        window.location.href = "./logout.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                                    }
+                                });
+                            });
+                        </script>
+                    </body>
+                    </html>';
         } else {
             echo "ข้อผิดพลาดในการอัพเดตข้อมูลโปรไฟล์: " . $stmt->error;
         }
@@ -55,4 +134,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // ปิดการเชื่อมต่อฐานข้อมูล
 $conn->close();
-?>

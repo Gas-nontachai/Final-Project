@@ -3,7 +3,33 @@ session_start();
 require("../condb.php");
 
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>กรุณาล็อคอินก่อน</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "กรุณาล็อคอินก่อน",
+                    icon: "error",
+                    timer: 2000, 
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "../admin/login.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
     exit();
 }
 
@@ -66,6 +92,7 @@ if (isset($_GET['category_id'])) {
     <title>ยืนยันการจอง/ปรับเปลี่ยนสถานะ</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -197,8 +224,8 @@ if (isset($_GET['category_id'])) {
                                         case 5:
                                             echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    <a href='cancel_booking.php?booking_id=" . $row["booking_id"] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"คุณแน่ใจหรือว่าต้องการยกเลิกการจองนี้?\")'>ยกเลิก</a>
-                                    </td>";
+                                    <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                   </td>";
                                             break;
                                         case 6:
                                             echo " <td>
@@ -231,7 +258,24 @@ if (isset($_GET['category_id'])) {
                         </div>
                     </div>
                 </div>
-
+                <script>
+                    function confirmCancel(booking_id) {
+                        Swal.fire({
+                            title: "คุณแน่ใจหรือไม่?",
+                            text: "คุณกำลังจะยกเลิกการจองน้า",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "ใช่, ยกเลิก!",
+                            cancelButtonText: "ยกเลิก"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'cancel_booking.php?booking_id=' + booking_id;
+                            }
+                        });
+                    }
+                </script>
                 <script>
                     document.getElementById('filterType').addEventListener('change', function() {
                         const filterType = this.value;

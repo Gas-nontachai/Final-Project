@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             Swal.fire({
                                 title: "อัปโหลดสลิปสำเร็จ กำลังรอการตรวจสอบ",
                                 icon: "success",
-                                timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                                timer: 2000,
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: false // ซ่อนปุ่ม "OK"
                             }).then((result) => {

@@ -3,7 +3,33 @@ session_start();
 require("../condb.php");
 
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>กรุณาล็อคอินก่อน</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "กรุณาล็อคอินก่อน",
+                    icon: "error",
+                    timer: 2000,
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "../admin/login.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
     exit();
 }
 
@@ -219,8 +245,8 @@ if (isset($_GET['category_id'])) {
                         switch ($row["booking_status"]) {
                             case 1:
                                 echo "<td>
-                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $bookingId . "'>ดู</button>
-                                <button class='btn btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='" . $bookingId . "'>ชำระเงิน</button>
+                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                <button class='btn btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='" . $row["booking_id"] . "'>ชำระเงิน</button>
                                 <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
                                  </td>";
                                 break;
@@ -380,7 +406,8 @@ if (isset($_GET['category_id'])) {
                                             <p><strong>สถานะ:</strong> ${data.status}</p>
                                             <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
                                             <p><strong>ยอดชำระเงิน: ${data.total_price} บาท</strong></p>
-                                        `;
+                                            <p><strong>เลขล็อคที่ได้รับ: ${data.book_lock_number}</strong></p>
+                                            `;
                             if (data.slip_img) {
                                 content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
                             } else {

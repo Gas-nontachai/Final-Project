@@ -90,12 +90,13 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#EditModal">Edit Profile</button>
-                        <a href="./logout.php" type="button" class="btn btn-danger">Logout</a>
+                        <a href='#' class='btn btn-danger' onclick=confirmLogout()>ออกจากระบบ</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div><!-- Edit Profile Modal -->
+    </div>
+    <!-- Edit Profile Modal -->
     <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -172,5 +173,22 @@
         </strong>
         <script src="../asset/js/time_couter.js"></script>
     </div>
-
+    <script>
+        function confirmLogout(booking_id) {
+            Swal.fire({
+                title: "คุณแน่ใจหรือไม่?",
+                text: "คุณกำลังจะออกจากระบบน้า",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ใช่, ออกจากระบบ!",
+                cancelButtonText: "ยกเลิก"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = './logout.php';
+                }
+            });
+        }
+    </script>
 </nav>

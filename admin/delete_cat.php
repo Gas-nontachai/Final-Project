@@ -3,7 +3,33 @@ session_start();
 require("../condb.php");
 
 if (!isset($_SESSION["username"])) {
-    echo '<script>alert("กรุณาล็อคอินก่อน"); window.location.href = "../admin/login.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>กรุณาล็อคอินก่อน</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "กรุณาล็อคอินก่อน",
+                    icon: "error",
+                    timer: 2000, 
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "../admin/login.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
     exit();
 }
 
@@ -30,7 +56,33 @@ if (isset($_GET['id_category'])) {
 
             if ($stmt->affected_rows > 0) {
                 $conn->commit();
-                echo '<script>alert("ลบประเภทหลักและประเภทย่อยสำเร็จ!"); window.location.href = "./manage_cat.php";</script>';
+                echo '<!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>ลบประเภทหลักและประเภทย่อยสำเร็จ</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                </head>
+                <body>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "ลบประเภทหลักและประเภทย่อยสำเร็จ",
+                                icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "./manage_cat.php";
+                                }
+                            });
+                        });
+                    </script>
+                </body>
+                </html>';
             } else {
                 throw new Exception("ลบประเภทหลักไม่สำเร็จ.");
             }
@@ -39,11 +91,63 @@ if (isset($_GET['id_category'])) {
         }
     } catch (Exception $e) {
         $conn->rollback();
-        echo '<script>alert("เออเร่อ: ' . $e->getMessage() . '"); window.location.href = "./manage_cat.php";</script>';
+        echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>คำขอผิดพลาด</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "เออเร่อ: ' . $e->getMessage() . '",
+                    icon: "error",
+                    timer: 2000, 
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "./manage_cat.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
     }
 
     $stmt->close();
     $conn->close();
 } else {
-    echo '<script>alert("คำขอผิดพลาด."); window.location.href = "./manage_cat.php";</script>';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>คำขอผิดพลาด</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "คำขอผิดพลาด",
+                    icon: "error",
+                    timer: 2000, 
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "./manage_cat.php";
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
 }

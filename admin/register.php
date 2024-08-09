@@ -10,7 +10,33 @@ if (isset($_SESSION["username"])) {
 
 if (isset($_POST["submit"])) {
     if (empty($_POST["username"]) || empty($_POST["shopname"]) || empty($_POST["prefix"]) || empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["tel"]) || empty($_POST["email"]) || empty($_POST["pw"])) {
-        echo '<script>alert("กรุณากรอกข้อมูลให้ครบทุกช่อง"); window.location.href = "register.php";</script>';
+        echo '<!DOCTYPE html>
+        <html lang="th">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        </head>
+        <body>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
+                        icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "./register.php";
+                        }
+                    });
+                });
+            </script>
+        </body>
+        </html>';
         exit();
     } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = mysqli_real_escape_string($conn, $_POST["username"]);
@@ -29,17 +55,95 @@ if (isset($_POST["submit"])) {
         $result_tel = mysqli_query($conn, $check_tel);
 
         if (mysqli_num_rows($result) > 0) {
-            echo '<script>alert("Username นี้ได้มีการสมัครไปแล้ว"); window.location.href = "register.php";</script>';
+            echo '<!DOCTYPE html>
+            <html lang="th">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Username นี้ได้มีการสมัครไปแล้ว</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            </head>
+            <body>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: "Username นี้ได้มีการสมัครไปแล้ว",
+                            icon: "error",
+                            timer: 2000, 
+                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                            showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                window.location.href = "./register.php";
+                            }
+                        });
+                    });
+                </script>
+            </body>
+            </html>';
             exit();
         } else if (mysqli_num_rows($result_tel) > 0) {
-            echo '<script>alert("หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว"); window.location.href = "register.php";</script>';
+            echo '<!DOCTYPE html>
+            <html lang="th">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            </head>
+            <body>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: "หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว",
+                            icon: "error",
+                            timer: 2000, 
+                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                            showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                window.location.href = "./register.php";
+                            }
+                        });
+                    });
+                </script>
+            </body>
+            </html>';
             exit();
         } else {
             $sql = "INSERT INTO tbl_user (username, shop_name, prefix, firstname, lastname, tel, email, password, userrole) VALUES 
             ('$username', '$shopname', '$prefix', '$firstname', '$lastname', '$tel', '$email', '$password', '$userrole')";
 
             if (mysqli_query($conn, $sql)) {
-                echo '<script>alert("สมัครสมาชิกสำเร็จ"); window.location.href = "login.php";</script>';
+                echo '<!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>สมัครสมาชิกสำเร็จ</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                </head>
+                <body>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            Swal.fire({
+                                title: "สมัครสมาชิกสำเร็จ",
+                                icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.href = "./register.php";
+                                }
+                            });
+                        });
+                    </script>
+                </body>
+                </html>';
                 exit();
             } else {
                 echo "ข้อผิดพลาด: " . $sql . "<br>" . mysqli_error($conn);
@@ -106,7 +210,7 @@ if (isset($_POST["submit"])) {
 </head>
 
 <body>
-    
+
     <h1>สมัครสมาชิก</h1>
     <form action="register.php" method="POST" onsubmit="return validateForm()">
         <div class="form-group">
