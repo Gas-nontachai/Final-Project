@@ -55,7 +55,7 @@ if ($conn->query($sql) === TRUE) {
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>อัพเดตโซนเรียบร้อย</title>
+                    <title>เพิ่มประเภทสินค้าเรียบร้อย</title>
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 </head>
@@ -63,7 +63,7 @@ if ($conn->query($sql) === TRUE) {
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
                             Swal.fire({
-                                title: "อัพเดตโซนเรียบร้อย",
+                                title: "เพิ่มประเภทสินค้าเรียบร้อย",
                                 icon: "success",
                                 timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า

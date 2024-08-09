@@ -405,12 +405,12 @@ if (isset($_GET['category_id'])) {
                                             <?php
                                             include('connect.php'); // รวมการเชื่อมต่อฐานข้อมูล
 
-                                            $sql = "SELECT * FROM zone_detail";
+                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {
-                                                    echo '<option value="' . htmlspecialchars($row['zone_id']) . '">' . htmlspecialchars($row['zone_name']) . '</option>';
+                                                    echo '<option value="' . htmlspecialchars($row['zone_id']) . '">' . htmlspecialchars($row['zone_name']) . ' (' . htmlspecialchars($row['zone_detail']) . ')</option>';
                                                 }
                                             } else {
                                                 echo '<option value="">ไม่มีข้อมูล</option>';

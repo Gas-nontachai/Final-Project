@@ -34,6 +34,38 @@ try {
             throw new Exception("ย้ายข้อมูลผิดพลาด: " . $stmt->error);
         }
 
+        // ดึง lock_name ที่ต้องอัปเดตจากตาราง booking
+        $get_locks_query = "SELECT DISTINCT book_lock_number FROM booking WHERE expiration_date <= NOW()";
+        $result = $conn->query($get_locks_query);
+        if ($result === FALSE) {
+            throw new Exception("ไม่สามารถดึงข้อมูลล็อกได้: " . $conn->error);
+        }
+
+        $lock_names = [];
+        while ($row = $result->fetch_assoc()) {
+            $lock_names[] = $row['book_lock_number']; // เก็บข้อมูลจากทุกแถว
+        }
+
+        // อัปเดตล็อก
+        foreach ($lock_names as $lock_name) {
+            $lock_numbers = explode(',', $lock_name);
+            foreach ($lock_numbers as $number) {
+                $number = trim($number); // ตัดช่องว่างรอบๆ
+                $update_locks_query = "UPDATE locks 
+                                       SET booking_id = NULL, available = 0 
+                                       WHERE lock_name = ?";
+                $stmt = $conn->prepare($update_locks_query);
+                if ($stmt === FALSE) {
+                    throw new Exception("ไม่สามารถเตรียมคำสั่งอัปเดตล็อกได้: " . $conn->error);
+                }
+                $stmt->bind_param('s', $number);
+                if ($stmt->execute() === FALSE) {
+                    throw new Exception("ไม่สามารถอัปเดตล็อก: " . $stmt->error);
+                }
+                $stmt->close();
+            }
+        }
+
         // ลบข้อมูลจาก booking หลังจากคัดลอกไปยัง booked
         $deleteSql = "DELETE FROM booking WHERE booking_id = $booking_id";
         if (!$conn->query($deleteSql)) {

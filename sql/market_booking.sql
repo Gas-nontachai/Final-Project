@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2024 at 05:10 PM
+-- Generation Time: Aug 09, 2024 at 01:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -30,25 +30,46 @@ SET time_zone = "+00:00";
 CREATE TABLE `booked` (
   `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว',
   `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL COMMENT 'รหัสการจอง',
+  `member_id` int(6) UNSIGNED NOT NULL COMMENT 'รหัสลูกค้า',
   `booking_amount` varchar(45) NOT NULL,
   `total_price` varchar(45) NOT NULL,
   `product_type` varchar(45) NOT NULL,
   `sub_product_type` varchar(45) NOT NULL,
-  `member_id` int(6) UNSIGNED NOT NULL COMMENT 'รหัสลูกค้า',
   `booking_status` int(3) UNSIGNED NOT NULL COMMENT 'สถานะการจอง',
   `booking_type` varchar(45) NOT NULL,
   `zone_id` int(3) UNSIGNED NOT NULL COMMENT 'รหัสประเภทโซน',
-  `slip_img` varchar(20) NOT NULL COMMENT 'log',
+  `slip_img` varchar(20) DEFAULT NULL COMMENT 'log',
   `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง',
-  `booked_lock_number` varchar(10) DEFAULT NULL COMMENT 'เลขล็อคที่จะได้'
+  `booked_lock_number` varchar(10) DEFAULT NULL COMMENT 'เลขล็อคที่จะได้',
+  `expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `booked`
 --
 
-INSERT INTO `booked` (`id_booked`, `booking_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `slip_img`, `booking_date`, `booked_lock_number`) VALUES
-(0000000001, 0000000004, '1', '100', '4', '25', 4, 6, 'PerMonth', 22, '', '2024-08-07 05:12:03', NULL);
+INSERT INTO `booked` (`id_booked`, `booking_id`, `member_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `booking_status`, `booking_type`, `zone_id`, `slip_img`, `booking_date`, `booked_lock_number`, `expiration_date`) VALUES
+(0000000001, 0000000004, 4, '1', '100', '4', '25', 6, 'PerMonth', 22, '', '2024-08-07 05:12:03', NULL, NULL),
+(0000000009, 0000000007, 6, '2', '100', '4', '23', 4, 'PerDay', 22, NULL, '2024-08-07 16:49:59', 'C1, C2', '2024-08-07 23:40:58'),
+(0000000013, 0000000003, 4, '1', '50', '3', '21', 4, 'PerDay', 16, NULL, '2024-08-07 17:09:33', 'A1', '2024-08-07 23:40:58'),
+(0000000014, 0000000005, 4, '3', '150', '3', '22', 4, 'PerDay', 16, NULL, '2024-08-07 17:09:33', 'A2, A3, A4', '2024-08-07 23:40:58'),
+(0000000015, 0000000006, 6, '1', '50', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-07 17:09:33', 'A20', '2024-08-07 23:40:58'),
+(0000000016, 0000000009, 6, '3', '150', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-07 17:14:24', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000017, 0000000010, 6, '1', '50', '6', '73', 4, 'PerDay', 21, NULL, '2024-08-07 17:14:24', 'B1', '2024-08-07 23:59:58'),
+(0000000019, 0000000011, 6, '3', '150', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-07 17:31:09', 'A1, A4, A6', '2024-08-07 23:59:58'),
+(0000000020, 0000000012, 6, '3', '150', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-07 17:33:20', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000021, 0000000013, 6, '3', '150', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-07 17:37:28', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000022, 0000000014, 6, '5', '250', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-07 17:39:26', 'A4, A7, A8', '2024-08-07 23:59:58'),
+(0000000023, 0000000008, 6, '3', '3000', '6', '73', 4, 'PerMonth', 21, NULL, '2024-07-07 16:18:32', 'B1, B2, B3', '2024-07-07 23:18:23'),
+(0000000024, 0000000015, 6, '2', '100', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-08 14:25:19', 'A1, A2', '2024-08-07 23:59:58'),
+(0000000026, 0000000016, 6, '3', '150', '3', '20', 4, 'PerDay', 16, NULL, '2024-08-08 14:32:16', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000027, 0000000017, 6, '2', '2000', '3', '21', 4, 'PerMonth', 21, NULL, '2024-08-08 14:32:16', 'B1, B2', '2024-07-07 21:31:15'),
+(0000000028, 0000000018, 6, '2', '80', '3', '20', 6, 'PerDay', 28, 'slip_20240809_014836', '2024-08-09 09:48:26', NULL, NULL),
+(0000000029, 0000000018, 6, '2', '80', '3', '20', 6, 'PerDay', 28, 'slip_20240809_014836', '2024-08-09 09:53:15', NULL, NULL),
+(0000000030, 0000000020, 6, '2', '80', '3', '125', 6, 'PerDay', 33, 'slip_20240809_183925', '2024-08-09 11:43:29', NULL, NULL),
+(0000000031, 0000000021, 6, '1', '40', '3', '125', 6, 'PerDay', 33, NULL, '2024-08-09 11:45:03', NULL, NULL),
+(0000000032, 0000000022, 6, '1', '40', '4', '85', 6, 'PerDay', 33, NULL, '2024-08-09 11:46:27', NULL, NULL),
+(0000000033, 0000000023, 6, '2', '80', '3', '125', 4, 'PerDay', 33, NULL, '2024-08-09 11:47:34', 'A1, A2', '2024-08-07 23:59:58');
 
 -- --------------------------------------------------------
 
@@ -68,17 +89,9 @@ CREATE TABLE `booking` (
   `sub_product_type` varchar(45) NOT NULL,
   `slip_img` varchar(45) DEFAULT NULL,
   `book_lock_number` varchar(45) DEFAULT NULL,
-  `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง'
+  `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง',
+  `expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `booking`
---
-
-INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `book_lock_number`, `booking_date`) VALUES
-(0000000003, 000004, 4, 'PerDay', 016, 1, 50, 3, '21', 'slip_20240805_090841_66b0342990296.jpg', 'A1', '2024-08-07 09:26:07'),
-(0000000004, 000004, 6, 'PerMonth', 022, 1, 100, 4, '25', NULL, NULL, '2024-08-07 05:12:03'),
-(0000000005, 000004, 4, 'PerDay', 016, 3, 150, 3, '22', 'slip_20240805_102106_66b045222fbba.jpg', 'A2, A3, A4', '2024-08-07 09:26:33');
 
 -- --------------------------------------------------------
 
@@ -119,9 +132,11 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id_category`, `cat_name`) VALUES
-(3, 'Food'),
-(4, 'Dress'),
-(6, 'Etc');
+(3, 'อาหาร'),
+(4, 'เครื่องดื่ม'),
+(6, 'เสื้อผ้าและแฟชั่น'),
+(7, 'จิปาถะของจุ๊บจิ๊บ'),
+(8, 'เปิดท้ายของมือสอง');
 
 -- --------------------------------------------------------
 
@@ -142,96 +157,86 @@ CREATE TABLE `locks` (
 --
 
 INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `available`) VALUES
-(257, 'A1', 016, 0000000003, 1),
-(258, 'A2', 016, 0000000005, 1),
-(259, 'A3', 016, 0000000005, 1),
-(260, 'A4', 016, 0000000005, 1),
-(261, 'A5', 016, NULL, 0),
-(262, 'A6', 016, NULL, 0),
-(263, 'A7', 016, NULL, 0),
-(264, 'A8', 016, NULL, 0),
-(265, 'A9', 016, NULL, 0),
-(266, 'A10', 016, NULL, 0),
-(267, 'A11', 016, NULL, 0),
-(268, 'A12', 016, NULL, 0),
-(269, 'A13', 016, NULL, 0),
-(270, 'A14', 016, NULL, 0),
-(271, 'A15', 016, NULL, 0),
-(272, 'A16', 016, NULL, 0),
-(273, 'A17', 016, NULL, 0),
-(274, 'A18', 016, NULL, 0),
-(275, 'A19', 016, NULL, 0),
-(276, 'A20', 016, NULL, 0),
-(347, 'B1', 021, NULL, 0),
-(348, 'B2', 021, NULL, 0),
-(349, 'B3', 021, NULL, 0),
-(350, 'B4', 021, NULL, 0),
-(351, 'B5', 021, NULL, 0),
-(352, 'B6', 021, NULL, 0),
-(353, 'B7', 021, NULL, 0),
-(354, 'B8', 021, NULL, 0),
-(355, 'B9', 021, NULL, 0),
-(356, 'B10', 021, NULL, 0),
-(357, 'B11', 021, NULL, 0),
-(358, 'B12', 021, NULL, 0),
-(359, 'B13', 021, NULL, 0),
-(360, 'B14', 021, NULL, 0),
-(361, 'B15', 021, NULL, 0),
-(362, 'B16', 021, NULL, 0),
-(363, 'B17', 021, NULL, 0),
-(364, 'B18', 021, NULL, 0),
-(365, 'B19', 021, NULL, 0),
-(366, 'B20', 021, NULL, 0),
-(367, 'C1', 022, NULL, 0),
-(368, 'C2', 022, NULL, 0),
-(369, 'C3', 022, NULL, 0),
-(370, 'C4', 022, NULL, 0),
-(371, 'C5', 022, NULL, 0),
-(372, 'C6', 022, NULL, 0),
-(373, 'C7', 022, NULL, 0),
-(374, 'C8', 022, NULL, 0),
-(375, 'C9', 022, NULL, 0),
-(376, 'C10', 022, NULL, 0),
-(377, 'C11', 022, NULL, 0),
-(378, 'C12', 022, NULL, 0),
-(379, 'C13', 022, NULL, 0),
-(380, 'C14', 022, NULL, 0),
-(381, 'C15', 022, NULL, 0),
-(382, 'C16', 022, NULL, 0),
-(383, 'C17', 022, NULL, 0),
-(384, 'C18', 022, NULL, 0),
-(385, 'C19', 022, NULL, 0),
-(386, 'C20', 022, NULL, 0),
-(387, 'C21', 022, NULL, 0),
-(388, 'C22', 022, NULL, 0),
-(389, 'C23', 022, NULL, 0),
-(390, 'C24', 022, NULL, 0),
-(391, 'C25', 022, NULL, 0),
-(392, 'C26', 022, NULL, 0),
-(393, 'C27', 022, NULL, 0),
-(394, 'C28', 022, NULL, 0),
-(395, 'C29', 022, NULL, 0),
-(396, 'C30', 022, NULL, 0),
-(397, 'C31', 022, NULL, 0),
-(398, 'C32', 022, NULL, 0),
-(399, 'C33', 022, NULL, 0),
-(400, 'C34', 022, NULL, 0),
-(401, 'C35', 022, NULL, 0),
-(402, 'C36', 022, NULL, 0),
-(403, 'C37', 022, NULL, 0),
-(404, 'C38', 022, NULL, 0),
-(405, 'C39', 022, NULL, 0),
-(406, 'C40', 022, NULL, 0),
-(407, 'C41', 022, NULL, 0),
-(408, 'C42', 022, NULL, 0),
-(409, 'C43', 022, NULL, 0),
-(410, 'C44', 022, NULL, 0),
-(411, 'C45', 022, NULL, 0),
-(412, 'C46', 022, NULL, 0),
-(413, 'C47', 022, NULL, 0),
-(414, 'C48', 022, NULL, 0),
-(415, 'C49', 022, NULL, 0),
-(416, 'C50', 022, NULL, 0);
+(537, 'B1', 029, NULL, 0),
+(538, 'B2', 029, NULL, 0),
+(539, 'B3', 029, NULL, 0),
+(540, 'B4', 029, NULL, 0),
+(541, 'B5', 029, NULL, 0),
+(542, 'B6', 029, NULL, 0),
+(543, 'B7', 029, NULL, 0),
+(544, 'B8', 029, NULL, 0),
+(545, 'B9', 029, NULL, 0),
+(546, 'B10', 029, NULL, 0),
+(547, 'B11', 029, NULL, 0),
+(548, 'B12', 029, NULL, 0),
+(549, 'B13', 029, NULL, 0),
+(550, 'B14', 029, NULL, 0),
+(551, 'B15', 029, NULL, 0),
+(552, 'B16', 029, NULL, 0),
+(553, 'B17', 029, NULL, 0),
+(554, 'B18', 029, NULL, 0),
+(555, 'B19', 029, NULL, 0),
+(556, 'B20', 029, NULL, 0),
+(557, 'C1', 030, NULL, 0),
+(558, 'C2', 030, NULL, 0),
+(559, 'C3', 030, NULL, 0),
+(560, 'C4', 030, NULL, 0),
+(561, 'C5', 030, NULL, 0),
+(562, 'C6', 030, NULL, 0),
+(563, 'C7', 030, NULL, 0),
+(564, 'C8', 030, NULL, 0),
+(565, 'C9', 030, NULL, 0),
+(566, 'C10', 030, NULL, 0),
+(567, 'C11', 030, NULL, 0),
+(568, 'C12', 030, NULL, 0),
+(569, 'C13', 030, NULL, 0),
+(570, 'C14', 030, NULL, 0),
+(571, 'C15', 030, NULL, 0),
+(572, 'C16', 030, NULL, 0),
+(573, 'C17', 030, NULL, 0),
+(574, 'C18', 030, NULL, 0),
+(575, 'C19', 030, NULL, 0),
+(576, 'C20', 030, NULL, 0),
+(597, 'D1', 032, NULL, 0),
+(598, 'D2', 032, NULL, 0),
+(599, 'D3', 032, NULL, 0),
+(600, 'D4', 032, NULL, 0),
+(601, 'D5', 032, NULL, 0),
+(602, 'D6', 032, NULL, 0),
+(603, 'D7', 032, NULL, 0),
+(604, 'D8', 032, NULL, 0),
+(605, 'D9', 032, NULL, 0),
+(606, 'D10', 032, NULL, 0),
+(607, 'D11', 032, NULL, 0),
+(608, 'D12', 032, NULL, 0),
+(609, 'D13', 032, NULL, 0),
+(610, 'D14', 032, NULL, 0),
+(611, 'D15', 032, NULL, 0),
+(612, 'D16', 032, NULL, 0),
+(613, 'D17', 032, NULL, 0),
+(614, 'D18', 032, NULL, 0),
+(615, 'D19', 032, NULL, 0),
+(616, 'D20', 032, NULL, 0),
+(617, 'A1', 033, NULL, 0),
+(618, 'A2', 033, NULL, 0),
+(619, 'A3', 033, NULL, 0),
+(620, 'A4', 033, NULL, 0),
+(621, 'A5', 033, NULL, 0),
+(622, 'A6', 033, NULL, 0),
+(623, 'A7', 033, NULL, 0),
+(624, 'A8', 033, NULL, 0),
+(625, 'A9', 033, NULL, 0),
+(626, 'A10', 033, NULL, 0),
+(627, 'A11', 033, NULL, 0),
+(628, 'A12', 033, NULL, 0),
+(629, 'A13', 033, NULL, 0),
+(630, 'A14', 033, NULL, 0),
+(631, 'A15', 033, NULL, 0),
+(632, 'A16', 033, NULL, 0),
+(633, 'A17', 033, NULL, 0),
+(634, 'A18', 033, NULL, 0),
+(635, 'A19', 033, NULL, 0),
+(636, 'A20', 033, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -262,17 +267,39 @@ CREATE TABLE `sub_category` (
 --
 
 INSERT INTO `sub_category` (`idsub_category`, `id_category`, `sub_cat_name`) VALUES
-(20, '3', 'drink'),
-(21, '3', 'fastfood'),
-(22, '3', 'etc'),
-(23, '4', '1Hand'),
-(24, '4', '2Hand'),
-(25, '4', 'ETC'),
-(73, '6', 'etc1'),
-(74, '6', 'etc2'),
-(75, '6', 'etc3'),
-(76, '6', 'etc4'),
-(77, '6', 'etc5');
+(84, '4', 'น้ำดื่ม'),
+(85, '4', 'น้ำผลไม้'),
+(86, '4', 'เครื่องดื่มสมุนไพร'),
+(87, '4', 'เครื่องดื่มมีแอลกอฮอล์'),
+(88, '6', 'เสื้อผ้าผู้หญิง'),
+(89, '6', 'เสื้อผ้าผู้ชาย'),
+(90, '6', 'เสื้อผ้าเด็ก'),
+(91, '6', 'แฟชั่นตามฤดูกาล'),
+(92, '6', 'แฟชั่นสไตล์'),
+(93, '6', 'เครื่องประดับ'),
+(94, '7', 'ของสะสม'),
+(95, '7', 'ของที่ระลึก'),
+(96, '7', 'ของตกแต่ง'),
+(97, '7', 'อุปกรณ์การเขียน'),
+(98, '7', 'เครื่องใช้ในบ้าน'),
+(99, '7', 'อุปกรณ์เทคโนโลยี'),
+(100, '7', 'ของขวัญและของที่ระลึก'),
+(101, '8', 'เสื้อผ้าและเครื่องแต่งกาย'),
+(102, '8', 'เครื่องใช้ไฟฟ้า'),
+(103, '8', 'เฟอร์นิเจอร์'),
+(104, '8', 'ของตกแต่งบ้าน'),
+(105, '8', 'หนังสือและสื่อบันเทิง'),
+(106, '8', 'อุปกรณ์กีฬาและออกกำลังกาย'),
+(107, '8', 'ของสะสม'),
+(108, '8', 'เครื่องครัวและอุปกรณ์ทำอาหาร'),
+(109, '8', 'ของเล่นและเกม'),
+(110, '8', 'อุปกรณ์สำนักงานและเครื่องเขียน'),
+(125, '3', 'อาหารคาว'),
+(126, '3', 'อาหารหวาน'),
+(127, '3', 'อาหารทานเล่น'),
+(128, '3', 'อาหารเช้า'),
+(129, '3', 'อาหารเพื่อสุขภาพ'),
+(130, '3', 'อาหารจานเดียว');
 
 -- --------------------------------------------------------
 
@@ -327,7 +354,8 @@ INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `em
 (000001, 'นาย', 'Nontachai', 'Prosri', '0885639233', 'bigboy2546.77@gmail.com', 'GGas', 'nontachai01', 1, 'GGasShop'),
 (000003, 'นาง', 'Kanokwan', 'Phakdee', '0888888888', 'Kanokwan.ph@gmail.com', 'Kanok', 'kanok123', 1, 'KanokShop'),
 (000004, 'นาย', 'Nontachai', 'Prosri', '0889999999', 'bigboy2546.77@gmail.com', 'GGas2', 'nontachai01', 0, 'GGasShop'),
-(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin');
+(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin'),
+(000006, 'นาย', 'User', 'User', '0888888888', 'user', 'user', 'user8888', 0, 'user');
 
 -- --------------------------------------------------------
 
@@ -367,9 +395,10 @@ CREATE TABLE `zone_detail` (
 --
 
 INSERT INTO `zone_detail` (`zone_id`, `zone_name`, `zone_detail`, `pricePerDate`, `pricePerMonth`) VALUES
-(016, 'A', 'Food', 50, 1000),
-(021, 'B', 'Something', 50, 1000),
-(022, 'C', 'Cloth', 50, 100);
+(029, 'B', 'เสื้อผ้าและแฟชั่น', 40, 1000),
+(030, 'C', 'จิปาถะของจุ๊บจิ๊บ', 40, 1000),
+(032, 'D', 'เปิดท้ายของมือสอง', 40, 800),
+(033, 'A', 'อาหารและเครื่องดื่ม', 40, 1000);
 
 --
 -- Indexes for dumped tables
@@ -380,11 +409,7 @@ INSERT INTO `zone_detail` (`zone_id`, `zone_name`, `zone_detail`, `pricePerDate`
 --
 ALTER TABLE `booked`
   ADD PRIMARY KEY (`id_booked`),
-  ADD KEY `booked_ibfk_1_idx` (`booking_id`),
-  ADD KEY `booked_ibfk_2_idx` (`booked_lock_number`),
-  ADD KEY `already_bookedbooked_ibfk_1_idx` (`booking_id`),
-  ADD KEY `already_booked_ibfk_2_idx` (`zone_id`),
-  ADD KEY `already_booked_ibfk_3_idx` (`member_id`);
+  ADD KEY `already_bookedbooked_ibfk_1_idx` (`booking_id`);
 
 --
 -- Indexes for table `booking`
@@ -469,13 +494,13 @@ ALTER TABLE `zone_detail`
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
-  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=2;
+  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=6;
+  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `booking_status`
@@ -487,13 +512,13 @@ ALTER TABLE `booking_status`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `locks`
 --
 ALTER TABLE `locks`
-  MODIFY `id_locks` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ไอดีล็อค', AUTO_INCREMENT=417;
+  MODIFY `id_locks` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ไอดีล็อค', AUTO_INCREMENT=637;
 
 --
 -- AUTO_INCREMENT for table `pre_category`
@@ -505,7 +530,7 @@ ALTER TABLE `pre_category`
 -- AUTO_INCREMENT for table `sub_category`
 --
 ALTER TABLE `sub_category`
-  MODIFY `idsub_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `idsub_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT for table `tbl_comment`
@@ -523,26 +548,17 @@ ALTER TABLE `tbl_payments`
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=6;
+  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `zone_detail`
 --
 ALTER TABLE `zone_detail`
-  MODIFY `zone_id` int(3) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสโซน', AUTO_INCREMENT=23;
+  MODIFY `zone_id` int(3) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสโซน', AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `booked`
---
-ALTER TABLE `booked`
-  ADD CONSTRAINT `already_booked_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `already_booked_ibfk_2` FOREIGN KEY (`zone_id`) REFERENCES `zone_detail` (`zone_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `already_booked_ibfk_3` FOREIGN KEY (`member_id`) REFERENCES `tbl_user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `already_booked_ibfk_4` FOREIGN KEY (`booked_lock_number`) REFERENCES `locks` (`lock_name`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `booking`
@@ -556,8 +572,8 @@ ALTER TABLE `booking`
 -- Constraints for table `locks`
 --
 ALTER TABLE `locks`
-  ADD CONSTRAINT `locks_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`),
-  ADD CONSTRAINT `locks_ibfk_2` FOREIGN KEY (`zone_id`) REFERENCES `zone_detail` (`zone_id`);
+  ADD CONSTRAINT `locks_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `locks_ibfk_2` FOREIGN KEY (`zone_id`) REFERENCES `zone_detail` (`zone_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `tbl_comment`

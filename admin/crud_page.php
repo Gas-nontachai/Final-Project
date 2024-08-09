@@ -69,7 +69,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             <div class=" row d-flex justify-content-center align-item-center">
                 <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">
                     <?php
-                    $sql = "SELECT * FROM zone_detail";
+                    $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
                     if ($result = $conn->query($sql)) {
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
