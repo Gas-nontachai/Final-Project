@@ -83,7 +83,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="my-1 border nav-link link-dark btn btn-outline-info">
+                            <a href="./stat_booking.php" class="my-1 border nav-link link-dark btn btn-outline-info">
                                 <div class="mx-2 p-2 d-flex align-items-center ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-bar-chart" viewBox="0 0 16 16">
                                         <path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z" />
