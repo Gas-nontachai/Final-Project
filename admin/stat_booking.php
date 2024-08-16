@@ -95,8 +95,17 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="font-weight-bold text-primary text-uppercase mx-2">
-                                                สมาชิกปัจจุบัน</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">xxx คน</div>
+                                                สมาชิกปัจจุบัน
+                                            </div>
+                                            <?php
+                                            $query = "SELECT COUNT(*) AS total_members FROM tbl_user ;";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            $total_members = $row['total_members'];
+                                            ?>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                <?php echo $total_members; ?> คน
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -113,7 +122,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                         <div class="col mr-2">
                                             <div class="font-weight-bold text-success text-uppercase mx-2">
                                                 จำนวนการจองปัจจุบัน</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">xxx รายการ</div>
+                                            <?php
+                                            $query = "SELECT COUNT(*) AS total_book FROM booking ;";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            $total_book = $row['total_book'];
+                                            ?>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                <?php echo $total_book; ?> รายการ
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -130,7 +147,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                         <div class="col mr-2">
                                             <div class="font-weight-bold text-info text-uppercase mx-2">
                                                 จำนวนการจองที่เสร็จสิ้นแล้ว</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">xxx รายการ</div>
+                                            <?php
+                                            $query = "SELECT COUNT(*) AS total_booked FROM booked ;";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            $total_booked = $row['total_booked'];
+                                            ?>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                <?php echo $total_booked; ?> รายการ
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -142,16 +167,24 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
                         <!-- Pending Requests Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div class="font-weight-bold text-danger text-uppercase mx-2">
+                                                จำนวนการจองที่นกเลิก</div>
+                                            <?php
+                                            $query = "SELECT COUNT(*) AS cancel_booked FROM booked WHERE booking_status = 5 OR booking_status = 6;";
+                                            $result = mysqli_query($conn, $query);
+                                            $row = mysqli_fetch_assoc($result);
+                                            $cancel_booked = $row['cancel_booked'];
+                                            ?>
+                                            <div class="h5 mb-0 font-weight-bold text-red-800 mx-2">
+                                                <?php echo $cancel_booked; ?> รายการ
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                            <i class="fas fa-dollar-sign fa-2x text-red-300"></i>
                                         </div>
                                     </div>
                                 </div>

@@ -314,6 +314,7 @@ if (isset($_GET['category_id'])) {
 
 
     </div>
+    
     <!-- View Modal -->
     <div class="modal fade" id="viewBookingModal" tabindex="-1" aria-labelledby="viewBookingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
