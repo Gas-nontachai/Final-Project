@@ -62,7 +62,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 >>>>>>> 7eb06d3 (from lenovo)
 </head>
-
+s
 <body>
     <!-- Nav -->
     <?php
