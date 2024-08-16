@@ -434,11 +434,11 @@ if (isset($_GET['category_id'])) {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>ReserveModal</strong></h1>
+                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>จองพื้นที่การขาย</strong></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h1>จองพื้นที่การขาย</h1>
+                    <h3>จองพื้นที่การขาย</h3>
                     <form action="./reserve_order.php" method="post">
                         <div class="mb-3 row">
                             <label for="fullname" class="col-sm-3 col-form-label">

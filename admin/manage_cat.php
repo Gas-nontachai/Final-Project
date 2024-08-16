@@ -279,7 +279,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h1>เพิ่ม ประเภทหลัก และ ประเภทย่อย</h1>
+                        <h1>แก้ไข ประเภทหลัก และ ประเภทย่อย</h1>
                         <input type="hidden" name="cat_id" id="zone_id">
                         <div class="mb-3 row">
                             <label for="zone_name" class="col-sm-3 col-form-label"><strong>ประเภทหลัก:</strong></label>
