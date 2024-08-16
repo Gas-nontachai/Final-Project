@@ -54,7 +54,13 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <title>จัดการประเภทสินค้า</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<<<<<<< HEAD
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">    <link rel="stylesheet" href="../asset/css/font.css">
+=======
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../asset/css/font.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+>>>>>>> 7eb06d3 (from lenovo)
 </head>
 
 <body>
@@ -100,6 +106,10 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             // Initially hide subcategories, shown on click
                             echo "<td>";
                             $id_category = $row["id_category"];
+<<<<<<< HEAD
+=======
+                            $cat_name = $row["cat_name"];
+>>>>>>> 7eb06d3 (from lenovo)
                             $sub_sql = "SELECT * FROM sub_category WHERE id_category = $id_category";
                             $sub_result = $conn->query($sub_sql);
                             $subcategories = [];
@@ -122,10 +132,18 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         type='button' 
                         data-bs-toggle='modal' 
                         data-bs-target='#EditModal' 
+<<<<<<< HEAD
                         data-bs-id='" . $row["id_category"] . "' 
                         data-bs-cat_name='" . $row["cat_name"] . "'
                         data-bs-sub_cat_name='" . $subcategories_str . "'>แก้ไข</button>";
                             echo "<a href='delete_category.php?id=" . $row["id_category"] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this category?\");'>ลบ</a>";
+=======
+                        data-bs-id='" . $id_category . "' 
+                        data-bs-cat_name='" . $cat_name . "'
+                        data-bs-sub_cat_name='" . $subcategories_str . "'>แก้ไข</button>";
+
+                            echo "<a href='#' class='btn btn-sm btn-danger' onclick='confirmDeleteCat(" . $id_category . ", \"" . $cat_name . "\"); return false;'>ลบ</a>";
+>>>>>>> 7eb06d3 (from lenovo)
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -135,7 +153,29 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     }
                     ?>
                 </div>
+<<<<<<< HEAD
 
+=======
+                <script>
+                    function confirmDeleteCat(id_category, cat_name) {
+                        Swal.fire({
+                            title: "คุณแน่ใจหรือไม่?",
+                            text: "คุณกำลังจะลบ " + cat_name + " น้า",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "ใช่, ลบเลย!",
+                            cancelButtonText: "ยกเลิก"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // หากผู้ใช้ยืนยันการลบ, รีไดเร็กต์ไปยัง delete_category.php พร้อม zone_id
+                                window.location.href = 'delete_category.php?id_category=' + id_category;
+                            }
+                        });
+                    }
+                </script>
+>>>>>>> 7eb06d3 (from lenovo)
                 <style>
                     .category-item {
                         cursor: pointer;

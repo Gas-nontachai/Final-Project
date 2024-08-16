@@ -262,9 +262,15 @@ if (isset($_POST["submit"])) {
                 <input oninput="recheck_pass()" type="password" class="form-control" name="re-pw" id="re-pw" placeholder="ยืนยันรหัสผ่าน">
             </div>
         </div>
+<<<<<<< HEAD
         <div class="form-group checkbox-group">
             <input type="checkbox" name="showPassword" id="showPassword" onchange="showpw()" class="form-check-input">
             <label for="showPassword" class="form-check-label">แสดงรหัสผ่าน</label>
+=======
+        <div class="form-group checkbox-group d-flex align-items-start">
+            <input type="checkbox" name="showPassword" id="showPassword" onchange="showpw()" class="form-check-input">
+            <label for="showPassword" class="form-check-label mx-2">แสดงรหัสผ่าน</label>
+>>>>>>> 7eb06d3 (from lenovo)
         </div>
         <ul>
             <li id="length">ความยาวอย่างน้อย 8 หลัก</li>
@@ -272,9 +278,15 @@ if (isset($_POST["submit"])) {
             <li id="num">มีตัวเลข</li>
             <li id="rech_pw">กรอกรหัสผ่านให้ตรงกัน</li>
         </ul>
+<<<<<<< HEAD
         <div class="form-group checkbox-group">
             <input type="checkbox" id="term" onchange="termofser()" class="form-check-input">
             <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ<a href="#">เงื่อนไขข้อกำหนดการใช้งาน</a></label>
+=======
+        <div class="form-group checkbox-group d-flex align-items-start">
+            <input type="checkbox" id="term" onchange="termofser()" class="form-check-input ">
+            <label for="term" class="form-check-label mx-2 ">คุณได้อ่านและยอมรับ<a href="#">เงื่อนไขข้อกำหนดการใช้งาน</a></label>
+>>>>>>> 7eb06d3 (from lenovo)
         </div>
         <button type="submit" name="submit" id="submit" class="btn btn-primary" disabled>สมัครสมาชิก</button>
         <p>หากมีบัญชีแล้ว <a href="login.php">เข้าสู่ระบบได้ที่นี่</a></p>
