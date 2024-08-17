@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2024 at 01:54 PM
+-- Generation Time: Aug 17, 2024 at 06:03 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -73,7 +73,9 @@ INSERT INTO `booked` (`id_booked`, `booking_id`, `member_id`, `booking_amount`, 
 (0000000034, 24, 6, '1', '40', 3, 125, 4, 0, 33, NULL, '2024-08-09 14:50:59', 'A1', '2024-08-08 23:59:58'),
 (0000000035, 25, 6, '1', '40', 3, 125, 4, 0, 33, 'slip_20240809_215258', '2024-08-09 14:53:17', 'A1', '2024-08-08 23:59:58'),
 (0000000036, 26, 6, '2', '80', 3, 125, 4, 0, 33, 'slip_20240809_215422_66b62d9e9080e.jpg', '2024-08-09 14:56:34', 'A1, A2', '2024-08-08 23:59:58'),
-(0000000037, 27, 6, '2', '80', 3, 125, 6, 0, 33, NULL, '2024-08-13 13:08:55', NULL, NULL);
+(0000000037, 27, 6, '2', '80', 3, 125, 6, 0, 33, NULL, '2024-08-13 13:08:55', NULL, NULL),
+(0000000038, 29, 6, '3', '120', 3, 125, 6, 0, 33, NULL, '2024-08-16 12:48:32', NULL, NULL),
+(0000000039, 28, 6, '2', '80', 3, 125, 4, 0, 33, 'slip_20240813_200906_66bb5af254f0f.jpg', '2024-08-13 13:09:16', 'A1, A2', '2024-08-13 23:59:58');
 
 -- --------------------------------------------------------
 
@@ -96,14 +98,6 @@ CREATE TABLE `booking` (
   `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง',
   `expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `booking`
---
-
-INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `book_lock_number`, `booking_date`, `expiration_date`) VALUES
-(0000000028, 000006, 4, 'PerDay', 033, 2, 80, 3, 125, 'slip_20240813_200906_66bb5af254f0f.jpg', 'A1, A2', '2024-08-13 13:09:16', '2024-08-13 23:59:58'),
-(0000000029, 000006, 1, 'PerDay', 033, 3, 120, 3, 125, NULL, NULL, '2024-08-13 13:15:45', NULL);
 
 -- --------------------------------------------------------
 
@@ -149,6 +143,27 @@ INSERT INTO `category` (`id_category`, `cat_name`) VALUES
 (6, 'เสื้อผ้าและแฟชั่น'),
 (7, 'จิปาถะของจุ๊บจิ๊บ'),
 (8, 'เปิดท้ายของมือสอง');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(6) UNSIGNED NOT NULL,
+  `comment` text NOT NULL,
+  `rating` int(11) NOT NULL CHECK (`rating` between 1 and 5),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `user_id`, `comment`, `rating`, `created_at`) VALUES
+(1, 6, 'ดีมากๆงับ', 5, '2024-08-16 13:48:42');
 
 -- --------------------------------------------------------
 
@@ -229,8 +244,8 @@ INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `availabl
 (614, 'D18', 032, NULL, 0),
 (615, 'D19', 032, NULL, 0),
 (616, 'D20', 032, NULL, 0),
-(617, 'A1', 033, 0000000028, 1),
-(618, 'A2', 033, 0000000028, 1),
+(617, 'A1', 033, NULL, 0),
+(618, 'A2', 033, NULL, 0),
 (619, 'A3', 033, NULL, 0),
 (620, 'A4', 033, NULL, 0),
 (621, 'A5', 033, NULL, 0),
@@ -451,6 +466,13 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`id_category`);
 
 --
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_id` (`user_id`);
+
+--
 -- Indexes for table `locks`
 --
 ALTER TABLE `locks`
@@ -513,7 +535,7 @@ ALTER TABLE `zone_detail`
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
-  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=38;
+  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `booking`
@@ -532,6 +554,12 @@ ALTER TABLE `booking_status`
 --
 ALTER TABLE `category`
   MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `locks`
@@ -589,6 +617,12 @@ ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`zone_id`) REFERENCES `zone_detail` (`zone_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`booking_status`) REFERENCES `booking_status` (`id`),
   ADD CONSTRAINT `booking_ibfk_4` FOREIGN KEY (`product_type`) REFERENCES `category` (`id_category`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+--
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `locks`
