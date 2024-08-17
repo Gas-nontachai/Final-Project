@@ -296,7 +296,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             }
                             ?>
                             <div class="container mt-5">
-                                <h1 class="mb-4">ยอดการจองต่อเดือน</h1>
+                                <h1 class="mb-4"> <strong>ยอดการจองต่อเดือน</strong> </h1>
                                 <div class="row">
                                     <div class="col-md-8">
                                         <canvas id="monthlyBookingsChart"></canvas>
@@ -393,7 +393,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 <div class="row ">
                                     <div class="col-md-12">
                                         <div class="chart-container p-3 mb-4">
-                                            <h1 class="mb-4 text-center">กราฟสถานะการจอง</h1>
+                                            <h1 class="mb-4 text-center"> <strong>กราฟสถานะการจอง</strong> </h1>
                                             <canvas id="bookingStatusChart"></canvas>
                                         </div>
                                     </div>

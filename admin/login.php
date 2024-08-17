@@ -59,7 +59,9 @@ if (isset($_POST["submit"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">    <link rel="stylesheet" href="../asset/css/font.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../asset/css/font.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             background-color: #f8f9fa;
@@ -121,13 +123,44 @@ if (isset($_POST["submit"])) {
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" id="term" onchange="termofser()" class="form-check-input">
-                <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#">เงื่อนไขข้อกำหนดการใช้งาน</a></label>
+                <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">เงื่อนไขข้อกำหนดการใช้งาน</a>
+                </label>
             </div>
             <button type="submit" name="submit" id="submit" class="btn btn-primary w-100" disabled>เข้าสู่ระบบ</button>
             <div class="mt-3 text-center">
                 <p>หากคุณยังไม่มีบัญชี <a href="register.php">สมัครที่นี่</a></p>
             </div>
         </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">เงื่อนไขข้อกำหนดการใช้งาน</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>ข้อที่ 1: การใช้งานบริการ</h6>
+                    <p>ผู้ใช้จะต้องใช้งานบริการของเราตามที่กำหนดไว้และห้ามละเมิดเงื่อนไขใด ๆ ในการใช้งาน เช่น การนำข้อมูลไปใช้ในทางที่ผิดกฎหมายหรือการคัดลอกเนื้อหาโดยไม่ได้รับอนุญาต</p>
+
+                    <h6>ข้อที่ 2: ความรับผิดชอบของผู้ใช้</h6>
+                    <p>ผู้ใช้ต้องรับผิดชอบต่อการกระทำของตนเองที่เกิดขึ้นจากการใช้บริการนี้ หากพบว่ามีการละเมิดทางเราขอสงวนสิทธิ์ในการระงับการใช้งานของผู้ใช้งาน</p>
+
+                    <h6>ข้อที่ 3: การเก็บข้อมูลส่วนตัว</h6>
+                    <p>เราจะเก็บข้อมูลส่วนตัวของผู้ใช้งานตามนโยบายความเป็นส่วนตัว โดยข้อมูลที่เก็บรวบรวมจะถูกใช้งานเพื่อการพัฒนาบริการและไม่มีการขายต่อข้อมูลให้บุคคลภายนอก</p>
+
+                    <h6>ข้อที่ 4: การเปลี่ยนแปลงเงื่อนไข</h6>
+                    <p>เราขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขข้อกำหนดการใช้งานโดยไม่จำเป็นต้องแจ้งให้ทราบล่วงหน้า ผู้ใช้ควรตรวจสอบเงื่อนไขนี้เป็นระยะ ๆ</p>
+
+                    <p>หากผู้ใช้มีข้อสงสัยเพิ่มเติมสามารถติดต่อทีมงานได้ผ่านช่องทางที่ระบุในเว็บไซต์</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

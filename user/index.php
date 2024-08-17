@@ -2,6 +2,8 @@
 session_start();
 require("../condb.php");
 
+
+
 if (!isset($_SESSION["username"])) {
     echo '<!DOCTYPE html>
     <html lang="th">
@@ -93,7 +95,8 @@ if (isset($_GET['category_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">    <link rel="stylesheet" href="../asset/css/font.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../asset/css/font.css">
 
 </head>
 
@@ -185,7 +188,7 @@ if (isset($_GET['category_id'])) {
                 </div>
                 <!-- BTN -->
                 <div class="col-12 d-flex justify-content-evenly px-3">
-                    <button class="btn btn-success m-2" type="button" data-bs-toggle="modal" data-bs-target="#ReserveModal">
+                    <button class="btn btn-success m-2" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#ReserveModal">
                         จองพื้นที่การขาย
                     </button>
                 </div>
@@ -314,7 +317,7 @@ if (isset($_GET['category_id'])) {
 
 
     </div>
-    
+
     <!-- View Modal -->
     <div class="modal fade" id="viewBookingModal" tabindex="-1" aria-labelledby="viewBookingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -369,6 +372,55 @@ if (isset($_GET['category_id'])) {
         });
     </script>
 
+    <?php $currentTime = date('H:i:s'); // เวลาปัจจุบัน
+    // ดึงข้อมูลจาก database
+    $sql_time = "SELECT opening_time, closing_time FROM operating_hours LIMIT 1";
+    $result = $conn->query($sql_time);
+    $row_time = $result->fetch_assoc();
+
+    $openingTime = $row_time['opening_time'];
+    $closingTime = $row_time['closing_time'];
+    ?>
+    <script>
+        // เวลาเปิดและปิดจาก PHP
+        var openingTime = "<?php echo $openingTime; ?>"; // เวลาเปิด เช่น "09:00:00"
+        var closingTime = "<?php echo $closingTime; ?>"; // เวลาปิด เช่น "18:00:00"
+
+        // ฟังก์ชันตรวจสอบเวลา
+        function checkTime() {
+            var now = new Date();
+            var currentTime = now.toTimeString().split(' ')[0];
+
+            if (currentTime < openingTime || currentTime > closingTime) {
+                disableReserveButton(); // ปิดใช้งานปุ่มถ้ายังไม่ถึงเวลาหรือเกินเวลา
+            } else {
+                enableReserveButton(); // เปิดใช้งานปุ่มถ้าอยู่ในช่วงเวลาเปิด-ปิด
+            }
+        }
+
+        // ปิดใช้งานปุ่มพร้อม tooltip
+        function disableReserveButton() {
+            var button = document.getElementById('reserveButton');
+            button.disabled = true;
+            button.classList.add('disabled');
+            button.setAttribute('title', 'ระบบยังไม่เปิดหรือปิดการจองแล้ว');
+            var tooltip = new bootstrap.Tooltip(button); // ใช้ tooltip ของ Bootstrap
+        }
+
+        // เปิดใช้งานปุ่ม
+        function enableReserveButton() {
+            var button = document.getElementById('reserveButton');
+            button.disabled = false;
+            button.classList.remove('disabled');
+            button.removeAttribute('title');
+        }
+
+        // เรียกใช้ฟังก์ชันตรวจสอบเวลาเมื่อโหลดหน้า
+        checkTime();
+
+        // อัปเดตสถานะทุกๆ 1 วินาที (ถ้าต้องการตรวจสอบเวลาตลอดเวลา)
+        setInterval(checkTime, 1000);
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

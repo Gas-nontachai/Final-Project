@@ -138,15 +138,116 @@
         </div>
     </div>
     <!-- timer -->
+    <?php
+    require("../condb.php");
+
+    $currentTime = date('H:i:s'); // เวลาปัจจุบัน
+    // ดึงข้อมูลจาก database
+    $sql_time = "SELECT opening_time, closing_time FROM operating_hours LIMIT 1";
+    $result = $conn->query($sql_time);
+    $row_time = $result->fetch_assoc();
+
+    $openingTime = $row_time['opening_time'];
+    $closingTime = $row_time['closing_time'];
+    ?>
+    <!-- Timer -->
     <div class="col-12 d-flex justify-content-between px-5">
         <strong>
             <div id="time"></div>
-            <div id="#">(ระบบปิด)</div>
+            <div id="status">(ระบบปิด)</div>
         </strong>
         <strong>
-            <div id="#">ระบบเปิดเวลา : <a href="#">00:00:00</a></div>
+            <div id="opening_time">ระบบเปิดเวลา : <a href="#" data-bs-toggle="modal" data-bs-target="#editTimeModal"><?php echo $openingTime; ?></a></div>
+            <div id="closing_time">ระบบปิดเวลา : <a href="#" data-bs-toggle="modal" data-bs-target="#editTimeModal"><?php echo $closingTime; ?></a></div>
         </strong>
-        <script src="../asset/js/time_couter.js"></script>
     </div>
+    <!-- Modal สำหรับแก้ไขเวลาเปิด-ปิด -->
+    <div class="modal fade" id="editTimeModal" tabindex="-1" aria-labelledby="editTimeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="updateTimeForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTimeModalLabel">แก้ไขเวลาเปิด-ปิดระบบ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="openingTime" class="form-label">เวลาเปิด</label>
+                            <input type="time" class="form-control" id="openingTime" name="opening_time" value="<?php echo $openingTime; ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="closingTime" class="form-label">เวลาปิด</label>
+                            <input type="time" class="form-control" id="closingTime" name="closing_time" value="<?php echo $closingTime; ?>" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                        <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript สำหรับ Swal และการอัพเดตเวลา -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // ฟังก์ชันการแสดงผล Swal เมื่อสำเร็จ
+        function showSuccessSwal() {
+            Swal.fire({
+                icon: 'success',
+                title: 'แก้ไขเวลาเปิด-ปิดสำเร็จ',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+
+        // ตรวจสอบเวลาปัจจุบัน
+        function updateTime() {
+            var now = new Date();
+            var currentTime = now.toTimeString().split(' ')[0];
+
+            document.getElementById('time').innerHTML = "เวลาปัจจุบัน : " + currentTime;
+
+            var openingTime = "<?php echo $openingTime; ?>";
+            var closingTime = "<?php echo $closingTime; ?>";
+
+            if (currentTime >= openingTime && currentTime <= closingTime) {
+                document.getElementById('status').innerHTML = "(ระบบเปิด)";
+            } else {
+                document.getElementById('status').innerHTML = "(ระบบปิด)";
+            }
+        }
+        setInterval(updateTime, 1000);
+
+        // เมื่อกด submit ฟอร์ม
+        document.getElementById('updateTimeForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันการโหลดหน้าใหม่
+
+            var formData = new FormData(this);
+
+            // ส่งข้อมูลไปที่ PHP ด้วย AJAX
+            fetch('update_time.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.text())
+                .then(data => {
+                    // แสดง Swal เมื่อสำเร็จ
+                    showSuccessSwal();
+
+                    // ปิด modal หลังจาก Swal แสดงผล
+                    setTimeout(function() {
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('editTimeModal'));
+                        modal.hide();
+                    }, 1500);
+                }).catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถแก้ไขเวลาได้'
+                    });
+                });
+        });
+    </script>
 
 </nav>

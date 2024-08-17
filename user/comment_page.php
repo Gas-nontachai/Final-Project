@@ -106,7 +106,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 <body>
     <!-- Nav -->
     <?php include('./user_nav.php'); ?>
-    <div class="container-fluid d-flex justify-content-center align-items-center">
+    <div class="mt-4 container-fluid d-flex justify-content-center align-items-center">
         <div class="card" style="width: 80%;">
             <div class="card-header text-center">
                 <h3 class="mb-0"><strong>แสดงความคิดเห็นของคุณ</strong></h3>

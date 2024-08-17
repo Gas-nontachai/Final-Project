@@ -169,18 +169,47 @@
             </div>
         </div>
     </div>
-    <!-- timer -->
+    <?php
+    require("../condb.php");
+
+    $currentTime = date('H:i:s'); // เวลาปัจจุบัน
+    // ดึงข้อมูลจาก database
+    $sql_time = "SELECT opening_time, closing_time FROM operating_hours LIMIT 1";
+    $result = $conn->query($sql_time);
+    $row_time = $result->fetch_assoc();
+
+    $openingTime = $row_time['opening_time'];
+    $closingTime = $row_time['closing_time'];
+    ?>
+    <!-- Timer -->
     <div class="col-12 d-flex justify-content-between px-5">
         <strong>
             <div id="time"></div>
-            <div id="#">(ระบบปิด)</div>
+            <div id="status">(ระบบปิด)</div>
         </strong>
         <strong>
-            <div id="#">ระบบเปิดเวลา : <a href="#">00:00:00</a></div>
+            <div id="opening_time">ระบบเปิดเวลา : <?php echo $openingTime; ?></div>
+            <div id="closing_time">ระบบปิดเวลา : <?php echo $closingTime; ?></div>
         </strong>
-        <script src="../asset/js/time_couter.js"></script>
     </div>
     <script>
+        function updateTime() {
+            var now = new Date();
+            var currentTime = now.toTimeString().split(' ')[0];
+
+            document.getElementById('time').innerHTML = "เวลาปัจจุบัน : " + currentTime;
+
+            var openingTime = "<?php echo $openingTime; ?>";
+            var closingTime = "<?php echo $closingTime; ?>";
+
+            if (currentTime >= openingTime && currentTime <= closingTime) {
+                document.getElementById('status').innerHTML = "(ระบบเปิด)";
+            } else {
+                document.getElementById('status').innerHTML = "(ระบบปิด)";
+            }
+        }
+        setInterval(updateTime, 1000);
+
         function confirmLogout(booking_id) {
             Swal.fire({
                 title: "คุณแน่ใจหรือไม่?",

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2024 at 06:03 AM
+-- Generation Time: Aug 17, 2024 at 12:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -163,7 +163,8 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`id`, `user_id`, `comment`, `rating`, `created_at`) VALUES
-(1, 6, 'ดีมากๆงับ', 5, '2024-08-16 13:48:42');
+(1, 6, 'ดีมากๆงับ', 5, '2024-08-16 13:48:42'),
+(3, 4, 'ดีมากค้าบบ', 5, '2024-08-17 04:36:43');
 
 -- --------------------------------------------------------
 
@@ -264,6 +265,25 @@ INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `availabl
 (634, 'A18', 033, NULL, 0),
 (635, 'A19', 033, NULL, 0),
 (636, 'A20', 033, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operating_hours`
+--
+
+CREATE TABLE `operating_hours` (
+  `id` int(11) NOT NULL,
+  `opening_time` time NOT NULL,
+  `closing_time` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `operating_hours`
+--
+
+INSERT INTO `operating_hours` (`id`, `opening_time`, `closing_time`) VALUES
+(1, '09:00:00', '18:00:00');
 
 -- --------------------------------------------------------
 
@@ -482,6 +502,12 @@ ALTER TABLE `locks`
   ADD KEY `locks_ibfk_3_idx` (`lock_name`);
 
 --
+-- Indexes for table `operating_hours`
+--
+ALTER TABLE `operating_hours`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pre_category`
 --
 ALTER TABLE `pre_category`
@@ -559,13 +585,19 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `locks`
 --
 ALTER TABLE `locks`
   MODIFY `id_locks` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ไอดีล็อค', AUTO_INCREMENT=637;
+
+--
+-- AUTO_INCREMENT for table `operating_hours`
+--
+ALTER TABLE `operating_hours`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `pre_category`
