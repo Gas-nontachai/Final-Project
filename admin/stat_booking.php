@@ -64,6 +64,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <link href="../asset/css/sb-admin-2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
@@ -82,183 +83,385 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid mt-4">
 
+                    <div class="container-fluid d-flex justify-content-around align-items-start">
+                        <div style="width: 50%;">
+                            <!-- Content Row -->
+                            <div class="row">
 
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- สมาชิกปัจจุบัน Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="font-weight-bold text-primary text-uppercase mx-2">
-                                                สมาชิกปัจจุบัน
+                                <!-- สมาชิกปัจจุบัน Card -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="font-weight-bold text-primary text-uppercase mx-2">
+                                                        สมาชิกปัจจุบัน
+                                                    </div>
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) AS total_members FROM tbl_user ;";
+                                                    $result = mysqli_query($conn, $query);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $total_members = $row['total_members'];
+                                                    ?>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                        <?php echo $total_members; ?> คน
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
                                             </div>
-                                            <?php
-                                            $query = "SELECT COUNT(*) AS total_members FROM tbl_user ;";
-                                            $result = mysqli_query($conn, $query);
-                                            $row = mysqli_fetch_assoc($result);
-                                            $total_members = $row['total_members'];
-                                            ?>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
-                                                <?php echo $total_members; ?> คน
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-success shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="font-weight-bold text-success text-uppercase mx-2">
+                                                        จำนวนการจองปัจจุบัน</div>
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) AS total_book FROM booking ;";
+                                                    $result = mysqli_query($conn, $query);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $total_book = $row['total_book'];
+                                                    ?>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                        <?php echo $total_book; ?> รายการ
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-info shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="font-weight-bold text-info text-uppercase mx-2">
+                                                        จองที่เสร็จสิ้นแล้ว</div>
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) AS total_booked FROM booked ;";
+                                                    $result = mysqli_query($conn, $query);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $total_booked = $row['total_booked'];
+                                                    ?>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                        <?php echo $total_booked; ?> รายการ
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-danger shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="font-weight-bold text-danger text-uppercase mx-2">
+                                                        จำนวนการจองที่ยกเลิก</div>
+                                                    <?php
+                                                    $query = "SELECT COUNT(*) AS cancel_booked FROM booked WHERE booking_status = 5 OR booking_status = 6;";
+                                                    $result = mysqli_query($conn, $query);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $cancel_booked = $row['cancel_booked'];
+                                                    ?>
+                                                    <div class="h5 mb-0 font-weight-bold text-red-800 mx-2">
+                                                        <?php echo $cancel_booked; ?> รายการ
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-red-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-warning shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="font-weight-bold text-warning text-uppercase mx-2">
+                                                        คะแนนตลาดปัจจุบัน
+                                                    </div>
+                                                    <?php
+                                                    $query = "SELECT 
+                                                            ROUND(AVG(rating), 1) AS average_rating
+                                                        FROM comments;";
+                                                    $result = mysqli_query($conn, $query);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $average_rating = $row['average_rating'];
+                                                    ?>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                        <?php echo $average_rating; ?> / 5.0 คะแนน
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-dark shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="font-weight-bold text-dark text-uppercase mx-2">
+                                                        จำนวนคอมเมนต์</div>
+                                                    <?php
+                                                    $query = "SELECT 
+                                                            COUNT(*) AS total_comments
+                                                        FROM comments;";
+                                                    $result = mysqli_query($conn, $query);
+                                                    $row = mysqli_fetch_assoc($result);
+                                                    $total_comments = $row['total_comments'];
+                                                    ?>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
+                                                        <?php echo $total_comments; ?> รายการ
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="font-weight-bold text-success text-uppercase mx-2">
-                                                จำนวนการจองปัจจุบัน</div>
-                                            <?php
-                                            $query = "SELECT COUNT(*) AS total_book FROM booking ;";
-                                            $result = mysqli_query($conn, $query);
-                                            $row = mysqli_fetch_assoc($result);
-                                            $total_book = $row['total_book'];
-                                            ?>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
-                                                <?php echo $total_book; ?> รายการ
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="font-weight-bold text-info text-uppercase mx-2">
-                                                จำนวนการจองที่เสร็จสิ้นแล้ว</div>
-                                            <?php
-                                            $query = "SELECT COUNT(*) AS total_booked FROM booked ;";
-                                            $result = mysqli_query($conn, $query);
-                                            $row = mysqli_fetch_assoc($result);
-                                            $total_booked = $row['total_booked'];
-                                            ?>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mx-2">
-                                                <?php echo $total_booked; ?> รายการ
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-danger shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="font-weight-bold text-danger text-uppercase mx-2">
-                                                จำนวนการจองที่นกเลิก</div>
-                                            <?php
-                                            $query = "SELECT COUNT(*) AS cancel_booked FROM booked WHERE booking_status = 5 OR booking_status = 6;";
-                                            $result = mysqli_query($conn, $query);
-                                            $row = mysqli_fetch_assoc($result);
-                                            $cancel_booked = $row['cancel_booked'];
-                                            ?>
-                                            <div class="h5 mb-0 font-weight-bold text-red-800 mx-2">
-                                                <?php echo $cancel_booked; ?> รายการ
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-red-300"></i>
-                                        </div>
-                                    </div>
+                        <div style="width: 40%;">
+                            <div class="row overflow-auto" style="height: 25rem;">
+                                <?php
+                                $sql = "SELECT id, comment, rating, created_at, firstname FROM market_booking.comments AS C
+                                LEFT JOIN tbl_user AS U ON C.user_id = U.user_id 
+                                ORDER BY created_at DESC";
+                                $result = mysqli_query($conn, $sql);
+                                ?>
+                                <!-- แสดงความคิดเห็นที่เคยแสดงความคิดเห็น -->
+                                <div class="container">
+                                    <h4> <strong>ความคิดเห็นทั้งหมด</strong> </h4>
+                                    <?php if (mysqli_num_rows($result) > 0): ?>
+                                        <ul class="list-group">
+                                            <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                                <li class="list-group-item">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>
+                                                            <span> <strong><?php echo $row['firstname']; ?></strong> </span>
+                                                            <span>คะแนน: <?php echo $row['rating']; ?>/5</span>
+                                                        </div>
+                                                        <span><?php echo $row['created_at']; ?></span>
+                                                    </div>
+                                                    <p><?php echo htmlspecialchars($row['comment']); ?></p>
+
+                                                </li>
+                                            <?php endwhile; ?>
+                                        </ul>
+                                    <?php else: ?>
+                                        <p>คุณยังไม่ได้แสดงความคิดเห็น</p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+                    <div class="container-fluid d-flex justify-content-around align-items-start">
+                        <div class="row ms-5" style="width: 50%;">
+                            <?php
+                            $sql = "SELECT DATE_FORMAT(booking_date, '%Y-%m') AS month, COUNT(*) AS total_bookings FROM booked GROUP BY month";
+                            $result = $conn->query($sql);
 
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 h5 font-weight-bold text-primary">ยอดจองปัจจุบัน</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
+                            $data = array();
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $data[] = $row;
+                                }
+                            }
+                            ?>
+                            <div class="container mt-5">
+                                <h1 class="mb-4">ยอดการจองต่อเดือน</h1>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <canvas id="monthlyBookingsChart"></canvas>
                                     </div>
                                 </div>
                             </div>
+
+                            <script>
+                                var dataFromPHP = <?php echo json_encode($data); ?>;
+
+                                var labels = dataFromPHP.map(function(e) {
+                                    return e.month;
+                                });
+                                var values = dataFromPHP.map(function(e) {
+                                    return e.total_bookings;
+                                });
+
+                                var ctx = document.getElementById('monthlyBookingsChart').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: 'ยอดการจอง',
+                                            data: values,
+                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                position: 'top',
+                                            },
+                                            tooltip: {
+                                                callbacks: {
+                                                    label: function(context) {
+                                                        return context.label + ': ' + context.raw;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            x: {
+                                                beginAtZero: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'เดือน'
+                                                }
+                                            },
+                                            y: {
+                                                beginAtZero: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'ยอดการจองทั้งหมด'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
                         </div>
+                        <div class="row" style="width: 50%; ">
+                            <style>
+                                .chart-container {
+                                    position: relative;
+                                    width: 100%;
+                                    height: 400px;
+                                    /* ปรับความสูงของกราฟตามต้องการ */
+                                }
 
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 h5 font-weight-bold text-primary">ประเภทการจอง</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> รายวัน
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> รายเดือน
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-danger"></i> ยกเลิก
-                                        </span>
+                                #bookingStatusChart {
+                                    width: 100% !important;
+                                    height: auto !important;
+                                }
+                            </style>
+                            <?php
+                            $sql = "SELECT status, COUNT(*) AS count FROM booked AS B
+                                    LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
+                                    GROUP BY booking_status";
+                            $result = $conn->query($sql);
+
+                            $data = array();
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $data[] = $row;
+                                }
+                            }
+                            $conn->close();
+                            ?>
+                            <div class="container">
+                                <div class="row ">
+                                    <div class="col-md-12">
+                                        <div class="chart-container p-3 mb-4">
+                                            <h1 class="mb-4 text-center">กราฟสถานะการจอง</h1>
+                                            <canvas id="bookingStatusChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <script>
+                                var dataFromPHP = <?php echo json_encode($data); ?>;
+
+                                var labels = dataFromPHP.map(function(e) {
+                                    return e.status;
+                                });
+                                var values = dataFromPHP.map(function(e) {
+                                    return e.count;
+                                });
+
+                                var ctx = document.getElementById('bookingStatusChart').getContext('2d');
+                                var bookingStatusChart = new Chart(ctx, {
+                                    type: 'pie',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: 'กราฟสถานะการจอง',
+                                            data: values,
+                                            backgroundColor: [
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 99, 132, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false, // ปิดการรักษาสัดส่วน
+                                        plugins: {
+                                            legend: {
+                                                position: 'top',
+                                            },
+                                            tooltip: {
+                                                callbacks: {
+                                                    label: function(context) {
+                                                        return context.label + ': ' + context.raw;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
-
-
-
                 </div>
                 <!-- /.container-fluid -->
 
             </div>
             <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->

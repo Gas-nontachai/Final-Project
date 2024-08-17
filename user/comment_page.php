@@ -141,7 +141,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     $result = mysqli_query($conn, $sql);
     ?>
     <!-- แสดงความคิดเห็นที่เคยแสดงความคิดเห็น -->
-    <div class="mt-4">
+    <div class="mt-4 container-fluid" style="width: 90%;">
         <h4>ความคิดเห็นของฉัน</h4>
         <?php if (mysqli_num_rows($result) > 0): ?>
             <ul class="list-group">
