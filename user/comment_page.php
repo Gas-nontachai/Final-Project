@@ -136,6 +136,67 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             </div>
         </div>
     </div>
+    <?php
+    $sql = "SELECT id, comment, rating, created_at FROM comments WHERE user_id = '$user_id' ORDER BY created_at DESC";
+    $result = mysqli_query($conn, $sql);
+    ?>
+    <!-- แสดงความคิดเห็นที่เคยแสดงความคิดเห็น -->
+    <div class="mt-4">
+        <h4>ความคิดเห็นของฉัน</h4>
+        <?php if (mysqli_num_rows($result) > 0): ?>
+            <ul class="list-group">
+                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <span>คะแนน: <?php echo $row['rating']; ?>/5</span>
+                            <span><?php echo $row['created_at']; ?></span>
+                        </div>
+                        <p><?php echo htmlspecialchars($row['comment']); ?></p>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editCommentModal" onclick="populateEditModal(<?php echo $row['id']; ?>, '<?php echo addslashes($row['comment']); ?>', <?php echo $row['rating']; ?>)">แก้ไข</button>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id']; ?>)">ลบ</button>
+                        </div>
+                    </li>
+                <?php endwhile; ?>
+            </ul>
+        <?php else: ?>
+            <p>คุณยังไม่ได้แสดงความคิดเห็น</p>
+        <?php endif; ?>
+    </div>
+    </div>
+
+    <!-- Modal สำหรับแก้ไขความคิดเห็น -->
+    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCommentModalLabel">แก้ไขความคิดเห็น</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCommentForm">
+                        <div class="mb-3">
+                            <label for="editComment" class="form-label">ความคิดเห็น</label>
+                            <textarea class="form-control" id="editComment" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ให้คะแนน</label>
+                            <div class="star-rating" id="editRating">
+                                <span class="star" data-value="1">&#9733;</span>
+                                <span class="star" data-value="2">&#9733;</span>
+                                <span class="star" data-value="3">&#9733;</span>
+                                <span class="star" data-value="4">&#9733;</span>
+                                <span class="star" data-value="5">&#9733;</span>
+                            </div>
+                            <input type="hidden" id="editRatingValue" name="rating" value="0">
+                        </div>
+                        <input type="hidden" id="editCommentId">
+                        <button type="submit" class="btn btn-primary w-100">บันทึกการแก้ไข</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
@@ -247,6 +308,146 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                 document.querySelectorAll('.star-rating .star').forEach(star => {
                     star.classList.remove('hover');
                 });
+            });
+        });
+
+        function populateEditModal(commentId, comment, rating) {
+            document.getElementById('editCommentId').value = commentId;
+            document.getElementById('editComment').value = comment;
+            document.getElementById('editRatingValue').value = rating;
+            // Set stars for the rating
+            [...document.querySelectorAll('#editRating .star')].forEach(star => {
+                star.classList.remove('selected');
+                if (parseInt(star.getAttribute('data-value')) <= rating) {
+                    star.classList.add('selected');
+                }
+            });
+        }
+        // ฟังก์ชันสำหรับการส่งข้อมูลการแก้ไข
+        document.getElementById('editCommentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const commentId = document.getElementById('editCommentId').value;
+            const comment = document.getElementById('editComment').value.trim();
+            const rating = document.getElementById('editRatingValue').value;
+
+            if (rating === '0') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถบันทึกได้',
+                    text: 'กรุณาให้คะแนนก่อนบันทึก!',
+                });
+            } else {
+                fetch('update_comment.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id: commentId,
+                            comment: comment,
+                            rating: rating
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ความคิดเห็นถูกแก้ไขแล้ว!',
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด!',
+                                text: data.message || 'ไม่สามารถแก้ไขความคิดเห็นได้',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด!',
+                            text: 'ไม่สามารถแก้ไขความคิดเห็นได้',
+                        });
+                    });
+            }
+        });
+
+        function confirmDelete(commentId) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: 'คุณต้องการลบความคิดเห็นนี้หรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ใช่, ลบเลย!',
+                cancelButtonText: 'ยกเลิก',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteComment(commentId);
+                }
+            });
+        }
+
+        function deleteComment(commentId) {
+            fetch(`delete_comment.php?id=${commentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ความคิดเห็นถูกลบแล้ว',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: data.error
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถลบความคิดเห็นได้'
+                    });
+                });
+        }
+
+        // Star rating interaction
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                let value = this.getAttribute('data-value');
+                document.getElementById('ratingValue').value = value;
+                [...document.querySelectorAll('#rating .star')].forEach(s => {
+                    s.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                for (let i = 1; i < value; i++) {
+                    document.querySelector(`#rating .star[data-value="${i}"]`).classList.add('selected');
+                }
+            });
+        });
+
+        document.querySelectorAll('#editRating .star').forEach(star => {
+            star.addEventListener('click', function() {
+                let value = this.getAttribute('data-value');
+                document.getElementById('editRatingValue').value = value;
+                [...document.querySelectorAll('#editRating .star')].forEach(s => {
+                    s.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                for (let i = 1; i < value; i++) {
+                    document.querySelector(`#editRating .star[data-value="${i}"]`).classList.add('selected');
+                }
             });
         });
     </script>
