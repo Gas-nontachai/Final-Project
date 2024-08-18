@@ -83,11 +83,22 @@
                     <p class="ms-1">
                         <strong>
                             <?php
-                            echo $_SESSION["token"];
+                            $user_id = $_SESSION["user_id"];
+                            $stmt = $conn->prepare("SELECT token FROM tbl_user WHERE user_id = ?");
+                            $stmt->bind_param("i", $user_id);
+
+                            $stmt->execute();
+                            $stmt->bind_result($token);
+                            $stmt->fetch();
+
+                            echo htmlspecialchars($token);
+
+                            $stmt->close();
+                            $conn->close();
                             ?>
                         </strong>
-
                     </p>
+
                 </div>
             </div>
             <button class="btn " type="button" data-bs-toggle="modal" data-bs-target="#ProfileModal">
