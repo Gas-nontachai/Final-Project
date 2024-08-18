@@ -17,6 +17,7 @@ if (isset($_POST["submit"])) {
         $stmt = $conn->prepare("SELECT * FROM tbl_user WHERE username = ? AND password = ?");
         $stmt->bind_param("ss", $username, $password);
         $stmt->execute();
+
         if ($stmt->error) {
             $message = "ข้อผิดพลาดในการสอบถามฐานข้อมูล: " . $stmt->error;
         } else {
@@ -33,6 +34,11 @@ if (isset($_POST["submit"])) {
                 $_SESSION["tel"] = $row['tel'];
                 $_SESSION["email"] = $row['email'];
                 $_SESSION["userrole"] = $row['userrole'];
+
+                // อัปเดตเวลาล็อกอินล่าสุด
+                $updateStmt = $conn->prepare("UPDATE tbl_user SET last_login = NOW() WHERE user_id = ?");
+                $updateStmt->bind_param("i", $row['user_id']);
+                $updateStmt->execute();
 
                 if ($row['userrole'] == 0) {
                     $message = 'ล็อคอินสำเร็จ|../user/index.php';

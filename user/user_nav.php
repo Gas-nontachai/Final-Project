@@ -1,3 +1,10 @@
+<style>
+    .swal2-container {
+        z-index: 9999 !important;
+        /* ปรับค่าให้เหมาะสมตามที่ต้องการ */
+    }
+</style>
+
 <nav class="row g-2">
     <!-- btn sidebar -->
     <div class="col-12 d-flex justify-content-between px-5 py-3">
@@ -93,6 +100,11 @@
                                 </svg>
                             </span>
                         </div>
+                        <div class="mb-3 row">
+                            <div class="col-sm-9">
+                                <button type="button" class="btn btn-sm btn-danger delete-btn" data-user-id="<?php echo $user_id; ?>">ลบโปรไฟล์</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -160,6 +172,7 @@
                                 </svg>
                             </span>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -192,6 +205,8 @@
             <div id="closing_time">ระบบปิดเวลา : <?php echo $closingTime; ?></div>
         </strong>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function updateTime() {
             var now = new Date();
@@ -226,5 +241,62 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-user-id');
+
+                    // First confirmation step
+                    Swal.fire({
+                        title: 'ยืนยันการลบ?',
+                        text: "คุณแน่ใจว่าต้องการลบโปรไฟล์นี้หรือไม่?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ใช่, ลบ!',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Second confirmation step with dropdown
+                            Swal.fire({
+                                title: 'ยืนยันการลบ!',
+                                text: "เลือก 'ยืนยันที่จะลบโปรไฟล์' จาก dropdown เพื่อดำเนินการต่อ:",
+                                input: 'select',
+                                inputOptions: {
+                                    '': 'ล้อเล่นไม่ลบหรอก',
+                                    'not_delete': 'ล้อเล่นไม่ลบหรอก',
+                                    'change_mind': 'เปลี่ยนใจละ',
+                                    'not_delete': 'ไม่ลบดีกว่า',
+                                    'confirm': 'ยืนยันที่จะลบโปรไฟล์',
+                                    'second_confirm': 'ยืนยันที่จะลบโปรไฟล์ดีไหมน้า หรือไม่ลบดี',
+                                },
+                                inputPlaceholder: 'เลือกตัวเลือก',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'ยืนยัน',
+                                cancelButtonText: 'ยกเลิก',
+                                preConfirm: (inputValue) => {
+                                    if (inputValue !== 'confirm') {
+                                        Swal.showValidationMessage('คุณต้องเลือก "ยืนยันที่จะลบโปรไฟล์" เพื่อดำเนินการต่อ');
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Proceed with the deletion
+                                    window.location.href = `delete_profile.php?user_id=${encodeURIComponent(userId)}`;
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </nav>

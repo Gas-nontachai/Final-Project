@@ -137,7 +137,7 @@ if (isset($_POST["submit"])) {
                                 showConfirmButton: false // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
-                                    window.location.href = "./register.php";
+                                    window.location.href = "./login.php";
                                 }
                             });
                         });

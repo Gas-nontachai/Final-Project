@@ -680,6 +680,5 @@ if (isset($_GET['category_id'])) {
         });
     });
 </script>
-<script src="../asset/js/time_couter.js"></script>
 
 </html>
