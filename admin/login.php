@@ -34,6 +34,7 @@ if (isset($_POST["submit"])) {
                 $_SESSION["tel"] = $row['tel'];
                 $_SESSION["email"] = $row['email'];
                 $_SESSION["userrole"] = $row['userrole'];
+                $_SESSION["token"] = $row['token'];
 
                 // อัปเดตเวลาล็อกอินล่าสุด
                 $updateStmt = $conn->prepare("UPDATE tbl_user SET last_login = NOW() WHERE user_id = ?");
@@ -61,7 +62,7 @@ if (isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ลงทะเบียน - Spacebooker</title>
+    <title>เข้าสู่ระบบ - Spacebooker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

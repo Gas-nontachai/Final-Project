@@ -243,7 +243,7 @@ if (isset($_GET['category_id'])) {
                             <td>" . $row["cat_name"] . " (" . $row["sub_cat_name"] . ")</td>
                             <td>" . $row["booking_type"] . "</td>
                             <td>" . $row["booking_amount"] . "</td>
-                            <td>" . $row["status"] . "</td>
+                            <td style='color: red;'>" . $row["status"] . "</td>
                             <td>" . $booking_date  . "</td>
                             <td>" . $row["total_price"]  . " บาท</td>
                             ";
@@ -258,7 +258,7 @@ if (isset($_GET['category_id'])) {
                             case 2:
                                 echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                    <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmRefund('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง/ขอเงินคืน</a>
                                     </td>";
                                 break;
                             case 3:
@@ -278,6 +278,11 @@ if (isset($_GET['category_id'])) {
                                     </td>";
                                 break;
                             case 6:
+                                echo " <td>
+                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                    </td>";
+                                break;
+                            case 7:
                                 echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                     </td>";
@@ -310,6 +315,25 @@ if (isset($_GET['category_id'])) {
                     if (result.isConfirmed) {
                         // หากผู้ใช้ยืนยันการยกเลิก, รีไดเร็กต์ไปยัง cancel_booking.php พร้อม booking_id
                         window.location.href = 'cancel_booking.php?booking_id=' + booking_id;
+                    }
+                });
+            }
+
+            function confirmRefund(booking_id) {
+                Swal.fire({
+                    title: "คุณแน่ใจหรือไม่?",
+                    text: "คุณกำลังจะยกเลิกการจองน้า",
+                    text: "เงินที่คุณจะได้ จะได้รับเป็นเหรียญในระบบ หากต้องการเงินคืนให้ติดต่อที่สำนักงาน",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "ใช่, ยกเลิก!",
+                    cancelButtonText: "ยกเลิก"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // หากผู้ใช้ยืนยันการยกเลิก, รีไดเร็กต์ไปยัง cancel_booking.php พร้อม booking_id
+                        window.location.href = 'refund_booking.php?booking_id=' + booking_id;
                     }
                 });
             }

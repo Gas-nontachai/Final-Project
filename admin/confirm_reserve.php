@@ -233,6 +233,11 @@ if (isset($_GET['category_id'])) {
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                     </td>";
                                             break;
+                                        case 7:
+                                            echo " <td>
+                                    <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
+                                    </td>";
+                                            break;
                                         default:
                                             echo "ไม่ทราบสถานะ";
                                     }

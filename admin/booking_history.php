@@ -107,22 +107,23 @@ $start_from = ($page - 1) * $results_per_page;
                     echo "</nav>";
 
                     $sql = "SELECT 
-                B.booking_id, 
-                CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
-                B.booking_amount, 
-                B.total_price, 
-                C.cat_name, 
-                SC.sub_cat_name, 
-                BS.status, 
-                B.booking_type, 
-                B.slip_img, 
-                B.booked_lock_number, 
-                B.booking_date
-            FROM market_booking.booked AS B
-            LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
-            LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
-            LEFT JOIN category AS C ON B.product_type = C.id_category
-            LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category";
+                            B.booking_id, 
+                            CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
+                            B.booking_amount, 
+                            B.total_price, 
+                            C.cat_name, 
+                            SC.sub_cat_name, 
+                            BS.status, 
+                            B.booking_type, 
+                            B.slip_img, 
+                            B.booked_lock_number, 
+                            B.booking_date
+                        FROM market_booking.booked AS B
+                        LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
+                        LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
+                        LEFT JOIN category AS C ON B.product_type = C.id_category
+                        LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
+                        ORDER BY id_booked DESC";       
 
                     // ตรวจสอบว่ามีการตั้งค่าคำค้นหาหรือไม่
                     if (isset($_GET['search_query']) && !empty($_GET['search_query'])) {
@@ -149,7 +150,8 @@ $start_from = ($page - 1) * $results_per_page;
                 LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
                 LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
                 LEFT JOIN category AS C ON B.product_type = C.id_category
-                LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category";
+                LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
+                ORDER BY id_booked DESC";
                     }
 
                     $sql .= " LIMIT $start_from, $results_per_page";
@@ -176,11 +178,11 @@ $start_from = ($page - 1) * $results_per_page;
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>";
                             echo "<td><strong>" . (is_null($row["booking_id"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_id"]) . "</strong></td>";
-                            echo "<td><strong>" . (is_null($row["fullname"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["fullname"]) . "</strong></td>";
-                            echo "<td><strong>" . (is_null($row["booking_amount"]) || is_null($row["total_price"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_amount"] . " ล็อค รวม:" . $row["total_price"] . " ฿") . "</strong></td>";
-                            echo "<td><strong>" . (is_null($row["cat_name"]) || is_null($row["sub_cat_name"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["cat_name"] . " (" . $row["sub_cat_name"] . ")") . "</strong></td>";
-                            echo "<td><strong>" . (is_null($row["status"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["status"]) . "</strong></td>";
-                            echo "<td><strong>" . (is_null($row["booking_type"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_type"]) . "</strong></td>";
+                            echo "<td>" . (is_null($row["fullname"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["fullname"]) . "</td>";
+                            echo "<td>" . (is_null($row["booking_amount"]) || is_null($row["total_price"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_amount"] . " ล็อค รวม:" . $row["total_price"] . " ฿") . "</td>";
+                            echo "<td>" . (is_null($row["cat_name"]) || is_null($row["sub_cat_name"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["cat_name"] . " (" . $row["sub_cat_name"] . ")") . "</td>";
+                            echo "<td>" . (is_null($row["status"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["status"]) . "</td>";
+                            echo "<td>" . (is_null($row["booking_type"])  ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_type"]) . "</td>";
                             echo "<td>
                     <button 
                         class='btn btn-primary m-2' type='button' 
