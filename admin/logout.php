@@ -14,6 +14,7 @@ echo '<!DOCTYPE html>
     <title>ออกจากระบบ</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../asset/css/font.css">
 </head>
 <body>
     <script>

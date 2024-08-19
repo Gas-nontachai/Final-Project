@@ -11,6 +11,7 @@ if (!isset($_SESSION["username"])) {
         <title>กรุณาล็อคอินก่อน</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="../asset/css/font.css">
     </head>
     <body>
         <script>
@@ -84,6 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                 <title>ส่งคำขอจองพื้นที่การขายเรียบร้อย</title>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <link rel="stylesheet" href="../asset/css/font.css">
             </head>
             <body>
                 <script>
@@ -112,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                 <title>เกิดข้อผิดพลาดในการจอง</title>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <link rel="stylesheet" href="../asset/css/font.css">
             </head>
             <body>
                 <script>
@@ -143,6 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
             <title>เกิดข้อผิดพลาดในการจอง</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <link rel="stylesheet" href="../asset/css/font.css">
         </head>
         <body>
             <script>

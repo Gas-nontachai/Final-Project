@@ -22,6 +22,7 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                   <title>ลบโปรไฟล์เรียบร้อย</title>
                   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                  <link rel='stylesheet' href='../asset/css/font.css'>
               </head>
               <body>
                   <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js'></script>
@@ -49,6 +50,7 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                   <title>เออเร่อในการลบโปรไฟล์</title>
                   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+                  <link rel='stylesheet' href='../asset/css/font.css'>
               </head>
               <body>
                   <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js'></script>
@@ -77,6 +79,7 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
               <meta name='viewport' content='width=device-width, initial-scale=1.0'>
               <title>เออเร่อ</title>
               <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css'>
+              <link rel='stylesheet' href='../asset/css/font.css'>
           </head>
           <body>
               <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js'></script>

@@ -18,6 +18,7 @@ if (isset($_POST["submit"])) {
             <title>กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <link rel="stylesheet" href="../asset/css/font.css">
         </head>
         <body>
             <script>
@@ -63,6 +64,7 @@ if (isset($_POST["submit"])) {
                 <title>Username นี้ได้มีการสมัครไปแล้ว</title>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <link rel="stylesheet" href="../asset/css/font.css">
             </head>
             <body>
                 <script>
@@ -92,6 +94,7 @@ if (isset($_POST["submit"])) {
                 <title>หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว</title>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <link rel="stylesheet" href="../asset/css/font.css">
             </head>
             <body>
                 <script>
@@ -125,6 +128,7 @@ if (isset($_POST["submit"])) {
                     <title>สมัครสมาชิกสำเร็จ</title>
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <link rel="stylesheet" href="../asset/css/font.css">
                 </head>
                 <body>
                     <script>

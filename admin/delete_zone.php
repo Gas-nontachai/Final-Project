@@ -23,6 +23,7 @@ if (isset($_GET['zone_id'])) {
             <title>ไม่สามารถลบโซนได้ เนื่องจากยังมีล็อกที่ใช้งานอยู่.</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <link rel="stylesheet" href="../asset/css/font.css">
         </head>
         <body>
             <script>
@@ -66,6 +67,7 @@ if (isset($_GET['zone_id'])) {
                 <title>ลบโซนสำเร็จ</title>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <link rel="stylesheet" href="../asset/css/font.css">
             </head>
             <body>
                 <script>

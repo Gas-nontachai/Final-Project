@@ -10,7 +10,8 @@ if (!isset($_SESSION["username"])) {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>กรุณาล็อคอินก่อน</title>
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
+                    <link rel="stylesheet" href="../asset/css/font.css">
                 </head>
                 <body>
                     <script>
@@ -58,6 +59,7 @@ if ($conn->query($sql) === TRUE) {
                     <title>เพิ่มประเภทสินค้าเรียบร้อย</title>
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <link rel="stylesheet" href="../asset/css/font.css">
                 </head>
                 <body>
                     <script>

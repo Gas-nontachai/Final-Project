@@ -11,6 +11,7 @@ if (!isset($_SESSION["username"])) {
         <title>กรุณาล็อคอินก่อน</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="../asset/css/font.css">
     </head>
     <body>
         <script>
@@ -58,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <title>ไม่สามารถอัปเดตโซนได้ มีล็อคที่ยังมีอยู่</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <link rel="stylesheet" href="../asset/css/font.css">
         </head>
         <body>
             <script>
@@ -90,6 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <title>กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <link rel="stylesheet" href="../asset/css/font.css">
         </head>
         <body>
             <script>
@@ -137,6 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <title>อัพเดตโซนสำเร็จ</title>
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <link rel="stylesheet" href="../asset/css/font.css">
                 </head>
                 <body>
                     <script>
