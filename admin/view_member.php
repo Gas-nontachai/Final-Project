@@ -220,6 +220,10 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             <label for="edit_email" class="form-label">อีเมล</label>
                             <input type="email" class="form-control" id="edit_email" name="email">
                         </div>
+                        <div class="mb-3">
+                            <label for="edit_token" class="form-label">เหรียญ</label>
+                            <input type="number" class="form-control " id="edit_token" name="token">
+                        </div>
                         <div class="mb-3 row">
                             <label for="userRoleSelect" class="col-sm-3 col-form-label"><strong>ประเภทผู้ใช้งาน:</strong></label>
                             <div class="col-sm-9">
@@ -273,6 +277,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             document.getElementById('edit_password').value = data.password; // จัดการนี้อย่างปลอดภัย
                             document.getElementById('edit_tel').value = data.tel;
                             document.getElementById('edit_email').value = data.email;
+                            document.getElementById('edit_token').value = data.token;
                             document.getElementById('edit_shop_name').value = data.shop_name;
                         });
                 });

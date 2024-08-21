@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2024 at 06:09 PM
+-- Generation Time: Aug 21, 2024 at 04:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -81,7 +81,16 @@ INSERT INTO `booked` (`id_booked`, `booking_id`, `member_id`, `booking_amount`, 
 (0000000042, 32, 6, '2', '80', 4, 85, 8, 'PerDay', 33, 'slip_20240818_204610_66c1fb22ea87c.jpg', '2024-08-18 14:27:28', NULL, '2024-08-17 21:21:10'),
 (0000000043, 33, 6, '1', '40', 7, 95, 8, 'PerDay', 30, 'slip_20240818_213019_66c2057b13e64.jpg', '2024-08-18 14:32:48', NULL, NULL),
 (0000000044, 33, 6, '1', '40', 7, 95, 8, 'PerDay', 30, 'slip_20240818_213019_66c2057b13e64.jpg', '2024-08-18 14:35:36', NULL, '2024-08-17 21:32:48'),
-(0000000045, 34, 6, '2', '80', 3, 128, 8, 'PerDay', 33, 'slip_20240818_213629_66c206ed36078.jpg', '2024-08-18 14:36:43', NULL, NULL);
+(0000000045, 34, 6, '2', '80', 3, 128, 8, 'PerDay', 33, 'slip_20240818_213629_66c206ed36078.jpg', '2024-08-18 14:36:43', NULL, NULL),
+(0000000046, 35, 6, '2', '80', 3, 125, 8, 'PerDay', 33, NULL, '2024-08-21 10:40:35', NULL, NULL),
+(0000000047, 36, 6, '2', '80', 3, 125, 4, 'PerDay', 33, NULL, '2024-08-21 10:42:16', 'A1, A2', '2024-08-20 23:59:58'),
+(0000000048, 37, 6, '1', '40', 8, 107, 4, 'PerDay', 32, 'slip_20240821_185814_66c5d65684f5b.jpg', '2024-08-21 11:55:06', 'D1', '2024-08-20 23:59:58'),
+(0000000049, 38, 6, '2', '80', 6, 88, 4, 'PerDay', 29, 'slip_20240821_191614_66c5da8e42b31.jpg', '2024-08-21 12:15:40', 'B1, B2', '2024-08-20 08:00:00'),
+(0000000050, 39, 6, '2', '80', 3, 126, 6, 'PerDay', 33, NULL, '2024-08-21 12:19:03', NULL, NULL),
+(0000000051, 40, 6, '1', '40', 3, 125, 6, 'PerDay', 33, NULL, '2024-08-21 12:24:07', NULL, NULL),
+(0000000052, 41, 6, '1', '40', 7, 97, 4, 'PerDay', 30, NULL, '2024-08-21 12:27:21', 'C1', '2024-08-21 08:00:00'),
+(0000000053, 42, 6, '2', '80', 4, 84, 4, 'PerDay', 33, 'slip_20240821_192741_66c5dd3d7698b.jpg', '2024-08-21 12:27:31', 'A1, A2', '2024-08-21 08:00:00'),
+(0000000055, 43, 6, '-1', '-40', 8, 110, 6, 'PerDay', 32, NULL, '2024-08-21 12:46:26', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -101,9 +110,16 @@ CREATE TABLE `booking` (
   `sub_product_type` int(11) NOT NULL,
   `slip_img` varchar(45) DEFAULT NULL,
   `book_lock_number` varchar(45) DEFAULT NULL,
-  `booking_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'วันเวลาที่จอง',
+  `booking_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'วันเวลาที่จอง',
   `expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `book_lock_number`, `booking_date`, `expiration_date`) VALUES
+(0000000047, 000006, 4, 'PerDay', 033, 1, 40, 3, 125, NULL, 'A1', '2024-08-21 13:47:21', '2024-08-22 08:00:00');
 
 -- --------------------------------------------------------
 
@@ -128,7 +144,8 @@ INSERT INTO `booking_status` (`id`, `status`) VALUES
 (5, 'ส่งคำขอยกเลิกแล้ว'),
 (6, 'ยกเลิก'),
 (7, 'ส่งคำขอขอคืนเงินแล้ว'),
-(8, 'คืนเงินเรียบร้อยแล้ว');
+(8, 'คืนเงินเรียบร้อยแล้ว'),
+(9, 'ชำระเงินผ่านเหรียญแล้ว(รอรับเลขล็อค)');
 
 -- --------------------------------------------------------
 
@@ -252,7 +269,7 @@ INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `availabl
 (614, 'D18', 032, NULL, 0),
 (615, 'D19', 032, NULL, 0),
 (616, 'D20', 032, NULL, 0),
-(617, 'A1', 033, NULL, 0),
+(617, 'A1', 033, 0000000047, 1),
 (618, 'A2', 033, NULL, 0),
 (619, 'A3', 033, NULL, 0),
 (620, 'A4', 033, NULL, 0),
@@ -409,8 +426,8 @@ CREATE TABLE `tbl_user` (
 INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `email`, `username`, `password`, `userrole`, `shop_name`, `token`, `last_login`) VALUES
 (000001, 'นาย', 'Nontachai', 'Prosri', '0885639233', 'bigboy2546.77@gmail.com', 'GGas', 'nontachai01', 1, 'GGasShop', 0, NULL),
 (000003, 'นาง', 'Kanokwan', 'Phakdee', '0888888888', 'Kanokwan.ph@gmail.com', 'Kanok', 'kanok123', 1, 'KanokShop', 0, NULL),
-(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin', 0, '2024-08-18 20:36:33'),
-(000006, 'นาย', 'User', 'User', '0888888888', 'user', 'user', 'user8888', 0, 'user', 120, '2024-08-18 21:22:30');
+(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin', 0, '2024-08-21 17:17:17'),
+(000006, 'นาย', 'User', 'User', '0111111111', 'user@gmail.com', 'user', 'user8888', 0, 'user', 0, '2024-08-21 17:16:27');
 
 -- --------------------------------------------------------
 
@@ -569,13 +586,13 @@ ALTER TABLE `zone_detail`
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
-  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=46;
+  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=35;
+  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `booking_status`
@@ -655,7 +672,7 @@ ALTER TABLE `booked`
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `tbl_user` (`user_id`),
   ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`zone_id`) REFERENCES `zone_detail` (`zone_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`booking_status`) REFERENCES `booking_status` (`id`),
+  ADD CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`booking_status`) REFERENCES `booking_status` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `booking_ibfk_4` FOREIGN KEY (`product_type`) REFERENCES `category` (`id_category`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --

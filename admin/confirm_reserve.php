@@ -504,6 +504,7 @@ if (isset($_GET['category_id'])) {
                                         content = `
                                                     <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
                                                     <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
+                                                    <p><strong>เบอร์โทรติดต่อ:</strong> ${data.tel}</p>
                                                     <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
                                                     <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
                                                     <p><strong>หมวดหมู่:</strong> ${data.cat_name}(${data.sub_cat_name})</p>

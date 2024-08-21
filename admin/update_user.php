@@ -8,6 +8,7 @@ if (isset($_POST['user_id']) &&
     isset($_POST['password']) && 
     isset($_POST['shop_name']) && 
     isset($_POST['tel']) && 
+    isset($_POST['token']) && 
     isset($_POST['email']) && 
     isset($_POST['user_role'])) {
 
@@ -16,9 +17,10 @@ if (isset($_POST['user_id']) &&
 
     $user_id = $_POST['user_id'];
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = $_POST['password']; // ควรพิจารณาเข้ารหัสก่อนเก็บในฐานข้อมูล
     $shop_name = $_POST['shop_name'];
     $tel = $_POST['tel'];
+    $token = $_POST['token']; // แก้ไขจาก $tel เป็น $token
     $email = $_POST['email'];
     $userrole = $_POST['user_role'];
 
@@ -28,6 +30,7 @@ if (isset($_POST['user_id']) &&
             password = ?, 
             shop_name = ?, 
             tel = ?, 
+            token = ?, 
             email = ?, 
             userrole = ?
             WHERE user_id = ?";
@@ -35,7 +38,7 @@ if (isset($_POST['user_id']) &&
     $stmt = $conn->prepare($sql);
     
     // เรียกใช้ bind_param ให้ถูกต้อง
-    $stmt->bind_param("ssssssi", $username, $password, $shop_name, $tel, $email, $userrole, $user_id);
+    $stmt->bind_param("sssssssi", $username, $password, $shop_name, $tel, $token, $email, $userrole, $user_id);
 
     // เรียกใช้คำสั่งและตรวจสอบความสำเร็จ
     if ($stmt->execute()) {

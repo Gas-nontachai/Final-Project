@@ -650,50 +650,13 @@ if (isset($_GET['category_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h3>จองพื้นที่การขาย</h3>
                     <form action="./reserve_order.php" method="post">
                         <div class="mb-3 row">
-                            <label for="fullname" class="col-sm-3 col-form-label">
-                                <strong>ชื่อผู้จอง :</strong>
+                            <label for="fullname" class="col col-form-label">
+                                <strong>ชื่อผู้จอง :</strong><?php echo $fullname; ?>
+                            </label><label for="shop_name" class="col col-form-label">
+                                <strong>ชื่อร้าน :</strong><?php echo $shop_name; ?>
                             </label>
-                            <div class="col-sm-9">
-                                <p><strong><?php echo $fullname; ?></strong></p>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="shop_name" class="col-sm-3 col-form-label">
-                                <strong>ชื่อร้าน :</strong>
-                            </label>
-                            <div class="col-sm-9">
-                                <p><strong><?php echo $shop_name; ?></strong></p>
-                            </div>
-                        </div>
-                        <div class="mb-4 row">
-                            <label for="category" class="col-sm-3 col-form-label">
-                                <strong>ประเภทสินค้า :</strong>
-                            </label>
-                            <div class="col-sm-4">
-                                <select name="category" id="category" class="form-select">
-                                    <option value="#">กรุณาเลือกประเภทสินค้า</option>
-                                    <?php
-                                    $sql = "SELECT * FROM category";
-                                    $result = $conn->query($sql);
-
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No categories found</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <select name="subcategory" id="subcategory" class="form-select">
-                                    <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
-                                </select>
-                            </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="zone" class="col-sm-3 col-form-label">
@@ -722,9 +685,47 @@ if (isset($_GET['category_id'])) {
                                 </strong>
                             </div>
                         </div>
+                        <div class="mx-4 row">
+                            <div class="col">
+                                <img src="../asset/img/img.locks.png" alt="" style="width:  50%; height: 10rem;">
+                                <label for="img"> รูปตัวอย่างล็อคปกติ</label>
+                            </div>
+                            <div class="col">
+                                <img src="../asset/img/img.openbackcar.png" alt="" style="width:  10rem; height: 10rem;">
+                                <label for="img"> รูปตัวอย่างล็อคเปิดท้าย</label>
+                            </div>
+                        </div>
+                        <div class="mb-4 mt-2 row">
+                            <label for="category" class="col-sm-3 col-form-label">
+                                <strong>ประเภทสินค้า :</strong>
+                            </label>
+                            <div class="col-sm-4">
+                                <select name="category" id="category" class="form-select">
+                                    <option value="#">กรุณาเลือกประเภทสินค้า</option>
+                                    <?php
+                                    $sql = "SELECT * FROM category";
+                                    $result = $conn->query($sql);
+
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No categories found</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <select name="subcategory" id="subcategory" class="form-select">
+                                    <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="mb-3 row">
                             <label for="typeReserve" class="col-sm-3 col-form-label">
-                                <strong>จำนวน :</strong>
+                                <strong>ประเภทการจอง :</strong>
                             </label>
                             <div class="col-sm-9">
                                 <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
@@ -738,7 +739,7 @@ if (isset($_GET['category_id'])) {
                                 <strong>จำนวน :</strong>
                             </label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" name="amount" id="amount" oninput="updateTotalPrice()" required>
+                                <input type="number" class="form-control" name="amount" min="1" id="amount" oninput="updateTotalPrice()" required>
                             </div>
                             <div class="col-sm-12">
                                 <strong id="TotalPrice">
