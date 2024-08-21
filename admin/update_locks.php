@@ -47,7 +47,7 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
 
             // คำนวณวันที่หมดอายุ
             if ($booking_type == 'PerDay') {
-                $expiration_date = date('Y-m-d 23:59:58');
+                $expiration_date = date('Y-m-d 08:00:00', strtotime($booking_date . ' +1 day'));
             } elseif ($booking_type == 'PerMonth') {
                 $expiration_date = date('Y-m-d 23:59:58', strtotime($booking_date . ' +1 month'));
             }
@@ -113,5 +113,32 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
         $conn->close();
     }
 } else {
-    echo 'คำขอไม่ถูกต้อง: ข้อมูลหายไป.';
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>กรุณาเลือกล็อคก่อน</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="../asset/css/font.css">
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "กรุณาเลือกล็อคก่อน",
+                    icon: "error",
+                    timer: 2000, // แสดงเป็นเวลา 2 วินาที
+                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location.href = "./confirm_reserve.php"; // เปลี่ยนเส้นทางไปยังหน้า index.php
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>';
 }

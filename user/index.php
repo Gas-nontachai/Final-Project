@@ -210,14 +210,15 @@ if (isset($_GET['category_id'])) {
                     <div class="mt-2">
                         <?php
                         // Assuming you have a connection to your database in $conn
-                        $sql = "SELECT BK.booking_id, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount , BK.booking_status , BK.slip_img, BS.status, BK.booking_date ,BK.total_price
-                            FROM booking AS BK 
-                            INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
-                            INNER JOIN category AS C ON BK.product_type = C.id_category
-                            INNER JOIN sub_category AS SC ON BK.sub_product_type = SC.idsub_category
-                            INNER JOIN zone_detail AS ZD ON BK.zone_id = ZD.zone_id
-                            WHERE member_id = $user_id
-                            ORDER BY booking_id 
+                        $sql = "SELECT BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
+                                FROM booking AS BK 
+                                INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
+                                INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
+                                INNER JOIN category AS C ON BK.product_type = C.id_category
+                                INNER JOIN sub_category AS SC ON BK.sub_product_type = SC.idsub_category
+                                INNER JOIN zone_detail AS ZD ON BK.zone_id = ZD.zone_id
+                                WHERE member_id = $user_id
+                                ORDER BY booking_id 
                             ";
 
                         $result = $conn->query($sql);
@@ -226,30 +227,31 @@ if (isset($_GET['category_id'])) {
                             echo "<table class='table table-striped'>";
                             echo "<thead>
                         <tr>
-                            <th>ชื่อโซน</th>
-                            <th>สินค้าที่ขาย</th>
+                            <th>รหัสการจอง</th>
+                            <th>รายละเอียดโซน</th>
+                            <th>หมวดหมู่</th>
                             <th>ประเภทการจอง</th>
                             <th>จำนวนการจอง</th>
                             <th>สถานะ</th>
                             <th>วันที่จอง</th>
-                            <th>ราคารวม</th>
                             <th>การกระทำ</th>
                         </tr>
                     </thead>";
                             echo "<tbody>";
 
                             while ($row = $result->fetch_assoc()) {
-                                $booking_date = date("d/m/Y เวลา H:i", strtotime($row["booking_date"]));
+                                $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
                                 $slip_img = $row["slip_img"] ? "<img src='" . $row["slip_img"] . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
 
                                 echo "<tr>
-                            <td>" . $row["zone_name"] . " (" . $row["zone_detail"] . ")</td>
-                            <td>" . $row["cat_name"] . " (" . $row["sub_cat_name"] . ")</td>
-                            <td>" . $row["booking_type"] . "</td>
-                            <td>" . $row["booking_amount"] . "</td>
-                            <td style='color: red;'>" . $row["status"] . "</td>
+                            <td>" . htmlspecialchars($row["booking_id"]) . "</td>
+                                                                <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
+                                                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>
+                                                                <td>" . htmlspecialchars($row["booking_type"]) . "</td>
+                                                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
+                                                                <td style='color: red;'>" . htmlspecialchars($row["status"]) . "</td>
+                                                                
                             <td>" . $booking_date  . "</td>
-                            <td>" . $row["total_price"]  . " บาท</td>
                             ";
                                 switch ($row["booking_status"]) {
                                     case 1:
@@ -294,8 +296,9 @@ if (isset($_GET['category_id'])) {
                                         break;
                                     case 9:
                                         echo " <td>
-                                    <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                    </td>";
+                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                        <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                        </td>";
                                         break;
                                     default:
                                         echo "ไม่ทราบสถานะ";
@@ -370,6 +373,7 @@ if (isset($_GET['category_id'])) {
     </div>
 
     <!-- Pay Modal -->
+    <!-- Pay Modal -->
     <div class="modal fade" id="PayModal" tabindex="-1" aria-labelledby="PayModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -385,7 +389,7 @@ if (isset($_GET['category_id'])) {
                     <div class="mb-3">
                         <label><strong>เลือกช่องทางการชำระเงิน:</strong></label>
                         <div>
-                            <input type="radio" name="paymentMethod" value="mobile" id="mobileBanking" checked>
+                            <input type="radio" name="paymentMethod" value="mobile" id="mobileBanking">
                             <label for="mobileBanking">Mobile Banking</label>
                         </div>
                         <div>
@@ -425,70 +429,66 @@ if (isset($_GET['category_id'])) {
     </div>
 
 
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const mobileBankingForm = document.getElementById('mobileBankingForm');
             const tokenPaymentForm = document.getElementById('tokenPaymentForm');
+            const payModal = document.getElementById('PayModal');
+            const payButton = document.getElementById('payButton');
+            const tokenWarning = document.getElementById('tokenWarning');
+            const userToken = <?php echo json_encode($token); ?>; // จำนวนเหรียญของผู้ใช้
 
-            document.querySelectorAll('input[name="paymentMethod"]').forEach(function(input) {
-                input.addEventListener('change', function() {
-                    if (this.value === 'mobile') {
-                        mobileBankingForm.style.display = 'block';
-                        tokenPaymentForm.style.display = 'none';
-                    } else if (this.value === 'token') {
-                        mobileBankingForm.style.display = 'none';
-                        tokenPaymentForm.style.display = 'block';
-                    }
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var payModal = document.getElementById('PayModal');
-            var payButton = document.getElementById('payButton');
-            var tokenWarning = document.getElementById('tokenWarning');
-            var userToken = <?php echo json_encode($token); ?>; // จำนวนเหรียญของผู้ใช้
-
-            payModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var bookingId = button.getAttribute('data-id');
-                var total_price = button.getAttribute('data-total-price');
-
+            function updateModalData(bookingId, totalPrice) {
                 document.getElementById('payModalBookingId').textContent = bookingId;
                 document.getElementById('hiddenBookingId').value = bookingId;
-                document.getElementById('hiddentotal_price').value = total_price;
-                document.getElementById('payModaltotalprice').textContent = total_price;
+                document.getElementById('hiddentotal_price').value = totalPrice;
+                document.getElementById('payModaltotalprice').textContent = totalPrice;
+            }
 
-                document.querySelectorAll('input[name="paymentMethod"]').forEach(function(input) {
-                    input.addEventListener('change', function() {
-                        if (this.value === 'mobile') {
-                            document.getElementById('mobileBankingForm').style.display = 'block';
-                            document.getElementById('tokenPaymentForm').style.display = 'none';
-                            payButton.disabled = false;
-                            document.getElementById('paymentForm').setAttribute('action', 'upload_slip.php');
-                        } else if (this.value === 'token') {
-                            document.getElementById('mobileBankingForm').style.display = 'none';
-                            document.getElementById('tokenPaymentForm').style.display = 'block';
+            function handlePaymentMethodChange() {
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+                if (paymentMethod === 'mobile') {
+                    mobileBankingForm.style.display = 'block';
+                    tokenPaymentForm.style.display = 'none';
+                    payButton.disabled = false;
+                    document.getElementById('paymentForm').setAttribute('action', 'upload_slip.php');
+                } else if (paymentMethod === 'token') {
+                    mobileBankingForm.style.display = 'none';
+                    tokenPaymentForm.style.display = 'block';
 
-                            if (parseInt(userToken) < parseInt(total_price)) {
-                                tokenWarning.style.display = 'block';
-                                payButton.disabled = true;
-                            } else {
-                                tokenWarning.style.display = 'none';
-                                payButton.disabled = false;
-                            }
-                            document.getElementById('paymentForm').setAttribute('action', 'token_pay.php');
-                        }
-                    });
-                });
+                    const totalPrice = parseInt(document.getElementById('payModaltotalprice').textContent, 10);
+                    if (userToken < totalPrice) {
+                        tokenWarning.style.display = 'block';
+                        payButton.disabled = true;
+                    } else {
+                        tokenWarning.style.display = 'none';
+                        payButton.disabled = false;
+                    }
+                    document.getElementById('paymentForm').setAttribute('action', 'token_pay.php');
+                }
+            }
+
+            payModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const bookingId = button.getAttribute('data-id');
+                const totalPrice = button.getAttribute('data-total-price');
+                updateModalData(bookingId, totalPrice);
+
+                // Reset the radio buttons and forms
+                document.querySelectorAll('input[name="paymentMethod"]').forEach(input => input.checked = false);
+                mobileBankingForm.style.display = 'none';
+                tokenPaymentForm.style.display = 'none';
+                payButton.disabled = false;
+            });
+
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(function(input) {
+                input.addEventListener('change', handlePaymentMethodChange);
             });
 
             payButton.addEventListener('click', function(event) {
-                var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
                 if (paymentMethod === 'token' && payButton.disabled) {
-                    event.preventDefault(); // ป้องกันการส่งฟอร์มถ้าเหรียญไม่พอ
+                    event.preventDefault(); // Prevent form submission if tokens are insufficient
 
                     Swal.fire({
                         title: 'ข้อผิดพลาด',
@@ -506,7 +506,6 @@ if (isset($_GET['category_id'])) {
                         cancelButtonText: 'ยกเลิก'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // ใช้ AJAX เพื่อส่งข้อมูลไปยัง token_pay.php
                             var form = document.getElementById('paymentForm');
                             var formData = new FormData(form);
 
@@ -515,7 +514,6 @@ if (isset($_GET['category_id'])) {
                                     body: formData
                                 }).then(response => response.text())
                                 .then(data => {
-                                    // แสดงข้อความตามที่ได้รับจากเซิร์ฟเวอร์
                                     document.open();
                                     document.write(data);
                                     document.close();
@@ -530,7 +528,6 @@ if (isset($_GET['category_id'])) {
         });
     </script>
 
-    </script>
 
     <?php $currentTime = date('H:i:s'); // เวลาปัจจุบัน
     // ดึงข้อมูลจาก database
@@ -613,21 +610,23 @@ if (isset($_GET['category_id'])) {
                             content = `<p>${data.error}</p>`;
                         } else {
                             content = `
-                                            <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                                            <p><strong>ชื่อโซน:</strong> ${data.zone_name} (${data.zone_detail})</p>
-                                            <p><strong>สินค้าที่ขาย:</strong> ${data.cat_name} (${data.sub_cat_name})</p>
-                                            <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                                            <p><strong>จำนวนการจอง:</strong> ${data.booking_amount} ล็อค</p>
-                                            <p><strong>สถานะ:</strong> ${data.status}</p>
-                                            <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                                            <p><strong>ยอดชำระเงิน: ${data.total_price} บาท</strong></p>
-                                            <p><strong>เลขล็อคที่ได้รับ: ${data.book_lock_number}</strong></p>
-                                            `;
+                                          <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
+                                                    <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
+                                                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
+                                                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
+                                                    <p><strong>หมวดหมู่:</strong> ${data.cat_name}(${data.sub_cat_name})</p>
+                                                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
+                                                    <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
+                                                    <p><strong>รวม:</strong> ${data.total_price} บาท</p>
+                                                    <p><strong>สถานะ:</strong> ${data.status}</p>
+                                                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
+                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number}</p> `;
                             if (data.slip_img) {
                                 content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
-                            } else {
+                            } else if (data.booking_status === 2) {
                                 content += `<button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='${data.booking_id}'>ชำระเงิน</button>`;
-                            }
+
+                            } else {}
                         }
                         document.querySelector('#viewBookingModal .modal-body').innerHTML = content;
                     })
@@ -748,7 +747,7 @@ if (isset($_GET['category_id'])) {
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                             <input class="btn btn-success" type="submit" name="submit" value="Submit">
                         </div>
                     </form>

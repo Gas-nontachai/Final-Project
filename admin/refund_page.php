@@ -90,6 +90,7 @@ $start_from = ($page - 1) * $results_per_page;
                                     B.booking_id, 
                                     CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
                                     B.booking_amount, 
+                                    B.booking_status,
                                     B.total_price, 
                                     C.cat_name, 
                                     SC.sub_cat_name, 
@@ -102,7 +103,9 @@ $start_from = ($page - 1) * $results_per_page;
                                 LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
                                 LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
                                 LEFT JOIN category AS C ON B.product_type = C.id_category
-                                LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category";
+                                LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
+                                WHERE booking_status = 7"
+                                ;
                         $result = mysqli_query($conn, $sql);
                         ?>
                         <div class="container">
