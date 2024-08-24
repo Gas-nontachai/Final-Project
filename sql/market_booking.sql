@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2024 at 04:06 PM
+-- Generation Time: Aug 24, 2024 at 10:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -427,7 +427,7 @@ INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `em
 (000001, 'นาย', 'Nontachai', 'Prosri', '0885639233', 'bigboy2546.77@gmail.com', 'GGas', 'nontachai01', 1, 'GGasShop', 0, NULL),
 (000003, 'นาง', 'Kanokwan', 'Phakdee', '0888888888', 'Kanokwan.ph@gmail.com', 'Kanok', 'kanok123', 1, 'KanokShop', 0, NULL),
 (000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin', 0, '2024-08-21 17:17:17'),
-(000006, 'นาย', 'User', 'User', '0111111111', 'user@gmail.com', 'user', 'user8888', 0, 'user', 0, '2024-08-21 17:16:27');
+(000006, 'นาย', 'User', 'User', '0111111111', 'user@gmail.com', 'user', 'user8888', 0, 'user', 0, '2024-08-23 15:37:11');
 
 -- --------------------------------------------------------
 
