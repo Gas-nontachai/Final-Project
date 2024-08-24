@@ -183,7 +183,14 @@ $start_from = ($page - 1) * $results_per_page;
                             echo "<td>" . (is_null($row["booking_amount"]) || is_null($row["total_price"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_amount"] . " ล็อค รวม:" . $row["total_price"] . " ฿") . "</td>";
                             echo "<td>" . (is_null($row["cat_name"]) || is_null($row["sub_cat_name"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["cat_name"] . " (" . $row["sub_cat_name"] . ")") . "</td>";
                             echo "<td>" . (is_null($row["status"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["status"]) . "</td>";
-                            echo "<td>" . (is_null($row["booking_type"])  ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : $row["booking_type"]) . "</td>";
+                            if ($row["booking_type"] === 'PerDay') {
+                                $booking_type_display = 'รายวัน';
+                            } elseif ($row["booking_type"] === 'PerMonth') {
+                                $booking_type_display = 'รายเดือน';
+                            } else {
+                                $booking_type_display = 'ไม่ทราบประเภทการจอง';
+                            }
+                            echo "<td>" . $booking_type_display . "</td>";
                             echo "<td>
                     <button 
                         class='btn btn-primary m-2' type='button' 
@@ -262,8 +269,10 @@ $start_from = ($page - 1) * $results_per_page;
                             <p><strong>ประเภทสินค้า:</strong> ${data.cat_name}</p>
                             <p><strong>ประเภทสินค้าย่อย:</strong> ${data.sub_cat_name}</p>
                             <p><strong>สถานะการจอง:</strong> ${data.status}</p>
-                            <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>
+                            <p><strong>ประเภทการจอง:</strong>           
+                            ${data.booking_type === 'PerDay' ? 'รายวัน' : data.booking_type === 'PerMonth' ? 'รายเดือน' : 'ไม่ทราบประเภทการจอง'}
+                            </p>                            
+                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p><p><strong>เลขล็อคที่ได้รับ:</strong> ${data.booked_lock_number ? data.booked_lock_number : 'ยังไม่ได้รับเลขล็อคหรือข้อมูลสูญหาย'}</p>
                             <p><strong>วันที่จอง:</strong> ${data.booking_date}</p>
                         `;
                             if (data.slip_img) {

@@ -80,7 +80,7 @@ $start_from = ($page - 1) * $results_per_page;
                 <div class="mt-2">
                     <?php
                     // Pagination links
-                    $sql_total = "SELECT COUNT(*) FROM market_booking.booked";
+                    $sql_total = "SELECT COUNT(*) FROM market_booking.booked WHERE member_id = $user_id";
                     $result_total = $conn->query($sql_total);
                     $row_total = $result_total->fetch_row();
                     $total_records = $row_total[0];
@@ -139,7 +139,14 @@ $start_from = ($page - 1) * $results_per_page;
                             echo "<td><strong>" . $row["booking_amount"] . "ล็อค รวม:" . $row["total_price"] . "฿</strong></td>";
                             echo "<td><strong>" . $row["cat_name"] . "(" . $row["sub_cat_name"] . ")</strong></td>";
                             echo "<td><strong>" . $row["status"] . "</strong></td>";
-                            echo "<td><strong>" . $row["booking_type"] . "</strong></td>";
+                            if ($row["booking_type"] === 'PerDay') {
+                                $booking_type_display = 'รายวัน';
+                            } elseif ($row["booking_type"] === 'PerMonth') {
+                                $booking_type_display = 'รายเดือน';
+                            } else {
+                                $booking_type_display = 'ไม่ทราบประเภทการจอง';
+                            }
+                            echo "<td><strong>" . $booking_type_display . "</strong></td>";
                             echo "<td>
                                     <button 
                                         class='btn btn-primary m-2' type='button' 
@@ -217,7 +224,9 @@ $start_from = ($page - 1) * $results_per_page;
                             <p><strong>ประเภทสินค้า:</strong> ${data.cat_name}</p>
                             <p><strong>ประเภทสินค้าย่อย:</strong> ${data.sub_cat_name}</p>
                             <p><strong>สถานะการจอง:</strong> ${data.status}</p>
-                            <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
+                            <p><strong>ประเภทการจอง:</strong> 
+                            ${data.booking_type === 'PerDay' ? 'รายวัน' : data.booking_type === 'PerMonth' ? 'รายเดือน' : 'ไม่ทราบประเภทการจอง'}
+                            </p>
                             <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>
                             <p><strong>วันที่จอง:</strong> ${data.booking_date}</p>
                         `;
