@@ -610,23 +610,23 @@ if (isset($_GET['category_id'])) {
                             content = `<p>${data.error}</p>`;
                         } else {
                             content = `
-                                          <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                                                    <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
-                                                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
-                                                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
-                                                    <p><strong>หมวดหมู่:</strong> ${data.cat_name}(${data.sub_cat_name})</p>
-                                                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                                                    <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
-                                                    <p><strong>รวม:</strong> ${data.total_price} บาท</p>
-                                                    <p><strong>สถานะ:</strong> ${data.status}</p>
-                                                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number}</p> `;
+                    <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
+                    <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
+                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
+                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
+                    <p><strong>หมวดหมู่:</strong> ${data.cat_name} (${data.sub_cat_name})</p>
+                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
+                    <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
+                    <p><strong>รวม:</strong> ${data.total_price} บาท</p>
+                    <p><strong>สถานะ:</strong> ${data.status}</p>
+                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
+                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>`;
+
                             if (data.slip_img) {
                                 content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
                             } else if (data.booking_status === 2) {
                                 content += `<button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='${data.booking_id}'>ชำระเงิน</button>`;
-
-                            } else {}
+                            }
                         }
                         document.querySelector('#viewBookingModal .modal-body').innerHTML = content;
                     })
@@ -635,6 +635,7 @@ if (isset($_GET['category_id'])) {
                         document.querySelector('#viewBookingModal .modal-body').innerHTML = '<p>มีข้อผิดพลาดในการดึงข้อมูลการจอง</p>';
                     });
             }
+
         });
     </script>
 

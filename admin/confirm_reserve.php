@@ -513,8 +513,8 @@ if (isset($_GET['category_id'])) {
                                                     <p><strong>รวม:</strong> ${data.total_price} บาท</p>
                                                     <p><strong>สถานะ:</strong> ${data.status}</p>
                                                     <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number}</p>
-                                                `;
+                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>`;
+
                                         if (data.slip_img) {
                                             content += `<img src="../asset./slip_img./${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
                                             content += `<button class="btn btn-success">ยืนยันการชำระเงิน</button>`;

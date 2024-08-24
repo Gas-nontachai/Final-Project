@@ -124,7 +124,7 @@ $start_from = ($page - 1) * $results_per_page;
                         LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
                         LEFT JOIN category AS C ON B.product_type = C.id_category
                         LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
-                        ORDER BY id_booked DESC";       
+                        ORDER BY id_booked DESC";
 
                     // ตรวจสอบว่ามีการตั้งค่าคำค้นหาหรือไม่
                     if (isset($_GET['search_query']) && !empty($_GET['search_query'])) {
@@ -263,7 +263,7 @@ $start_from = ($page - 1) * $results_per_page;
                             <p><strong>ประเภทสินค้าย่อย:</strong> ${data.sub_cat_name}</p>
                             <p><strong>สถานะการจอง:</strong> ${data.status}</p>
                             <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.booked_lock_number}</p>
+                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>
                             <p><strong>วันที่จอง:</strong> ${data.booking_date}</p>
                         `;
                             if (data.slip_img) {
