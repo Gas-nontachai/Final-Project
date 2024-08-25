@@ -272,7 +272,7 @@ $start_from = ($page - 1) * $results_per_page;
                             <p><strong>ประเภทการจอง:</strong>           
                             ${data.booking_type === 'PerDay' ? 'รายวัน' : data.booking_type === 'PerMonth' ? 'รายเดือน' : 'ไม่ทราบประเภทการจอง'}
                             </p>                            
-                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p><p><strong>เลขล็อคที่ได้รับ:</strong> ${data.booked_lock_number ? data.booked_lock_number : 'ยังไม่ได้รับเลขล็อคหรือข้อมูลสูญหาย'}</p>
+                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.booked_lock_number ? data.booked_lock_number : 'ยังไม่ได้รับเลขล็อคหรือข้อมูลสูญหาย'}</p>
                             <p><strong>วันที่จอง:</strong> ${data.booking_date}</p>
                         `;
                             if (data.slip_img) {

@@ -210,7 +210,7 @@ if (isset($_GET['category_id'])) {
                     <div class="mt-2">
                         <?php
                         // Assuming you have a connection to your database in $conn
-                        $sql = "SELECT BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
+                        $sql = "SELECT BK.expiration_date, BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
                                 FROM booking AS BK 
                                 INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                                 INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
@@ -234,6 +234,7 @@ if (isset($_GET['category_id'])) {
                             <th>จำนวนการจอง</th>
                             <th>สถานะ</th>
                             <th>วันที่จอง</th>
+                            <th>วันหมดอายุคำจอง</th>
                             <th>การกระทำ</th>
                         </tr>
                     </thead>";
@@ -253,6 +254,11 @@ if (isset($_GET['category_id'])) {
                                                                 
                             <td>" . $booking_date  . "</td>
                             ";
+                                if ($row["booking_status"] === '4') {
+                                    echo "<td>" . htmlspecialchars($row["expiration_date"]) . "</td>";
+                                } else {
+                                    echo "<td>คำขอยังไม่สมบูรณ์</td>";
+                                }
                                 switch ($row["booking_status"]) {
                                     case 1:
                                         echo "<td>
@@ -529,7 +535,9 @@ if (isset($_GET['category_id'])) {
     </script>
 
 
-    <?php $currentTime = date('H:i:s'); // เวลาปัจจุบัน
+    <?php
+    $currentTime = date('H:i:s'); // เวลาปัจจุบัน
+
     // ดึงข้อมูลจาก database
     $sql_time = "SELECT opening_time, closing_time FROM operating_hours LIMIT 1";
     $result = $conn->query($sql_time);
@@ -543,41 +551,71 @@ if (isset($_GET['category_id'])) {
         var openingTime = "<?php echo $openingTime; ?>"; // เวลาเปิด เช่น "09:00:00"
         var closingTime = "<?php echo $closingTime; ?>"; // เวลาปิด เช่น "18:00:00"
 
+        // ฟังก์ชันแปลงเวลาเป็น Date object
+        function timeStringToDate(timeString) {
+            var today = new Date();
+            var timeParts = timeString.split(':');
+            return new Date(today.getFullYear(), today.getMonth(), today.getDate(), timeParts[0], timeParts[1], timeParts[2]);
+        }
+
         // ฟังก์ชันตรวจสอบเวลา
         function checkTime() {
             var now = new Date();
-            var currentTime = now.toTimeString().split(' ')[0];
+            var openingDate = timeStringToDate(openingTime);
+            var closingDate = timeStringToDate(closingTime);
 
-            if (currentTime < openingTime || currentTime > closingTime) {
-                disableReserveButton(); // ปิดใช้งานปุ่มถ้ายังไม่ถึงเวลาหรือเกินเวลา
+            // ตรวจสอบว่าช่วงเวลาเปิด-ปิดข้ามวันหรือไม่
+            if (closingDate <= openingDate) {
+                // ช่วงเวลาเปิด-ปิดข้ามวัน เช่น 23:00:00 ถึง 05:00:00
+                if (now >= openingDate || now <= closingDate) {
+                    enableReserveButton(); // เปิดใช้งานปุ่มถ้าอยู่ในช่วงเวลาเปิด-ปิด
+                } else {
+                    disableReserveButton(); // ปิดใช้งานปุ่มถ้าอยู่นอกช่วงเวลาเปิด-ปิด
+                }
             } else {
-                enableReserveButton(); // เปิดใช้งานปุ่มถ้าอยู่ในช่วงเวลาเปิด-ปิด
+                // ช่วงเวลาเปิด-ปิดในวันเดียวกัน เช่น 09:00:00 ถึง 18:00:00
+                if (now >= openingDate && now <= closingDate) {
+                    enableReserveButton(); // เปิดใช้งานปุ่มถ้าอยู่ในช่วงเวลาเปิด-ปิด
+                } else {
+                    disableReserveButton(); // ปิดใช้งานปุ่มถ้าอยู่นอกช่วงเวลาเปิด-ปิด
+                }
             }
         }
 
         // ปิดใช้งานปุ่มพร้อม tooltip
         function disableReserveButton() {
             var button = document.getElementById('reserveButton');
-            button.disabled = true;
-            button.classList.add('disabled');
-            button.setAttribute('title', 'ระบบยังไม่เปิดหรือปิดการจองแล้ว');
-            var tooltip = new bootstrap.Tooltip(button); // ใช้ tooltip ของ Bootstrap
+            if (button) {
+                button.disabled = true;
+                button.classList.add('disabled');
+                button.setAttribute('title', 'ระบบยังไม่เปิดหรือปิดการจองแล้ว');
+                if (!button._tooltip) { // ตรวจสอบว่ามี Tooltip อยู่หรือไม่
+                    button._tooltip = new bootstrap.Tooltip(button); // ใช้ tooltip ของ Bootstrap
+                }
+            }
         }
 
         // เปิดใช้งานปุ่ม
         function enableReserveButton() {
             var button = document.getElementById('reserveButton');
-            button.disabled = false;
-            button.classList.remove('disabled');
-            button.removeAttribute('title');
+            if (button) {
+                button.disabled = false;
+                button.classList.remove('disabled');
+                button.removeAttribute('title');
+                if (button._tooltip) {
+                    button._tooltip.dispose(); // ลบ tooltip ที่ใช้งานอยู่
+                    button._tooltip = null;
+                }
+            }
         }
 
         // เรียกใช้ฟังก์ชันตรวจสอบเวลาเมื่อโหลดหน้า
         checkTime();
 
-        // อัปเดตสถานะทุกๆ 1 วินาที (ถ้าต้องการตรวจสอบเวลาตลอดเวลา)
-        setInterval(checkTime, 1000);
+        // อัปเดตสถานะทุกๆ 1 นาที (เพียงพอสำหรับการตรวจสอบเวลา)
+        setInterval(checkTime, 60000);
     </script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

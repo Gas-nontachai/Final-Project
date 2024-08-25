@@ -187,7 +187,7 @@
     <div class="col-12 d-flex justify-content-between px-5">
         <strong>
             <div id="time"></div>
-            <div id="status">(ระบบปิด)</div>
+            <div id="status"></div>
         </strong>
         <strong>
             <div id="opening_time">ระบบเปิดเวลา : <a href="#" data-bs-toggle="modal" data-bs-target="#editTimeModal"><?php echo $openingTime; ?></a></div>
@@ -235,7 +235,6 @@
             });
         }
 
-        // ตรวจสอบเวลาปัจจุบัน
         function updateTime() {
             var now = new Date();
             var currentTime = now.toTimeString().split(' ')[0];
@@ -245,12 +244,30 @@
             var openingTime = "<?php echo $openingTime; ?>";
             var closingTime = "<?php echo $closingTime; ?>";
 
-            if (currentTime >= openingTime && currentTime <= closingTime) {
-                document.getElementById('status').innerHTML = "(ระบบเปิด)";
+            // แปลงเวลาจาก string เป็น Date object
+            var nowDate = new Date();
+            var openingDate = new Date(nowDate.toDateString() + ' ' + openingTime);
+            var closingDate = new Date(nowDate.toDateString() + ' ' + closingTime);
+
+            // ตรวจสอบว่าช่วงเวลาปิดข้ามวันหรือไม่
+            if (closingDate <= openingDate) {
+                // ช่วงเวลาเปิด-ปิดข้ามวัน เช่น 23:00:00 ถึง 05:00:00
+                if (now >= openingDate || now <= closingDate) {
+                    document.getElementById('status').innerHTML = "ขณะนี้สามารถจองพื้นที่การขายได้(ระบบเปิด)";
+                } else {
+                    document.getElementById('status').innerHTML = "ขณะนี้ไม่สามารถจองพื้นที่การขายได้(ระบบปิด)";
+                }
             } else {
-                document.getElementById('status').innerHTML = "(ระบบปิด)";
+                // ช่วงเวลาเปิด-ปิดในวันเดียวกัน
+                if (now >= openingDate && now <= closingDate) {
+                    document.getElementById('status').innerHTML = "ขณะนี้สามารถจองพื้นที่การขายได้(ระบบเปิด)";
+                } else {
+                    document.getElementById('status').innerHTML = "ขณะนี้ไม่สามารถจองพื้นที่การขายได้(ระบบปิด)";
+                }
             }
         }
+
+        // เรียกใช้ฟังก์ชัน updateTime ทุกๆ 1 วินาที
         setInterval(updateTime, 1000);
 
         // เมื่อกด submit ฟอร์ม
