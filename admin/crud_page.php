@@ -76,65 +76,74 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     if ($result = $conn->query($sql)) {
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
+                                // Get the count of locks for the current zone
+                                $sql2 = "SELECT COUNT(*) as count FROM locks WHERE zone_id = " . $row["zone_id"];
+                                $lockCountResult = $conn->query($sql2);
+                                $lockCountRow = $lockCountResult->fetch_assoc();
+                                $lockCount = $lockCountRow['count'];
+                                $lockCountResult->free();
+
                                 echo '
-                                    <div class="mt-2 ">
-                                       <div class="row ">
-                                            <div class="col">
-                                                <div class="d-flex justify-content-start">
-                                                        <div class="">
-                                                        <p class="zone_detail" 
-                                                            data-bs-toggle="tooltip" 
-                                                            data-bs-placement="right" 
-                                                            title="รายวัน ' . $row["pricePerDate"] . '฿<br>รายเดือน ' . $row["pricePerMonth"] . '฿">
-                                                            โซน: <strong>' . $row["zone_name"] . '</strong><br>(' . $row["zone_detail"] . ')
-                                                        </p>
-                                                        </div>
-                                                        <div class="">
-                                                            <button class="btn btn-sm mx-2 btn-warning edit-btn" 
-                                                                type="button" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#EditModal" 
-                                                                data-bs-id="' . $row['zone_id'] . '" 
-                                                                data-bs-name="' . $row['zone_name'] . '"
-                                                                data-bs-detail="' . $row['zone_detail'] . '"
-                                                                data-bs-date="' . $row['pricePerDate'] . '"
-                                                                data-bs-month="' . $row['pricePerMonth'] . '">
-                                                            แก้ไขรายละเอียด</button>                                             
-                                                        <a href="#" class="btn btn-sm btn-danger" 
-                                                            onclick="confirmDelete(\'' . $row['zone_id'] . '\', \'' . addslashes($row['zone_name']) . '\'); return false;">
-                                                            ลบโซน
-                                                            </a>
-                                                        </div>
-                                                </div>
-                                        </div>
+                <div class="mt-2 ">
+                   <div class="row ">
+                        <div class="col">
+                            <div class="d-flex justify-content-start">
+                                    <div class="">
+                                    <p class="zone_detail" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="right" 
+                                        title="รายวัน ' . $row["pricePerDate"] . '฿<br>รายเดือน ' . $row["pricePerMonth"] . '฿">
+                                        โซน: <strong>' . $row["zone_name"] . '</strong><br>(' . $row["zone_detail"] . ')
+                                    </p>
                                     </div>
-                                    ';
-                                $sql2 = "SELECT * FROM locks WHERE zone_id = " . $row["zone_id"];
-                                if ($result2 = $conn->query($sql2)) {
-                                    if ($result2->num_rows > 0) {
+                                    <div class="">
+                                        <button class="btn btn-sm mx-2 btn-warning edit-btn" 
+                                            type="button" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#EditModal" 
+                                            data-bs-id="' . $row['zone_id'] . '" 
+                                            data-bs-name="' . $row['zone_name'] . '"
+                                            data-bs-detail="' . $row['zone_detail'] . '"
+                                            data-bs-date="' . $row['pricePerDate'] . '"
+                                            data-bs-month="' . $row['pricePerMonth'] . '"
+                                            data-bs-amount="' . $lockCount . '">
+                                        แก้ไขรายละเอียด</button>                                             
+                                    <a href="#" class="btn btn-sm btn-danger" 
+                                        onclick="confirmDelete(\'' . $row['zone_id'] . '\', \'' . addslashes($row['zone_name']) . '\'); return false;">
+                                        ลบโซน
+                                        </a>
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+                ';
+
+                                $sql3 = "SELECT * FROM locks WHERE zone_id = " . $row["zone_id"];
+                                if ($result3 = $conn->query($sql3)) {
+                                    if ($result3->num_rows > 0) {
                                         echo '<div class="d-flex flex-wrap container-md">';
-                                        while ($row2 = $result2->fetch_assoc()) {
+                                        while ($row3 = $result3->fetch_assoc()) {
                                             echo '<div class="mx-2 ">
-                                                        <p>';
-                                            if ($row2["available"] == 0) {
+                                    <p>';
+                                            if ($row3["available"] == 0) {
                                                 echo '
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
-                                                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                                                    </svg>';
-                                            } else if ($row2["available"] == 1) {
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
+                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                                </svg>';
+                                            } else if ($row3["available"] == 1) {
                                                 echo '
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
-                                                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
-                                                </svg>';
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
+                            </svg>';
                                             }
                                             echo '</p>
-                                                        </div>';
+                                </div>';
                                         }
                                         echo '</div>';
                                     } else {
                                         echo "<p>ยังไม่มีการสร้างข้อมูลพื้นที่การขาย</p>";
                                     }
-                                    $result2->free();
+                                    $result3->free();
                                 } else {
                                     echo "<p>Error in nested query: " . $conn->error . "</p>";
                                 }
@@ -147,6 +156,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         echo "<p>Error in main query: " . $conn->error . "</p>";
                     }
                     ?>
+
                     <script>
                         function confirmDelete(zoneId, zoneName) {
                             Swal.fire({
@@ -193,7 +203,6 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             </div>
         </div>
     </div>
-    <!-- EDIT MODAL -->
     <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -228,6 +237,12 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 <input type="text" class="form-control" name="pricePerMonth" id="pricePerMonth">
                             </div>
                         </div>
+                        <div class="mb-3 row">
+                            <label for="lock_amount" class="col-sm-3 col-form-label"><strong>จำนวนล็อค:</strong></label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" name="lock_amount" id="lock_amount" min="1">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
@@ -236,31 +251,34 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                 </form>
             </div>
         </div>
+    </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var editButtons = document.querySelectorAll('.edit-btn');
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var zoneId = this.getAttribute('data-bs-id');
+                    var zoneName = this.getAttribute('data-bs-name');
+                    var zoneDetail = this.getAttribute('data-bs-detail');
+                    var pricePerDate = this.getAttribute('data-bs-date');
+                    var pricePerMonth = this.getAttribute('data-bs-Month');
+                    var lockAmount = this.getAttribute('data-bs-amount'); // Assuming this attribute is set
 
-                editButtons.forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        var zoneId = this.getAttribute('data-bs-id');
-                        var zoneName = this.getAttribute('data-bs-name');
-                        var zoneDetail = this.getAttribute('data-bs-detail');
-                        var pricePerDate = this.getAttribute('data-bs-date');
-                        var pricePerMonth = this.getAttribute('data-bs-Month');
-
-                        document.getElementById('zone_id').value = zoneId;
-                        document.getElementById('zone_name').value = zoneName;
-                        document.getElementById('zone_detail').value = zoneDetail;
-                        document.getElementById('pricePerDate').value = pricePerDate;
-                        document.getElementById('pricePerMonth').value = pricePerMonth;
-                    });
+                    document.getElementById('zone_id').value = zoneId;
+                    document.getElementById('zone_name').value = zoneName;
+                    document.getElementById('zone_detail').value = zoneDetail;
+                    document.getElementById('pricePerDate').value = pricePerDate;
+                    document.getElementById('pricePerMonth').value = pricePerMonth;
+                    document.getElementById('lock_amount').value = lockAmount; // Set the lock amount
                 });
             });
-        </script>
+        });
+    </script>
 
-        <?php $conn->close(); ?>
+
+    <?php $conn->close(); ?>
     </div>
     <!-- Add Zone Modal -->
     <div class="modal fade" id="AddZoneModal" tabindex="-1" aria-labelledby="AddZoneModalLabel" aria-hidden="true">
