@@ -228,12 +228,10 @@ if (isset($_GET['category_id'])) {
                             echo "<thead>
                         <tr>
                             <th>รหัสการจอง</th>
-                            <th>รายละเอียดโซน</th>
-                            <th>หมวดหมู่</th>
-                            <th>ประเภทการจอง</th>
-                            <th>จำนวนการจอง</th>
-                            <th>สถานะ</th>
                             <th>วันที่จอง</th>
+                            <th>รายละเอียดโซน</th>
+                            <th>จำนวน</th>
+                            <th>สถานะ</th>
                             <th>วันหมดอายุคำจอง</th>
                             <th>การกระทำ</th>
                         </tr>
@@ -243,16 +241,19 @@ if (isset($_GET['category_id'])) {
                             while ($row = $result->fetch_assoc()) {
                                 $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
                                 $slip_img = $row["slip_img"] ? "<img src='" . $row["slip_img"] . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
-
+                                if ($row["booking_type"] === 'PerDay') {
+                                    $booking_type_display = 'รายวัน';
+                                } elseif ($row["booking_type"] === 'PerMonth') {
+                                    $booking_type_display = 'รายเดือน';
+                                } else {
+                                    $booking_type_display = 'ไม่ทราบประเภทการจอง';
+                                }
                                 echo "<tr>
-                            <td>" . htmlspecialchars($row["booking_id"]) . "</td>
-                                                                <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
-                                                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>
-                                                                <td>" . htmlspecialchars($row["booking_type"]) . "</td>
-                                                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
-                                                                <td style='color: red;'>" . htmlspecialchars($row["status"]) . "</td>
-                                                                
-                            <td>" . $booking_date  . "</td>
+                                        <td>" . htmlspecialchars($row["booking_id"]) . "</td>
+                                        <td>" . $booking_date . "</td>
+                                        <td>" . $booking_type_display   . " ( " . htmlspecialchars($row["zone_detail"]) . ")</td>
+                                        <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
+                                        <td style='color: red;'>" . htmlspecialchars($row["status"]) . "</td>
                             ";
                                 if ($row["booking_status"] === '4') {
                                     echo "<td>" . htmlspecialchars($row["expiration_date"]) . "</td>";
@@ -304,6 +305,11 @@ if (isset($_GET['category_id'])) {
                                         echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                        </td>";
+                                        break;
+                                    case 10:
+                                        echo " <td>
+                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         </td>";
                                         break;
                                     default:
@@ -648,18 +654,52 @@ if (isset($_GET['category_id'])) {
                             content = `<p>${data.error}</p>`;
                         } else {
                             content = `
-                    <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                    <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
-                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
-                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
-                    <p><strong>หมวดหมู่:</strong> ${data.cat_name} (${data.sub_cat_name})</p>
-                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                    <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
-                    <p><strong>รวม:</strong> ${data.total_price} บาท</p>
-                    <p><strong>สถานะ:</strong> ${data.status}</p>
-                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>`;
-
+				<table class="table table-striped">			
+					<thead>
+					<tr>
+						<th>หมายเลขการจอง</th>
+						<th>${data.booking_id}</th>
+					</tr>
+					</thead>
+					<tbody>
+							<tr>
+						<th scope="row">ชื่อ-สกุล</th>
+						<td>${data.fullname}</td>
+					</tr>
+					<tr>
+						<th scope="row">ชื่อโซน</th>
+						<td>${data.zone_name} (${data.zone_detail})</td>
+						</tr>
+					<tr>
+						<th scope="row">หมวดหมู่</th>
+						<td> ${data.cat_name} (${data.sub_cat_name})</td>
+					</tr>
+					<tr>
+						<th scope="row">ประเภทการจอง</th>
+						<td> ${data.booking_type_display}</td>
+					</tr>	
+					<tr>
+						<th scope="row">จำนวนการจอง</th>
+						<td> ${data.booking_amount} ล็อค}</td>
+					</tr>	
+					<tr>
+						<th scope="row">รวม</th>
+						<td> ${data.total_price} บาท</td>
+					</tr>	
+					<tr>
+						<th scope="row">วันที่การจอง</th>
+						<td>${data.booking_date}</td>
+					</tr>	
+					<tr>
+						<th scope="row">วันที่คำขอหมดอายุ</th>
+						<td> ${data.expiration_date ? data.book_lock_number : 'คำขอยังไม่สมบูรณ์'}</td>
+					</tr>	
+					<tr>
+						<th scope="row">เลขล็อคที่ได้รับ</th>
+						<td>   ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
+					</tr>	
+					</tbody>
+                    </table>`;
                             if (data.slip_img) {
                                 content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
                             } else if (data.booking_status === 2) {

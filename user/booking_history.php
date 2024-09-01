@@ -126,8 +126,8 @@ $start_from = ($page - 1) * $results_per_page;
                                 <th>รหัสการจอง</th>
                                 <th>จำนวนการจองและราคา</th>
                                 <th>ประเภทสินค้า</th>
-                                <th>สถานะการจอง</th>
                                 <th>ประเภทการจอง</th>
+                                <th>สถานะการจอง</th>
                                 <th>Action</th>
                             </tr>
                         </thead>";
@@ -138,7 +138,6 @@ $start_from = ($page - 1) * $results_per_page;
                             echo "<td><strong>" . $row["booking_id"] . "</strong></td>";
                             echo "<td><strong>" . $row["booking_amount"] . "ล็อค รวม:" . $row["total_price"] . "฿</strong></td>";
                             echo "<td><strong>" . $row["cat_name"] . "(" . $row["sub_cat_name"] . ")</strong></td>";
-                            echo "<td><strong>" . $row["status"] . "</strong></td>";
                             if ($row["booking_type"] === 'PerDay') {
                                 $booking_type_display = 'รายวัน';
                             } elseif ($row["booking_type"] === 'PerMonth') {
@@ -147,6 +146,7 @@ $start_from = ($page - 1) * $results_per_page;
                                 $booking_type_display = 'ไม่ทราบประเภทการจอง';
                             }
                             echo "<td><strong>" . $booking_type_display . "</strong></td>";
+                            echo "<td><strong>" . $row["status"] . "</strong></td>";
                             echo "<td>
                                     <button 
                                         class='btn btn-primary m-2' type='button' 
@@ -216,20 +216,53 @@ $start_from = ($page - 1) * $results_per_page;
                         if (data.error) {
                             content = `<p>${data.error}</p>`;
                         } else {
-                            content = `
-                            <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                            <p><strong>ชื่อ-สกุล:</strong> ${data.fullname}</p>
-                            <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
-                            <p><strong>ราคารวม:</strong> ${data.total_price}</p>
-                            <p><strong>ประเภทสินค้า:</strong> ${data.cat_name}</p>
-                            <p><strong>ประเภทสินค้าย่อย:</strong> ${data.sub_cat_name}</p>
-                            <p><strong>สถานะการจอง:</strong> ${data.status}</p>
-                            <p><strong>ประเภทการจอง:</strong> 
-                            ${data.booking_type === 'PerDay' ? 'รายวัน' : data.booking_type === 'PerMonth' ? 'รายเดือน' : 'ไม่ทราบประเภทการจอง'}
-                            </p>
-                            <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.booked_lock_number ? data.booked_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>
-                            <p><strong>วันที่จอง:</strong> ${data.booking_date}</p>
-                        `;
+                            content = ` 
+				<table class="table table-striped">			
+					<thead>
+					<tr>
+						<th>หมายเลขการจอง</th>
+						<th>${data.booking_id}</th>
+					</tr>
+					</thead>
+					<tbody>
+							<tr>
+						<th scope="row">ชื่อ-สกุล</th>
+						<td>${data.fullname}</td>
+					</tr>
+					<tr>
+						<th scope="row">จำนวนการจอง</th>
+						<td>${data.booking_amount}</td>
+						</tr>
+					<tr>
+						<th scope="row">ราคารวม</th>
+						<td> ${data.total_price}</td>
+					</tr>
+					<tr>
+						<th scope="row">ประเภทสินค้า</th>
+						<td> ${data.cat_name}</td>
+					</tr>	
+					<tr>
+						<th scope="row">ประเภทสินค้าย่อย</th>
+						<td> ${data.sub_cat_name}</td>
+					</tr>	
+					<tr>
+						<th scope="row">สถานะการจอง</th>
+						<td> ${data.status}</td>
+					</tr>	
+					<tr>
+						<th scope="row">ประเภทการจอง</th>
+						<td> ${data.booking_type === 'PerDay' ? 'รายวัน' : data.booking_type === 'PerMonth' ? 'รายเดือน' : 'ไม่ทราบประเภทการจอง'}</td>
+					</tr>	
+					<tr>
+						<th scope="row">เลขล็อคที่ได้รับ</th>
+						<td>  ${data.booked_lock_number ? data.booked_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
+					</tr>	
+					<tr>
+						<th scope="row">วันที่จอง</th>
+						<td> ${data.booking_date}</td>
+					</tr>	
+					</tbody>
+                    </table>`;
                             if (data.slip_img) {
                                 content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
                             }

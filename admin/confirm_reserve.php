@@ -502,18 +502,61 @@ if (isset($_GET['category_id'])) {
                                         content = `<p>${data.error}</p>`;
                                     } else {
                                         content = `
-                                                    <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                                                    <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
-                                                    <p><strong>เบอร์โทรติดต่อ:</strong> ${data.tel}</p>
-                                                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
-                                                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
-                                                    <p><strong>หมวดหมู่:</strong> ${data.cat_name}(${data.sub_cat_name})</p>
-                                                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                                                    <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
-                                                    <p><strong>รวม:</strong> ${data.total_price} บาท</p>
-                                                    <p><strong>สถานะ:</strong> ${data.status}</p>
-                                                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>`;
+                                        <table class="table table-striped">			
+                                            <thead>
+                                            <tr>
+                                                <th>หมายเลขการจอง</th>
+                                                <th>${data.booking_id}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                <th scope="row">ชื่อ-สกุล</th>
+                                                <td>${data.fullname}</td>
+                                            </tr>
+                                                    <tr>
+                                                <th scope="row">เบอร์โทรติดต่อ</th>
+                                                <td>${data.tel}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ชื่อโซน</th>
+                                                <td>${data.zone_name} (${data.zone_detail})</td>
+                                                </tr>
+                                            <tr>
+                                                <th scope="row">หมวดหมู่</th>
+                                                <td> ${data.cat_name} (${data.sub_cat_name})</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ประเภทการจอง</th>
+                                                <td> ${data.booking_type_display}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">จำนวนการจอง</th>
+                                                <td> ${data.booking_amount} ล็อค}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">รวม</th>
+                                                <td> ${data.total_price} บาท</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">สถานะ</th>
+                                                <td> ${data.status} บาท</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">วันที่การจอง</th>
+                                                <td>${data.booking_date}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">วันที่คำขอหมดอายุ</th>
+                                                <td> ${data.expiration_date ? data.book_lock_number : 'คำขอยังไม่สมบูรณ์'}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">เลขล็อคที่ได้รับ</th>
+                                                <td>   ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
+                                            </tr>	
+                                            </tbody>
+                                            </table>
+                        `;
 
                                         if (data.slip_img) {
                                             content += `<img src="../asset./slip_img./${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;

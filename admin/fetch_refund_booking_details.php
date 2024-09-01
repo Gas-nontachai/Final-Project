@@ -30,10 +30,21 @@ if (isset($_POST['fetch_booking_details'])) {
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
         $bookingDetails = $result->fetch_assoc();
+
+        // Determine the booking type display
+        if ($bookingDetails["booking_type"] === 'PerDay') {
+            $bookingDetails['booking_type_display'] = 'รายวัน';
+        } elseif ($bookingDetails["booking_type"] === 'PerMonth') {
+            $bookingDetails['booking_type_display'] = 'รายเดือน';
+        } else {
+            $bookingDetails['booking_type_display'] = 'ไม่ทราบประเภทการจอง';
+        }
+
         echo json_encode($bookingDetails);
     } else {
         echo json_encode(['error' => 'ไม่พบการจอง']);
     }
+
     $stmt->close();
     $conn->close();
     exit;

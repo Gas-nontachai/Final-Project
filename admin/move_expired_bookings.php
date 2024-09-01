@@ -6,11 +6,22 @@ do {
     $conn->begin_transaction();
 
     try {
-        // ย้ายการจองที่หมดอายุไปยังตาราง booked
+        // อัปเดตสถานะ booking_status = 10 สำหรับการจองที่มี booking_date < 1 วันจากเวลาปัจจุบัน และ booking_type เป็น PerDay หรือ PerMonth
+        $update_status_query = "UPDATE booking 
+                                SET booking_status = 10 
+                                WHERE (booking_date < DATE_ADD(NOW(), INTERVAL 1 DAY) 
+                                AND booking_type = 'PerDay')
+                                OR (booking_date < DATE_ADD(NOW(), INTERVAL 1 MONTH) 
+                                AND booking_type = 'PerMonth')";
+        if ($conn->query($update_status_query) === FALSE) {
+            throw new Exception("ไม่สามารถอัปเดตสถานะการจองได้: " . $conn->error);
+        }
+
+        // ย้ายการจองที่หมดอายุหรือที่มีสถานะ booking_status = 10 ไปยังตาราง booked
         $move_query = "INSERT INTO booked (booking_id, member_id, booking_status, booking_type, zone_id, booking_amount, total_price, product_type, sub_product_type, booking_date, booked_lock_number, slip_img, expiration_date)
                        SELECT booking_id, member_id, booking_status, booking_type, zone_id, booking_amount, total_price, product_type, sub_product_type, booking_date, book_lock_number, slip_img, expiration_date
                        FROM booking
-                       WHERE expiration_date <= NOW()";
+                       WHERE expiration_date <= NOW() OR booking_status = 10";
         if ($conn->query($move_query) === FALSE) {
             throw new Exception("ไม่สามารถย้ายการจองที่หมดอายุได้: " . $conn->error);
         }
@@ -19,7 +30,7 @@ do {
         $affected_rows_move = $conn->affected_rows;
 
         // ดึง lock_name ที่ต้องอัปเดตจากตาราง booking
-        $get_locks_query = "SELECT DISTINCT book_lock_number FROM booking WHERE expiration_date <= NOW()";
+        $get_locks_query = "SELECT DISTINCT book_lock_number FROM booking WHERE expiration_date <= NOW() OR booking_status = 10";
         $result = $conn->query($get_locks_query);
         if ($result === FALSE) {
             throw new Exception("ไม่สามารถดึงข้อมูลล็อกได้: " . $conn->error);
@@ -53,8 +64,8 @@ do {
         // ตรวจสอบจำนวนแถวที่ถูกอัปเดต
         $affected_rows_update = $conn->affected_rows;
 
-        // ลบการจองที่หมดอายุออกจากตาราง booking
-        $delete_query = "DELETE FROM booking WHERE expiration_date <= NOW()";
+        // ลบการจองที่หมดอายุหรือที่มี booking_status = 10 ออกจากตาราง booking
+        $delete_query = "DELETE FROM booking WHERE expiration_date <= NOW() OR booking_status = 10";
         if ($conn->query($delete_query) === FALSE) {
             throw new Exception("ไม่สามารถลบการจองที่หมดอายุได้: " . $conn->error);
         }
@@ -66,6 +77,7 @@ do {
         $conn->commit();
 
         // แสดงจำนวนแถวที่ได้รับผลกระทบ
+        echo "จำนวนแถวที่ถูกอัปเดตสถานะ: $affected_rows_move<br>";
         echo "จำนวนแถวที่ถูกย้าย: $affected_rows_move<br>";
         echo "จำนวนแถวที่ถูกอัปเดต: $affected_rows_update<br>";
         echo "จำนวนแถวที่ถูกลบ: $affected_rows_delete<br>";
