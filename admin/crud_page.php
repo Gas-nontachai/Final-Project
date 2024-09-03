@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -58,6 +58,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,7 +76,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     ?>
 
     <!-- Display -->
-    <div class="container mt-4">
+    <div class="container mt-4 bgcolor py-4 rounded">
         <div class="container">
             <div class=" row d-flex justify-content-center align-item-center">
                 <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">

@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -62,6 +62,15 @@ $start_from = ($page - 1) * $results_per_page;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -71,7 +80,7 @@ $start_from = ($page - 1) * $results_per_page;
 
 
     <!-- Display -->
-    <div class="container my-4 p-2 border border-dark-subtle rounded overflow-auto" style="width: 90%; height: 40rem;">
+    <div class="container my-4 px-2 border rounded overflow-auto bgcolor py-4" style="width: 100%; height: 40rem;">
         <ul class="nav nav-tabs" id="myTab">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>คำขอคืนเงิน</strong></a>

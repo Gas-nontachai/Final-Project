@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -59,6 +59,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <link rel="stylesheet" href="../asset/css/font.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -66,7 +75,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <?php include('./admin_nav.php'); ?>
 
     <!-- Display -->
-    <div class="container my-4 p-2 border border-dark-subtle rounded overflow-auto" style="width: 90%; height: 40rem;">
+    <div class="container my-4 px-2 border bgcolor py-4 rounded overflow-auto" style="width: 90%; height: 40rem;">
         <ul class="nav nav-tabs" id="myTab">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>สมาชิกในระบบ</strong></a>

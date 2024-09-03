@@ -1,4 +1,16 @@
-<nav class="row g-2">
+<style>
+    .swal2-container {
+        z-index: 9999 !important;
+        /* ปรับค่าให้เหมาะสมตามที่ต้องการ */
+    }
+
+    .bgcolor {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding-bottom: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<nav class="row g-2 bgcolor">
     <!-- btn sidebar -->
     <div class="col-12 d-flex justify-content-between px-5 py-3">
         <div class="col-4">

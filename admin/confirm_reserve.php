@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -96,6 +96,15 @@ if (isset($_GET['category_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -105,12 +114,12 @@ if (isset($_GET['category_id'])) {
     ?>
 
     <!-- Display -->
-    <div class="container mt-4">
+    <div class="container mt-4 bgcolor py-4 rounded">
         <div class="container ">
             <div class="row d-flex justify-content-center align-item-center">
                 <div class="row">
                     <div class="col">
-                        <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">
+                        <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded">
                             <!-- fetch_zone_detail -->
                             <?php
                             include('./fetch_zone_detail.php');
@@ -119,7 +128,7 @@ if (isset($_GET['category_id'])) {
                     </div>
                     <div class="col">
                         <!-- Display -->
-                        <div class="col-12 container my-4 p-2 border border-dark-subtle rounded overflow-auto" style="width: 90%; height: 40rem;">
+                        <div class="col-12 container my-4 p-2 border rounded overflow-auto" style="width: 100%; height: 40rem; background-color: rgba(255, 255, 255);">
                             <ul class="nav nav-tabs" id="myTab">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#tab1Content"><strong>คำขอจองพื้นที่</strong></a>
@@ -129,7 +138,7 @@ if (isset($_GET['category_id'])) {
                                 </li>
                             </ul>
 
-                            <div class="tab-content border p-3">
+                            <div class="tab-content  p-3">
                                 <!-- Tab 1: คำขอจองพื้นที่ -->
                                 <div class="tab-pane fade show active" id="tab1Content">
                                     <div class="mt-2" id="bookingTable1">
@@ -554,34 +563,49 @@ if (isset($_GET['category_id'])) {
                                                 <th scope="row">เลขล็อคที่ได้รับ</th>
                                                 <td>   ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
                                             </tr>	
-                                            </tbody>
-                                            </table>
                         `;
 
                                         if (data.slip_img) {
-                                            content += `<img src="../asset./slip_img./${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
-                                            content += `<button class="btn btn-success">ยืนยันการชำระเงิน</button>`;
+                                            content += `
+                                                        <tr>
+                                                            <th scope="row">รูปภาพใบเสร็จ</th>
+                                                            <td>  <img  src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    </table>
+                                                   `;
                                         } else {
                                             switch (parseInt(data.booking_status, 10)) {
                                                 case 1:
                                                     content += `<button class="btn btn-success">แจ้งชำระเงิน</button>`;
                                                     break;
                                                 case 2:
+                                                    content += `</tbody>
+                                                </table>`;
                                                     break;
                                                 case 3:
+                                                    content += `</tbody>
+                                                                    </table>`;
                                                     break;
                                                 case 4:
+                                                    content += `</tbody>
+                                                                </table>`;
                                                     break;
                                                 case 5:
-                                                    content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button>`;
+                                                    content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button></tbody>
+                                                                </table>`;
                                                     break;
                                                 case 6:
-                                                    content += `<strong style="color: red;">ยกเลิกเรียบร้อยแล้ว</strong>`;
+                                                    content += `<strong style="color: red;">ยกเลิกเรียบร้อยแล้ว</strong></tbody>
+                                                                 </table>`;
                                                     break;
                                                 case 9:
+                                                    content += `</tbody>
+                                                                </table>`;
                                                     break;
                                                 default:
-                                                    content += `<p>ไม่ทราบสถานะ</p>`;
+                                                    content += `<p>ไม่ทราบสถานะ</p></tbody>
+                                                                </table>`;
                                                     break;
                                             }
                                         }

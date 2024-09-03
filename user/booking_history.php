@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -62,6 +62,15 @@ $start_from = ($page - 1) * $results_per_page;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -71,13 +80,13 @@ $start_from = ($page - 1) * $results_per_page;
     ?>
 
     <!-- แสดงผล -->
-    <div class="container my-4 p-2 border border-dark-subtle rounded overflow-auto" style="width: 90%; height: 40rem;">
+    <div class="container my-4 p-2 border border-dark-subtle rounded  overflow-auto  bgcolor" style="width: 90%; height: 50rem;">
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active mt-2 mx-2 p-2" id="category">
                 <div>
                     <h1>ประวัติการจอง</h1>
                 </div>
-                <div class="mt-2">
+                <div class="mt-2 overflow-auto">
                     <?php
                     // Pagination links
                     $sql_total = "SELECT COUNT(*) FROM market_booking.booked WHERE member_id = $user_id";
@@ -126,7 +135,6 @@ $start_from = ($page - 1) * $results_per_page;
                                 <th>รหัสการจอง</th>
                                 <th>จำนวนการจองและราคา</th>
                                 <th>ประเภทสินค้า</th>
-                                <th>ประเภทการจอง</th>
                                 <th>สถานะการจอง</th>
                                 <th>Action</th>
                             </tr>
@@ -138,14 +146,6 @@ $start_from = ($page - 1) * $results_per_page;
                             echo "<td><strong>" . $row["booking_id"] . "</strong></td>";
                             echo "<td><strong>" . $row["booking_amount"] . "ล็อค รวม:" . $row["total_price"] . "฿</strong></td>";
                             echo "<td><strong>" . $row["cat_name"] . "(" . $row["sub_cat_name"] . ")</strong></td>";
-                            if ($row["booking_type"] === 'PerDay') {
-                                $booking_type_display = 'รายวัน';
-                            } elseif ($row["booking_type"] === 'PerMonth') {
-                                $booking_type_display = 'รายเดือน';
-                            } else {
-                                $booking_type_display = 'ไม่ทราบประเภทการจอง';
-                            }
-                            echo "<td><strong>" . $booking_type_display . "</strong></td>";
                             echo "<td><strong>" . $row["status"] . "</strong></td>";
                             echo "<td>
                                     <button 
@@ -264,7 +264,15 @@ $start_from = ($page - 1) * $results_per_page;
 					</tbody>
                     </table>`;
                             if (data.slip_img) {
-                                content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
+                                content += `
+                                <tr>
+                                    <th scope="row">รูปภาพใบเสร็จ</th>
+                                    <td>  <img  src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                </tr>
+                             </tbody>
+                               </table>`;
+                            } else {
+                                content += ``;
                             }
                         }
                         document.querySelector('#viewBookingModal .modal-body').innerHTML = content;

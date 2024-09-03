@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -118,8 +118,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
-                            title: "ส่งคำขอจองพื้นที่การขายเรียบร้อย",
-                            icon: "success",
+                            title: "เกิดข้อผิดพลาดในการจอง ข้อมูลไม่ครบถ้วน",
+                            icon: "error",
                             timer: 3000,
                             timerProgressBar: true,
                         }).then(() => {

@@ -26,7 +26,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -99,7 +99,15 @@ if (isset($_GET['category_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
-
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -107,10 +115,11 @@ if (isset($_GET['category_id'])) {
     <?php
     include('./user_nav.php');
     ?>
-    <div class="row">
+
+    <div class="row ">
         <div class="col">
             <!-- Display -->
-            <div class="container mt-4">
+            <div class="container mt-4 bgcolor py-4 rounded">
                 <div class="container-fluid ">
                     <div class="row d-flex justify-content-center align-item-center">
                         <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">
@@ -145,14 +154,22 @@ if (isset($_GET['category_id'])) {
                                                     echo '<p>';
                                                     if ($row2["available"] == 0) {
                                                         echo '
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
-                                                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                                                    </svg>';
+                                                     <div class="border rounded " style="text-align: center;">
+                                                        <div class="bg-lightt rounded d-flex justify-content-center align-items-center" style="width: 30px; height:30px;">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+                                                                <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>';
                                                     } else if ($row2["available"] == 1) {
                                                         echo '
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
-                                                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
-                                                </svg>';
+                                                <div class="border rounded d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
+                                                        <div class="bg-secondary rounded d-flex justify-content-center align-items-center" style="width: 30px; height:30px; color:white;" >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+                                                                <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>';
                                                     }
                                                     echo '</p>';
                                                     echo '</div>';
@@ -177,22 +194,26 @@ if (isset($_GET['category_id'])) {
                         </div>
                         <!--Avaliable--->
                         <div class="container-md d-flex justify-content-center p-2 m-2">
-                            <div class="px-2 mx-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
-                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                </svg>
+                            <div class="px-2 mx-2 d-flex justify-content-center align-items-center">
+                                <div class="bg-lightt rounded d-flex justify-content-center align-items-center" style="width: 30px; height:30px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+                                        <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+                                    </svg>
+                                </div>
                                 <strong>ว่าง</strong>
                             </div>
-                            <div class="px-2 mx-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
-                                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z" />
-                                </svg>
-                                <strong>ไม่ว่าง</strong>
+                            <div class="px-2 mx-2 d-flex justify-content-center align-items-center">
+                                <div class="bg-secondary rounded d-flex justify-content-center align-items-center" style="width: 30px; height:30px; color:white;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class=" bi bi-shop" viewBox="0 0 16 16">
+                                        <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+                                    </svg>
+                                </div>
+                                <strong class="mx-1">ไม่ว่าง</strong>
                             </div>
                         </div>
                         <!-- BTN -->
                         <div class="col-12 d-flex justify-content-evenly px-3">
-                            <button class="btn btn-success m-2" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#ReserveModal">
+                            <button class="btn btn-success m-2" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#step1Modal">
                                 จองพื้นที่การขาย
                             </button>
                         </div>
@@ -200,14 +221,14 @@ if (isset($_GET['category_id'])) {
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col bgcolor">
             <!--Dispaly-->
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active mt-2 mx-2 p-2 border" id="categort">
+                <div class="tab-pane fade show active mt-2 mx-2 p-2 " id="categort">
                     <div>
                         <h1>คำขอจองพื้นที่</h1>
                     </div>
-                    <div class="mt-2">
+                    <div class="mt-2 overflow-auto">
                         <?php
                         // Assuming you have a connection to your database in $conn
                         $sql = "SELECT BK.expiration_date, BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
@@ -384,7 +405,6 @@ if (isset($_GET['category_id'])) {
         </div>
     </div>
 
-    <!-- Pay Modal -->
     <!-- Pay Modal -->
     <div class="modal fade" id="PayModal" tabindex="-1" aria-labelledby="PayModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -692,18 +712,24 @@ if (isset($_GET['category_id'])) {
 					</tr>	
 					<tr>
 						<th scope="row">วันที่คำขอหมดอายุ</th>
-						<td> ${data.expiration_date ? data.book_lock_number : 'คำขอยังไม่สมบูรณ์'}</td>
+						<td> ${data.expiration_date ? data.expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
 					</tr>	
 					<tr>
 						<th scope="row">เลขล็อคที่ได้รับ</th>
 						<td>   ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
 					</tr>	
-					</tbody>
-                    </table>`;
+					        `;
                             if (data.slip_img) {
-                                content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
-                            } else if (data.booking_status === 2) {
-                                content += `<button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#PayModal' data-id='${data.booking_id}'>ชำระเงิน</button>`;
+                                content += `
+                                <tr>
+                                    <th scope="row">รูปภาพใบเสร็จ</th>
+                                    <td>  <img  src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                </tr>
+                             </tbody>
+                               </table>`;
+                            } else {
+                                content += `</tbody>
+                               </table>`;
                             }
                         }
                         document.querySelector('#viewBookingModal .modal-body').innerHTML = content;
@@ -719,16 +745,22 @@ if (isset($_GET['category_id'])) {
 
 
 
-
     <!-- Reserve Modal -->
-    <div class="modal fade" id="ReserveModal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
+
+    <!-- Step 1 Modal -->
+    <div class="modal fade" id="step1Modal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>จองพื้นที่การขาย</strong></h1>
+                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>จองพื้นที่การขาย - ขั้นตอนที่ 1</strong></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Progress Bar -->
+                    <div class="progress mb-4">
+                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 1</div>
+                    </div>
+
                     <form action="./reserve_order.php" method="post">
                         <div class="mb-3 row">
                             <label for="fullname" class="col col-form-label">
@@ -764,78 +796,131 @@ if (isset($_GET['category_id'])) {
                                 </strong>
                             </div>
                         </div>
-                        <div class="mx-4 row">
-                            <div class="col">
-                                <img src="../asset/img/img.locks.png" alt="" style="width:  50%; height: 10rem;">
-                                <label for="img"> รูปตัวอย่างล็อคปกติ</label>
-                            </div>
-                            <div class="col">
-                                <img src="../asset/img/img.openbackcar.png" alt="" style="width:  10rem; height: 10rem;">
-                                <label for="img"> รูปตัวอย่างล็อคเปิดท้าย</label>
-                            </div>
-                        </div>
-                        <div class="mb-4 mt-2 row">
-                            <label for="category" class="col-sm-3 col-form-label">
-                                <strong>ประเภทสินค้า :</strong>
-                            </label>
-                            <div class="col-sm-4">
-                                <select name="category" id="category" class="form-select">
-                                    <option value="#">กรุณาเลือกประเภทสินค้า</option>
-                                    <?php
-                                    $sql = "SELECT * FROM category";
-                                    $result = $conn->query($sql);
-
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No categories found</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <select name="subcategory" id="subcategory" class="form-select">
-                                    <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mb-3 row">
-                            <label for="typeReserve" class="col-sm-3 col-form-label">
-                                <strong>ประเภทการจอง :</strong>
-                            </label>
-                            <div class="col-sm-9">
-                                <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
-                                    <option value="PerDay">รายวัน</option>
-                                    <option value="PerMonth">รายเดือน</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="amount" class="col-sm-3 col-form-label">
-                                <strong>จำนวน :</strong>
-                            </label>
-                            <div class="col-sm-9">
-                                <input type="number" class="form-control" name="amount" min="1" id="amount" oninput="updateTotalPrice()" required>
-                            </div>
-                            <div class="col-sm-12">
-                                <strong id="TotalPrice">
-                                    ราคาสุทธิ : ฿
-                                </strong>
-                            </div>
-                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                            <input class="btn btn-success" type="submit" name="submit" value="Submit">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Step 2 Modal -->
+    <div class="modal fade" id="step2Modal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>จองพื้นที่การขาย - ขั้นตอนที่ 2</strong></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Progress Bar -->
+                    <div class="progress mb-4">
+                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 66%;" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 2</div>
+                    </div>
+
+                    <div class="mx-4 row">
+                        <div class="col">
+                            <img src="../asset/img/img.locks.png" alt="" style="width:  50%; height: 10rem;">
+                            <label for="img"> รูปตัวอย่างล็อคปกติ</label>
+                        </div>
+                        <div class="col">
+                            <img src="../asset/img/img.openbackcar.png" alt="" style="width:  10rem; height: 10rem;">
+                            <label for="img"> รูปตัวอย่างล็อคเปิดท้าย</label>
+                        </div>
+                    </div>
+                    <div class="mb-4 mt-2 row">
+                        <label for="category" class="col-sm-3 col-form-label">
+                            <strong>ประเภทสินค้า :</strong>
+                        </label>
+                        <div class="col-sm-4">
+                            <select name="category" id="category" class="form-select">
+                                <option value="#">กรุณาเลือกประเภทสินค้า</option>
+                                <?php
+                                $sql = "SELECT * FROM category";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="">No categories found</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <select name="subcategory" id="subcategory" class="form-select">
+                                <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step3Modal" data-bs-dismiss="modal" onclick="updateProgressBar(100, 'ขั้นตอนที่ 3')">ถัดไป</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3 Modal -->
+    <div class="modal fade" id="step3Modal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ReserveModalLabel"><strong>จองพื้นที่การขาย - ขั้นตอนที่ 3</strong></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Progress Bar -->
+                    <div class="progress mb-4">
+                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 3</div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="typeReserve" class="col-sm-3 col-form-label">
+                            <strong>ประเภทการจอง :</strong>
+                        </label>
+                        <div class="col-sm-9">
+                            <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
+                                <option value="PerDay">รายวัน</option>
+                                <option value="PerMonth">รายเดือน</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="amount" class="col-sm-3 col-form-label">
+                            <strong>จำนวน :</strong>
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="amount" min="1" id="amount" oninput="updateTotalPrice()" required>
+                        </div>
+                        <div class="col-sm-12">
+                            <strong id="TotalPrice">
+                                ราคาสุทธิ : ฿
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
+                        <input class="btn btn-success" type="submit" name="submit" value="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function updateProgressBar(value, stepText) {
+            document.getElementById('progressBar').style.width = value + '%';
+            document.getElementById('progressBar').setAttribute('aria-valuenow', value);
+            document.getElementById('progressBar').textContent = stepText;
+        }
+    </script>
 </body>
 
 <script>

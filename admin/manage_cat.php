@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -58,8 +58,16 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
-s
 
 <body>
     <!-- Nav -->
@@ -67,13 +75,10 @@ s
     include('./admin_nav.php');
     ?>
     <!-- Display -->
-    <div class="container mt-2 p-2 border border-dark-subtle rounded overflow-auto" style="width: 60%; height: 40rem;">
+    <div class="container mt-2 px-2 border bgcolor py-4 rounded overflow-auto" style="width: 60%; height: 40rem;">
         <ul class="nav nav-tabs" id="myTab">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>ประเภทสินค้า</strong> </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#pre_category"> <strong>คำขอเพิ่มประเภทสินค้า</strong></a>
             </li>
         </ul>
 
@@ -182,16 +187,6 @@ s
                         });
                     });
                 </script>
-            </div>
-
-
-            <div class="tab-pane fade mt-2 mx-2 p-2" id="pre_category">
-                <div class="">
-                    <h1>คำขอเพิ่มประเภทสินค้า</h1>
-                </div>
-                <div class="mt-2">
-                    <p>This is the home page of the tabbed navigation.</p>
-                </div>
             </div>
         </div>
     </div>
