@@ -310,12 +310,17 @@ $start_from = ($page - 1) * $results_per_page;
 							<tr>
 						<th scope="row">วันที่จอง</th>
 						<td> ${data.booking_date}</td>
-					</tr>
-					</tbody>
-                    </table>
-                        `;
+					</tr>	 `;
                             if (data.slip_img) {
-                                content += `<img src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
+                                content += ` <tr>
+                                                <th scope="row">รูปภาพใบเสร็จ</th>
+                                                <td>  <img  src="../asset/slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                             </tr>
+                                          </tbody>
+                                       </table>`;
+                            } else {
+                                content += `</tbody>
+                                </table>`;
                             }
                         }
                         document.querySelector('#viewBookingModal .modal-body').innerHTML = content;

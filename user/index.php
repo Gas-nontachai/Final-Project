@@ -447,7 +447,7 @@ if (isset($_GET['category_id'])) {
 
                         <!-- ส่วน Token Payment -->
                         <div id="tokenPaymentForm" style="display: none;">
-                            <label for="tokenInput" class="form-label"> <strong>คุณมีเหรียญ <?php echo htmlspecialchars($token); ?> เหรียญ</strong> </label>
+                            <label for="tokenInput" class="form-label"> <strong>คุณมีเหรียญ <span id="userToken"><?php echo htmlspecialchars($token); ?></span> เหรียญ</strong> </label>
                             <br>
                             <label for="tokenInput" class="form-label"> <strong>ต้องใช้ทั้งหมด <span id="payModaltotalprice"></span> เหรียญ</strong> </label>
                             <p id="tokenWarning" style="color: red; display: none;">เหรียญของคุณไม่เพียงพอ</p>
@@ -460,7 +460,6 @@ if (isset($_GET['category_id'])) {
         </div>
     </div>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const mobileBankingForm = document.getElementById('mobileBankingForm');
@@ -468,7 +467,8 @@ if (isset($_GET['category_id'])) {
             const payModal = document.getElementById('PayModal');
             const payButton = document.getElementById('payButton');
             const tokenWarning = document.getElementById('tokenWarning');
-            const userToken = <?php echo json_encode($token); ?>; // จำนวนเหรียญของผู้ใช้
+            const userTokenSpan = document.getElementById('userToken');
+            let userToken = parseInt(userTokenSpan.textContent, 10); // จำนวนเหรียญของผู้ใช้
 
             function updateModalData(bookingId, totalPrice) {
                 document.getElementById('payModalBookingId').textContent = bookingId;
@@ -559,8 +559,6 @@ if (isset($_GET['category_id'])) {
             });
         });
     </script>
-
-
     <?php
     $currentTime = date('H:i:s'); // เวลาปัจจุบัน
 
@@ -723,7 +721,7 @@ if (isset($_GET['category_id'])) {
                                 content += `
                                 <tr>
                                     <th scope="row">รูปภาพใบเสร็จ</th>
-                                    <td>  <img  src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                    <td>  <img  src="../asset/slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
                                 </tr>
                              </tbody>
                                </table>`;

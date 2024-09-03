@@ -181,6 +181,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ManulExpiredModal">ปรับหมดอายุคำขอแบบกดมือ</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                         <a href="./logout.php" type="button" class="btn btn-danger">ล็อกเอ้าท์</a>
                     </div>
@@ -188,6 +189,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Manul Expired Modal -->
+    <div class="modal fade" id="ManulExpiredModal" tabindex="-1" aria-labelledby="ManulExpiredModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ManulExpiredModalLabel"><strong>ปรับหมดอายุคำขอแบบกดมือ</strong></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>เมื่อคุณกดปุ่ม "ยืนยัน", ระบบจะทำการปรับสถานะคำขอให้เป็น "หมดอายุ" ซึ่งจะมีผลดังนี้:</p>
+                    <ul>
+                        <li>อัปเดตสถานะการจองที่มีวันหมดอายุ หรือที่มีสถานะ "หมดอายุ" ในฐานข้อมูล.</li>
+                        <li>ย้ายข้อมูลการจองที่หมดอายุไปยังตาราง "booked" เพื่อเก็บประวัติ.</li>
+                        <li>อัปเดตสถานะล็อก (lock) ที่เกี่ยวข้องให้พร้อมใช้งานอีกครั้ง.</li>
+                        <li>ลบข้อมูลการจองที่หมดอายุออกจากตาราง "booking".</li>
+                        <li>ระบบจะนำทางคุณไปยังหน้าใหม่เพื่อแสดงผลลัพธ์การดำเนินการนี้.</li>
+                    </ul>
+                    <p>คุณแน่ใจหรือไม่ว่าต้องการดำเนินการต่อ?</p>
+                    <button type="button" class="btn btn-danger" id="confirmManualExpire">ยืนยัน</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('confirmManualExpire').addEventListener('click', function() {
+            Swal.fire({
+                title: 'ยืนยันการปรับสถานะ',
+                text: "คุณแน่ใจหรือไม่ว่าต้องการปรับสถานะหมดอายุคำขอนี้?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ใช่, ฉันแน่ใจ',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ดำเนินการตามที่ต้องการเมื่อได้รับการยืนยัน
+                    window.location.href = 'manual_expired_bookings.php'; // เปลี่ยน URL ตามต้องการ
+                }
+            });
+        });
+    </script>
+
+
     <!-- timer -->
     <?php
     require("../condb.php");
@@ -249,9 +295,14 @@
                 icon: 'success',
                 title: 'แก้ไขเวลาเปิด-ปิดสำเร็จ',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1500,
+                didClose: () => {
+                    // Refresh the page
+                    location.reload();
+                }
             });
         }
+
 
         function updateTime() {
             var now = new Date();

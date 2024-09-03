@@ -79,8 +79,8 @@
                             ล็อคอิน/สมัครสมาชิก
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="./admin/login.php">ล็อคอิน</a></li>
-                            <li><a class="dropdown-item" href="./admin/register.php">สมัครสมาชิก</a></li>
+                            <li><a class="dropdown-item" href="./login.php">ล็อคอิน</a></li>
+                            <li><a class="dropdown-item" href="./register.php">สมัครสมาชิก</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -172,7 +172,13 @@
                 <a href="#" class="mx-1"><img src="./asset/img/icon.youtube.png" alt="YouTube"></a>
                 <a href="#" class="mx-1"><img src="./asset/img/icon.instagram.png" alt="Instagram"></a>
             </div>
-            <p>© 2024 ตลาดนัด - ช่องทางติดต่อ</p>
+            <p>© 2024 จองล็อค.คอม - ช่องทางติดต่อ</p>
+            <ul>
+                <p><strong>ที่อยู่:</strong> มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน(สุรนารายณ์) 744 ถ. สุรนารายณ์</p>
+                <p><strong>โทรศัพท์:</strong> 02-888-8888 <strong>อีเมล:</strong> info@marketplace.com</p>
+                <p></p>
+                <p><strong>เวลาทำการ:</strong> จันทร์ - ศุกร์ 9:00 น. - 17:00 น.</p>
+            </ul>
         </div>
     </footer>
 

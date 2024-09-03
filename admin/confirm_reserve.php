@@ -569,7 +569,7 @@ if (isset($_GET['category_id'])) {
                                             content += `
                                                         <tr>
                                                             <th scope="row">รูปภาพใบเสร็จ</th>
-                                                            <td>  <img  src="../asset./slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                                            <td>  <img  src="../asset/slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
                                                         </tr>
                                                     </tbody>
                                                     </table>
@@ -653,9 +653,7 @@ if (isset($_GET['category_id'])) {
                                         <select class="form-select" id="zoneSelect" name="zone_id">
                                             <option value="" selected>กรุณาเลือกโซน</option>
                                             <?php
-                                            include('connect.php'); // รวมการเชื่อมต่อฐานข้อมูล
-
-                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
+                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name ";
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
@@ -673,7 +671,7 @@ if (isset($_GET['category_id'])) {
                                     <div class="display_locks">
                                         <!-- ข้อมูลจะถูกแสดงที่นี่ -->
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-3">อัพเดตข้อมูล</button>
+                                    <button id="updateButton" type="submit" class="btn update-btn btn-primary mt-3" disabled>อัพเดตข้อมูล</button>
                                 </form>
                             </div>
                         </div>
@@ -711,6 +709,7 @@ if (isset($_GET['category_id'])) {
                             var checkbox = $(this).siblings('.lock-checkbox');
                             var isChecked = checkbox.prop('checked');
                             var selectedCount = $('.lock-checkbox:checked').length; // นับจำนวนล็อคที่ถูกเลือก
+                            var updateButton = document.getElementById('updateButton');
 
                             if (!isChecked && selectedCount >= maxLocks) {
                                 alert('ไม่สามารถเลือกล็อคได้เกิน ' + maxLocks + ' ล็อค');
@@ -724,9 +723,10 @@ if (isset($_GET['category_id'])) {
                             selectedCount = $('.lock-checkbox:checked').length; // อัปเดตจำนวนการเลือกล็อคอีกครั้ง
                             if (selectedCount >= maxLocks) {
                                 $('.lock-btn').not('.active').prop('disabled', true); // ปิดการใช้งานปุ่มที่ยังไม่ถูกเลือก
+                                updateButton.disabled = false;
                             } else {
                                 $('.lock-btn').prop('disabled', false); // เปิดการใช้งานปุ่มทั้งหมดหากยังไม่ครบ
-                            }
+                                updateButton.disabled = true;                            }
                         });
 
                         // อัปเดตข้อมูลใน modal และกำหนดค่าจำนวนล็อคสูงสุด
