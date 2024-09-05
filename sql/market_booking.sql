@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2024 at 06:47 PM
+-- Generation Time: Sep 05, 2024 at 01:15 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -99,7 +99,14 @@ INSERT INTO `booked` (`id_booked`, `booking_id`, `member_id`, `booking_amount`, 
 (0000000061, 51, 6, '1', '40', 3, 125, 10, 'PerDay', 33, 'slip_20240903_153229_66d6c99dc54d3.png', '2024-09-03 08:02:25', 'A1', '2024-09-03 08:00:00'),
 (0000000062, 56, 6, '3', '120', 3, 125, 10, 'PerDay', 33, 'slip_20240903_231836_66d736dc11250.png', '2024-09-03 16:06:07', 'A1, A2, A3', '2024-09-03 08:00:00'),
 (0000000063, 57, 6, '3', '120', 6, 93, 10, 'PerDay', 29, 'slip_20240903_232026_66d7374acd47a.png', '2024-09-03 16:20:15', 'B1', '2024-09-03 08:00:00'),
-(0000000065, 58, 6, '3', '120', 4, 84, 10, 'PerDay', 33, 'slip_20240903_232902_66d7394ed982d.png', '2024-09-03 16:28:55', 'A1, A2, A3', '2024-09-03 08:00:00');
+(0000000065, 58, 6, '3', '120', 4, 84, 10, 'PerDay', 33, 'slip_20240903_232902_66d7394ed982d.png', '2024-09-03 16:28:55', 'A1, A2, A3', '2024-09-03 08:00:00'),
+(0000000066, 59, NULL, '2', '80', 3, 125, 10, 'PerDay', 33, 'slip_20240905_170027_66d9813bb5317.png', '2024-09-05 10:00:15', 'A1, A2', '2024-09-05 08:00:00'),
+(0000000067, 60, NULL, '2', '80', 6, 93, 10, 'PerDay', 32, 'slip_20240905_173318_66d988eed4246.png', '2024-09-05 10:33:09', 'D1, D2', '2024-09-05 08:00:00'),
+(0000000068, 61, NULL, '2', '80', 3, 125, 11, 'PerDay', 33, 'slip_20240905_174626_66d98c026aa65.png', '2024-09-05 10:37:42', 'A1, A2', '2024-09-05 08:00:00'),
+(0000000069, 62, NULL, '4', '160', 3, 126, 10, 'PerDay', 33, NULL, '2024-09-04 10:46:20', NULL, NULL),
+(0000000071, 63, NULL, '1', '40', 3, 125, 8, 'PerDay', 33, 'slip_20240905_175515_66d98e13a05a4.png', '2024-09-05 10:55:09', NULL, NULL),
+(0000000072, 64, NULL, '1', '40', 6, 88, 11, 'PerDay', 29, NULL, '2024-09-05 10:55:49', 'B1', '2024-09-05 08:00:00'),
+(0000000073, 65, NULL, '1', '40', 3, 125, 6, 'PerDay', 33, NULL, '2024-09-05 11:11:19', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -148,7 +155,8 @@ INSERT INTO `booking_status` (`id`, `status`) VALUES
 (7, 'ส่งคำขอขอคืนเงินแล้ว'),
 (8, 'คืนเงินเรียบร้อยแล้ว'),
 (9, 'ชำระเงินผ่านเหรียญแล้ว(รอรับเลขล็อค)'),
-(10, 'ยกเลิกคำขอเนื่องจากคำขอหมดอายุ');
+(10, 'ยกเลิกคำขอเนื่องจากคำขอหมดอายุ'),
+(11, 'หมดอายุการจอง');
 
 -- --------------------------------------------------------
 
@@ -429,7 +437,7 @@ CREATE TABLE `tbl_user` (
 INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `email`, `username`, `password`, `userrole`, `shop_name`, `token`, `last_login`) VALUES
 (000001, 'นาย', 'Nontachai', 'Prosri', '0885639233', 'bigboy2546.77@gmail.com', 'GGas', 'nontachai01', 1, 'GGasShop', 0, NULL),
 (000003, 'นาง', 'Kanokwan', 'Phakdee', '0888888888', 'Kanokwan.ph@gmail.com', 'Kanok', 'kanok123', 1, 'KanokShop', 0, NULL),
-(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin', 0, '2024-09-03 22:36:37'),
+(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin888', 1, 'admin', 0, '2024-09-05 17:01:27'),
 (000006, 'นาย', 'User', 'Test', '0222222222', 'userTest@gmail.com', 'user', 'user8888', 0, 'UserShop', 0, '2024-09-03 23:00:48'),
 (000010, 'นาย', 'ทดสอบ', 'ระบบ', '0891247281', 'Test@gmail.com', 'Test', 'test8888', 0, 'TestShop', 80, '2024-08-24 17:02:28');
 
@@ -590,13 +598,13 @@ ALTER TABLE `zone_detail`
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
-  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=66;
+  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=59;
+  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `booking_status`
@@ -614,7 +622,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `locks`
@@ -650,7 +658,7 @@ ALTER TABLE `tbl_payments`
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=11;
+  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `zone_detail`

@@ -261,6 +261,9 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             Swal.fire({
                                 icon: 'success',
                                 title: 'ความคิดเห็นของคุณถูกส่งแล้ว!',
+                            }).then(() => {
+                                // Refresh the page
+                                location.reload();
                             });
                             document.getElementById('commentForm').reset();
                             document.getElementById('ratingValue').value = '0';
@@ -336,7 +339,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             const comment = document.getElementById('editComment').value.trim();
             const rating = document.getElementById('editRatingValue').value;
 
-            if (rating === '0') {
+            let containsBadWord = badWords.some(word => comment.toLowerCase().includes(word.toLowerCase()));
+
+            if (containsBadWord) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถบันทึกได้',
+                    text: 'พบคำหยาบในความคิดเห็นของคุณ!',
+                });
+            } else if (rating === '0') {
                 Swal.fire({
                     icon: 'error',
                     title: 'ไม่สามารถบันทึกได้',
@@ -380,6 +391,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     });
             }
         });
+
 
         function confirmDelete(commentId) {
             Swal.fire({

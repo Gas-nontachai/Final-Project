@@ -557,7 +557,7 @@ if (isset($_GET['category_id'])) {
                                             </tr>	
                                             <tr>
                                                 <th scope="row">วันที่คำขอหมดอายุ</th>
-                                                <td> ${data.expiration_date ? data.book_lock_number : 'คำขอยังไม่สมบูรณ์'}</td>
+                                                <td> ${data.expiration_date ? data.expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
                                             </tr>	
                                             <tr>
                                                 <th scope="row">เลขล็อคที่ได้รับ</th>
@@ -726,7 +726,8 @@ if (isset($_GET['category_id'])) {
                                 updateButton.disabled = false;
                             } else {
                                 $('.lock-btn').prop('disabled', false); // เปิดการใช้งานปุ่มทั้งหมดหากยังไม่ครบ
-                                updateButton.disabled = true;                            }
+                                updateButton.disabled = true;
+                            }
                         });
 
                         // อัปเดตข้อมูลใน modal และกำหนดค่าจำนวนล็อคสูงสุด

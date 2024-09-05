@@ -128,18 +128,17 @@ $start_from = ($page - 1) * $results_per_page;
                             B.slip_img, 
                             B.booked_lock_number, 
                             B.booking_date
-                        FROM market_booking.booked AS B
+                        FROM booked AS B
                         LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
                         LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
                         LEFT JOIN category AS C ON B.product_type = C.id_category
                         LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
-                        ORDER BY id_booked DESC";
+                        ";
 
                     // ตรวจสอบว่ามีการตั้งค่าคำค้นหาหรือไม่
                     if (isset($_GET['search_query']) && !empty($_GET['search_query'])) {
                         $search_query = $conn->real_escape_string($_GET['search_query']);
-                        $sql .= " WHERE B.booking_id LIKE '%$search_query%' 
-                  OR CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) LIKE '%$search_query%'";
+                        $sql .= " WHERE B.booking_id LIKE '%$search_query%' OR CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) LIKE '%$search_query%' ORDER BY id_booked DESC";
                     }
 
                     // ตรวจสอบว่ามีการคลิกปุ่มรีเซ็ตหรือไม่
