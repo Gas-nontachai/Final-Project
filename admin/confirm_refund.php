@@ -4,7 +4,7 @@ require("../condb.php");
 
 // ตรวจสอบว่า user ได้ล็อกอินหรือไม่
 if (!isset($_SESSION["username"])) {
-    header("Location: ../admin/login.php");
+    header("Location: ../login.php");
     exit();
 }
 

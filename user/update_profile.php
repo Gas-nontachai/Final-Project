@@ -25,7 +25,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <head>
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>อัพเดตข้อมูลแล้ว กรุณาล็อกอินใหม่</title>
+                        <title>อัพเดตข้อมูลแล้ว</title>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <link rel="stylesheet" href="../asset/css/font.css">
@@ -108,14 +108,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <script>
                             document.addEventListener("DOMContentLoaded", function() {
                                 Swal.fire({
-                                    title: "อัพเดตข้อมูลแล้ว กรุณาล็อกอินใหม่",
+                                    title: "อัพเดตข้อมูลแล้ว",
                                     icon: "success",
                                     timer: 2000, 
                                     timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                                 }).then((result) => {
                                     if (result.dismiss === Swal.DismissReason.timer) {
-                                        window.location.href = "./logout.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                                        window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
                                     }
                                 });
                             });
@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "ข้อผิดพลาดในการเตรียมคำสั่ง: " . $conn->error;
     }
 } else {
-    header("Location: ../admin/logout.php");
+    header("Location: ./logout.php");
     exit();
 }
 

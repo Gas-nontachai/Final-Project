@@ -20,8 +20,8 @@ if (!isset($_SESSION["username"])) {
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
                     timer: 2000,
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                    timerProgressBar: true, 
+                    showConfirmButton: false 
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -47,14 +47,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าแรก</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>ติดต่อเรา</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
     <style>
@@ -65,46 +66,39 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             background-repeat: repeat;
             background-size: cover;
         }
+
+        .contact-info {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
     </style>
 </head>
 
 <body>
     <!-- Nav -->
-    <?php
-    include('./admin_nav.php');
-    ?>
-    <!-- Display -->
-    <div class="container mt-4">
-        <div class="container ">
-            <div class="row d-flex justify-content-center align-item-center">
-                <div class="col-12 d-flex flex-wrap justify-content-center align-item-center bgcolor py-4 rounded">
-                    <!-- fetch_zone_detail -->
-                    <?php
-                    include('./fetch_zone_detail.php');
-                    ?>
-                </div>
+    <?php include('./user_nav.php'); ?>
 
-                <!-- BTN -->
-                <div class="col-12 d-flex justify-content-evenly px-3">
-                    <a href="./confirm_reserve.php" type="button" class="btn btn-success m-2">ตรวจสอบการชำระเงิน / ยืนยันการจอง / ยกเลิกการจอง</a>
+    <!-- Contact Us Information -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="contact-info mt-5 p-4">
+                    <h2 class="text-center">ติดต่อเรา</h2>
+                    <p>หากคุณมีคำถาม ข้อเสนอแนะ หรือปัญหาใด ๆ สามารถติดต่อเราได้ผ่านช่องทางดังต่อไปนี้:</p>
+                    <ul>
+                        <li><strong>ที่อยู่:</strong> มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน(สุรนารายณ์) 744 ถ. สุรนารายณ์</li>
+                        <li><strong>โทรศัพท์:</strong> 02-888-8888</li>
+                        <li><strong>อีเมล:</strong> info@marketplace.com</li>
+                        <li><strong>เวลาทำการ:</strong> จันทร์ - ศุกร์ 9:00 น. - 17:00 น.</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('.question-icon'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            html: true
-        });
-    });
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('.zone_detail'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            html: true
-        });
-    });
-</script>
 
 </html>

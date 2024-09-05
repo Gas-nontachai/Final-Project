@@ -19,12 +19,12 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
-                    timer: 2000, 
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -40,23 +40,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $zone_detail = $_POST["zone_detail"];
     $pricePerDate = $_POST["pricePerDate"];
     $pricePerMonth = $_POST["pricePerMonth"];
-    // Check if there are locks with available = 1
-    $check_locks_sql = "SELECT COUNT(*) AS count FROM locks WHERE zone_id = ? AND available = 1";
-    $check_locks_stmt = $conn->prepare($check_locks_sql);
-    $check_locks_stmt->bind_param("i", $zone_id);
-    $check_locks_stmt->execute();
-    $check_locks_result = $check_locks_stmt->get_result();
-    $locks_row = $check_locks_result->fetch_assoc();
-    $count = $locks_row['count'];
+    $new_amount = $_POST["lock_amount"];
 
-    // If there are locks with available = 1, notify and exit
-    if ($count > 0) {
+    // ตรวจสอบจำนวนล็อคที่ถูกจอง
+    $current_lock_count_query = "SELECT COUNT(*) as count FROM locks WHERE zone_id = ?";
+    $booked_lock_count_query = "SELECT COUNT(*) as count FROM locks WHERE zone_id = ? AND available = 1";
+
+    $stmt = $conn->prepare($current_lock_count_query);
+    $stmt->bind_param("i", $zone_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $current_lock_count = $row['count'];
+    $stmt->close();
+
+    $stmt = $conn->prepare($booked_lock_count_query);
+    $stmt->bind_param("i", $zone_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $booked_lock_count = $row['count'];
+    $stmt->close();
+
+    if ($new_amount < $current_lock_count && $new_amount < $booked_lock_count) {
+        // แจ้งเตือนถ้าพยายามลดจำนวนล็อคให้ต่ำกว่าจำนวนที่ถูกจอง
         echo '<!DOCTYPE html>
         <html lang="th">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>ไม่สามารถอัปเดตโซนได้ มีล็อคที่ยังมีอยู่</title>
+            <title>ไม่สามารถลดจำนวนล็อคได้</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <link rel="stylesheet" href="../asset/css/font.css">
@@ -65,11 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
-                        title: "ไม่สามารถอัปเดตโซนได้ มีล็อคที่ยังใช้งานอยู่",
+                        title: "ไม่สามารถลดจำนวนล็อคได้เนื่องจากมีการจองอยู่",
                         icon: "error",
                         timer: 2000,
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timerProgressBar: true,
+                        showConfirmButton: false
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
@@ -82,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Perform validation if needed
+    // ตรวจสอบข้อมูลที่จำเป็น
     if (empty($zone_name) || empty($zone_detail) || empty($pricePerDate) || empty($pricePerMonth)) {
         echo '<!DOCTYPE html>
         <html lang="th">
@@ -101,8 +114,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
                         icon: "error",
                         timer: 2000,
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timerProgressBar: true,
+                        showConfirmButton: false
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
@@ -115,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Prepare and execute the SQL update statement
+    // อัพเดตข้อมูลโซน
     $sql = "UPDATE zone_detail
             SET 
                 zone_name = ?, 
@@ -132,6 +145,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssss", $zone_name, $zone_detail, $pricePerDate, $pricePerMonth, $zone_id);
 
         if ($stmt->execute()) {
+            // อัพเดตจำนวนล็อค
+            if ($new_amount > $current_lock_count) {
+                // เพิ่มล็อค
+                $lock_sql = "INSERT INTO locks (lock_name, zone_id, available) VALUES (?, ?, '0')";
+                $lock_stmt = $conn->prepare($lock_sql);
+                for ($i = $current_lock_count + 1; $i <= $new_amount; $i++) {
+                    $lock_name = $zone_name . $i;
+                    $lock_stmt->bind_param("si", $lock_name, $zone_id);
+                    $lock_stmt->execute();
+                }
+                $lock_stmt->close();
+            } elseif ($new_amount < $current_lock_count) {
+                // ลบล็อคที่ยังไม่มีการจอง
+                $delete_sql = "DELETE FROM locks WHERE zone_id = ? AND available = 0 ORDER BY lock_name DESC LIMIT ?";
+                $stmt = $conn->prepare($delete_sql);
+                $delete_count = $current_lock_count - $new_amount;
+                $stmt->bind_param("ii", $zone_id, $delete_count);
+                $stmt->execute();
+                $stmt->close();
+            }
+
             echo '<!DOCTYPE html>
                 <html lang="th">
                 <head>
@@ -148,9 +182,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             Swal.fire({
                                 title: "อัพเดตโซนสำเร็จ",
                                 icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./crud_page.php";
@@ -163,7 +197,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "Error updating zone: " . $stmt->error;
         }
-        $stmt->close();
     }
 } else {
     header("Location: ./crud_page.php");

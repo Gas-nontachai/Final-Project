@@ -1,12 +1,7 @@
 <?php
-require("../condb.php");
+require("./condb.php");
 
 session_start();
-
-if (isset($_SESSION["username"])) {
-    header("Location: ../login.php");
-    exit();
-}
 
 if (isset($_POST["submit"])) {
     if (empty($_POST["username"]) || empty($_POST["shopname"]) || empty($_POST["prefix"]) || empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["tel"]) || empty($_POST["email"]) || empty($_POST["pw"])) {
@@ -170,16 +165,37 @@ if (isset($_POST["submit"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../asset/css/font.css">
+    <link rel="stylesheet" href="./asset/css/font.css">
     <style>
         /* การตกแต่งเพิ่มเติมสำหรับแบบฟอร์มของคุณ */
         body {
-            padding: 20px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            background-image: url(./asset/img/img.market.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
         }
 
         form {
             max-width: 500px;
             margin: 0 auto;
+        }
+
+        .login-form {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .login-form h1 {
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         h1 {
@@ -216,75 +232,80 @@ if (isset($_POST["submit"])) {
 </head>
 
 <body>
+    <div class="p-4 rounded " style="background-color:rgba(255, 255, 255, 0.7); ">
+        <div class="login-form" style="opacity:1.0;">
+            <h1>สมัครสมาชิก</h1>
+            <form action="register.php" method="POST" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="username">Username (ใช้ในการล็อกอิน)</label>
+                    <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Username ไว้เพื่อใช้ในการ Login">
+                    <span id="span_id" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="shopname">ชื่อร้านค้า</label>
+                    <input type="text" class="form-control" name="shopname" id="shopname" placeholder="ชื่อร้านค้า">
+                    <span id="span_id" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="prefixSelect">คำนำหน้า:</label>
+                    <select id="prefixSelect" class="form-control" name="prefix">
+                        <option value="นาย">นาย</option>
+                        <option value="นาง">นาง</option>
+                        <option value="นางสาว">นางสาว</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="firstname">ชื่อ</label>
+                    <input type="text" class="form-control" name="firstname" placeholder="สมบูรณ์">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">นามสกุล</label>
+                    <input type="text" class="form-control" name="lastname" placeholder="ยิ่งใหญ่">
+                </div>
+                <div class="form-group">
+                    <label for="tel">เบอร์โทรศัพท์</label>
+                    <input oninput="check_tel()" type="tel" class="form-control" name="tel" id="tel" placeholder="088xxxxxxx">
+                    <span id="span_tel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" name="email" placeholder="สมบูรณ์@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน</label>
+                    <div class="input-group">
+                        <input oninput="checkPassword()" type="password" class="form-control" name="pw" id="pw" placeholder="กรุณาตั้งให้รัดกุม">
+                    </div>
+                </div>
 
-    <h1>สมัครสมาชิก</h1>
-    <form action="register.php" method="POST" onsubmit="return validateForm()">
-        <div class="form-group">
-            <label for="username">Username (ใช้ในการล็อกอิน)</label>
-            <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Username ไว้เพื่อใช้ในการ Login">
-            <span id="span_id" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="shopname">ชื่อร้านค้า</label>
-            <input type="text" class="form-control" name="shopname" id="shopname" placeholder="ชื่อร้านค้า">
-            <span id="span_id" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="prefixSelect">คำนำหน้า:</label>
-            <select id="prefixSelect" class="form-control" name="prefix">
-                <option value="นาย">นาย</option>
-                <option value="นาง">นาง</option>
-                <option value="นางสาว">นางสาว</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="firstname">ชื่อ</label>
-            <input type="text" class="form-control" name="firstname" placeholder="สมบูรณ์">
-        </div>
-        <div class="form-group">
-            <label for="lastname">นามสกุล</label>
-            <input type="text" class="form-control" name="lastname" placeholder="ยิ่งใหญ่">
-        </div>
-        <div class="form-group">
-            <label for="tel">เบอร์โทรศัพท์</label>
-            <input oninput="check_tel()" type="tel" class="form-control" name="tel" id="tel" placeholder="088xxxxxxx">
-            <span id="span_tel" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control" name="email" placeholder="สมบูรณ์@gmail.com">
-        </div>
-        <div class="form-group">
-            <label for="password">รหัสผ่าน</label>
-            <div class="input-group">
-                <input oninput="checkPassword()" type="password" class="form-control" name="pw" id="pw" placeholder="กรุณาตั้งให้รัดกุม">
-            </div>
+                <div class="form-group">
+                    <label for="re-password">ยืนยันรหัสผ่าน</label>
+                    <div class="input-group">
+                        <input oninput="recheck_pass()" type="password" class="form-control" name="re-pw" id="re-pw" placeholder="ยืนยันรหัสผ่าน">
+                    </div>
+                </div>
+
+                <div class="form-group checkbox-group d-flex align-items-start">
+                    <input type="checkbox" name="showPassword" id="showPassword" onchange="showpw()" class="form-check-input">
+                    <label for="showPassword" class="form-check-label mx-2">แสดงรหัสผ่าน</label>
+                </div>
+                <ul>
+                    <li id="length">ความยาวอย่างน้อย 8 หลัก</li>
+                    <li id="char">มีตัวอักษรภาษาอังกฤษ</li>
+                    <li id="num">มีตัวเลข</li>
+                    <li id="rech_pw">กรอกรหัสผ่านให้ตรงกัน</li>
+                </ul>
+                <div class="form-group checkbox-group d-flex align-items-start">
+                    <input type="checkbox" id="term" onchange="termofser()" class="form-check-input ">
+                    <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">เงื่อนไขข้อกำหนดการใช้งาน</a>
+                </div>
+                <button type="submit" name="submit" id="submit" class="btn btn-primary" disabled>สมัครสมาชิก</button>
+                <p>หากมีบัญชีแล้ว <a href="login.php">เข้าสู่ระบบได้ที่นี่</a></p>
+            </form>
         </div>
 
-        <div class="form-group">
-            <label for="re-password">ยืนยันรหัสผ่าน</label>
-            <div class="input-group">
-                <input oninput="recheck_pass()" type="password" class="form-control" name="re-pw" id="re-pw" placeholder="ยืนยันรหัสผ่าน">
-            </div>
-        </div>
+    </div>
 
-        <div class="form-group checkbox-group d-flex align-items-start">
-            <input type="checkbox" name="showPassword" id="showPassword" onchange="showpw()" class="form-check-input">
-            <label for="showPassword" class="form-check-label mx-2">แสดงรหัสผ่าน</label>
-        </div>
-        <ul>
-            <li id="length">ความยาวอย่างน้อย 8 หลัก</li>
-            <li id="char">มีตัวอักษรภาษาอังกฤษ</li>
-            <li id="num">มีตัวเลข</li>
-            <li id="rech_pw">กรอกรหัสผ่านให้ตรงกัน</li>
-        </ul>
-        <div class="form-group checkbox-group d-flex align-items-start">
-            <input type="checkbox" id="term" onchange="termofser()" class="form-check-input ">
-            <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">เงื่อนไขข้อกำหนดการใช้งาน</a>
-        </div>
-        <button type="submit" name="submit" id="submit" class="btn btn-primary" disabled>สมัครสมาชิก</button>
-        <p>หากมีบัญชีแล้ว <a href="login.php">เข้าสู่ระบบได้ที่นี่</a></p>
-    </form>
     <!-- Modal -->
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
         <div class="modal-dialog">

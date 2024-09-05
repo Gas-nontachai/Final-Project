@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -96,6 +96,15 @@ if (isset($_GET['category_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
+    <style>
+        body {
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -105,12 +114,12 @@ if (isset($_GET['category_id'])) {
     ?>
 
     <!-- Display -->
-    <div class="container mt-4">
+    <div class="container mt-4 bgcolor py-4 rounded">
         <div class="container ">
             <div class="row d-flex justify-content-center align-item-center">
                 <div class="row">
                     <div class="col">
-                        <div class="col-12 d-flex flex-wrap justify-content-center align-item-center">
+                        <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded">
                             <!-- fetch_zone_detail -->
                             <?php
                             include('./fetch_zone_detail.php');
@@ -119,7 +128,7 @@ if (isset($_GET['category_id'])) {
                     </div>
                     <div class="col">
                         <!-- Display -->
-                        <div class="col-12 container my-4 p-2 border border-dark-subtle rounded overflow-auto" style="width: 90%; height: 40rem;">
+                        <div class="col-12 container my-4 p-2 border rounded overflow-auto" style="width: 100%; height: 40rem; background-color: rgba(255, 255, 255);">
                             <ul class="nav nav-tabs" id="myTab">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#tab1Content"><strong>คำขอจองพื้นที่</strong></a>
@@ -129,7 +138,7 @@ if (isset($_GET['category_id'])) {
                                 </li>
                             </ul>
 
-                            <div class="tab-content border p-3">
+                            <div class="tab-content  p-3">
                                 <!-- Tab 1: คำขอจองพื้นที่ -->
                                 <div class="tab-pane fade show active" id="tab1Content">
                                     <div class="mt-2" id="bookingTable1">
@@ -502,43 +511,101 @@ if (isset($_GET['category_id'])) {
                                         content = `<p>${data.error}</p>`;
                                     } else {
                                         content = `
-                                                    <p><strong>หมายเลขการจอง:</strong> ${data.booking_id}</p>
-                                                    <p><strong>ผู้จอง:</strong> ${data.fullname}</p>
-                                                    <p><strong>เบอร์โทรติดต่อ:</strong> ${data.tel}</p>
-                                                    <p><strong>ชื่อโซน:</strong> ${data.zone_name}</p>
-                                                    <p><strong>รายละเอียดโซน:</strong> ${data.zone_detail}</p>
-                                                    <p><strong>หมวดหมู่:</strong> ${data.cat_name}(${data.sub_cat_name})</p>
-                                                    <p><strong>ประเภทการจอง:</strong> ${data.booking_type}</p>
-                                                    <p><strong>จำนวนการจอง:</strong> ${data.booking_amount}</p>
-                                                    <p><strong>รวม:</strong> ${data.total_price} บาท</p>
-                                                    <p><strong>สถานะ:</strong> ${data.status}</p>
-                                                    <p><strong>วันที่การจอง:</strong> ${data.booking_date}</p>
-                                                    <p><strong>เลขล็อคที่ได้รับ:</strong> ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</p>`;
+                                        <table class="table table-striped">			
+                                            <thead>
+                                            <tr>
+                                                <th>หมายเลขการจอง</th>
+                                                <th>${data.booking_id}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                <th scope="row">ชื่อ-สกุล</th>
+                                                <td>${data.fullname}</td>
+                                            </tr>
+                                                    <tr>
+                                                <th scope="row">เบอร์โทรติดต่อ</th>
+                                                <td>${data.tel}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ชื่อโซน</th>
+                                                <td>${data.zone_name} (${data.zone_detail})</td>
+                                                </tr>
+                                            <tr>
+                                                <th scope="row">หมวดหมู่</th>
+                                                <td> ${data.cat_name} (${data.sub_cat_name})</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ประเภทการจอง</th>
+                                                <td> ${data.booking_type_display}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">จำนวนการจอง</th>
+                                                <td> ${data.booking_amount} ล็อค}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">รวม</th>
+                                                <td> ${data.total_price} บาท</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">สถานะ</th>
+                                                <td> ${data.status} บาท</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">วันที่การจอง</th>
+                                                <td>${data.booking_date}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">วันที่คำขอหมดอายุ</th>
+                                                <td> ${data.expiration_date ? data.book_lock_number : 'คำขอยังไม่สมบูรณ์'}</td>
+                                            </tr>	
+                                            <tr>
+                                                <th scope="row">เลขล็อคที่ได้รับ</th>
+                                                <td>   ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
+                                            </tr>	
+                        `;
 
                                         if (data.slip_img) {
-                                            content += `<img src="../asset./slip_img./${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid">`;
-                                            content += `<button class="btn btn-success">ยืนยันการชำระเงิน</button>`;
+                                            content += `
+                                                        <tr>
+                                                            <th scope="row">รูปภาพใบเสร็จ</th>
+                                                            <td>  <img  src="../asset/slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    </table>
+                                                   `;
                                         } else {
                                             switch (parseInt(data.booking_status, 10)) {
                                                 case 1:
                                                     content += `<button class="btn btn-success">แจ้งชำระเงิน</button>`;
                                                     break;
                                                 case 2:
+                                                    content += `</tbody>
+                                                </table>`;
                                                     break;
                                                 case 3:
+                                                    content += `</tbody>
+                                                                    </table>`;
                                                     break;
                                                 case 4:
+                                                    content += `</tbody>
+                                                                </table>`;
                                                     break;
                                                 case 5:
-                                                    content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button>`;
+                                                    content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button></tbody>
+                                                                </table>`;
                                                     break;
                                                 case 6:
-                                                    content += `<strong style="color: red;">ยกเลิกเรียบร้อยแล้ว</strong>`;
+                                                    content += `<strong style="color: red;">ยกเลิกเรียบร้อยแล้ว</strong></tbody>
+                                                                 </table>`;
                                                     break;
                                                 case 9:
+                                                    content += `</tbody>
+                                                                </table>`;
                                                     break;
                                                 default:
-                                                    content += `<p>ไม่ทราบสถานะ</p>`;
+                                                    content += `<p>ไม่ทราบสถานะ</p></tbody>
+                                                                </table>`;
                                                     break;
                                             }
                                         }
@@ -586,9 +653,7 @@ if (isset($_GET['category_id'])) {
                                         <select class="form-select" id="zoneSelect" name="zone_id">
                                             <option value="" selected>กรุณาเลือกโซน</option>
                                             <?php
-                                            include('connect.php'); // รวมการเชื่อมต่อฐานข้อมูล
-
-                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
+                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name ";
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
@@ -606,7 +671,7 @@ if (isset($_GET['category_id'])) {
                                     <div class="display_locks">
                                         <!-- ข้อมูลจะถูกแสดงที่นี่ -->
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-3">อัพเดตข้อมูล</button>
+                                    <button id="updateButton" type="submit" class="btn update-btn btn-primary mt-3" disabled>อัพเดตข้อมูล</button>
                                 </form>
                             </div>
                         </div>
@@ -644,6 +709,7 @@ if (isset($_GET['category_id'])) {
                             var checkbox = $(this).siblings('.lock-checkbox');
                             var isChecked = checkbox.prop('checked');
                             var selectedCount = $('.lock-checkbox:checked').length; // นับจำนวนล็อคที่ถูกเลือก
+                            var updateButton = document.getElementById('updateButton');
 
                             if (!isChecked && selectedCount >= maxLocks) {
                                 alert('ไม่สามารถเลือกล็อคได้เกิน ' + maxLocks + ' ล็อค');
@@ -657,9 +723,10 @@ if (isset($_GET['category_id'])) {
                             selectedCount = $('.lock-checkbox:checked').length; // อัปเดตจำนวนการเลือกล็อคอีกครั้ง
                             if (selectedCount >= maxLocks) {
                                 $('.lock-btn').not('.active').prop('disabled', true); // ปิดการใช้งานปุ่มที่ยังไม่ถูกเลือก
+                                updateButton.disabled = false;
                             } else {
                                 $('.lock-btn').prop('disabled', false); // เปิดการใช้งานปุ่มทั้งหมดหากยังไม่ครบ
-                            }
+                                updateButton.disabled = true;                            }
                         });
 
                         // อัปเดตข้อมูลใน modal และกำหนดค่าจำนวนล็อคสูงสุด

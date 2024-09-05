@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -90,17 +90,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
             <body>
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-                        Swal.fire({
+                       Swal.fire({
                             title: "ส่งคำขอจองพื้นที่การขายเรียบร้อย",
                             icon: "success",
-                            timer: 2000,
-                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                            showConfirmButton: false // ซ่อนปุ่ม "OK"
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
-                            }
+                            timer: 3000,
+                            timerProgressBar: true,
+                        }).then(() => {
+                            window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
                         });
+
                     });
                 </script>
             </body>
@@ -120,16 +118,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
-                            title: "เกิดข้อผิดพลาดในการจอง",
+                            title: "เกิดข้อผิดพลาดในการจอง ข้อมูลไม่ครบถ้วน",
                             icon: "error",
-                            timer: 2000, 
-                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                            showConfirmButton: false // ซ่อนปุ่ม "OK"
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                window.location.href = "./index.php";
-                            }
+                            timer: 3000,
+                            timerProgressBar: true,
+                        }).then(() => {
+                            window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
                         });
+
                     });
                 </script>
             </body>
@@ -154,14 +150,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                     Swal.fire({
                         title: "เกิดข้อผิดพลาดในการจอง",
                         icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            window.location.href = "./index.php";
-                        }
+                        timer: 3000,
+                        timerProgressBar: true,
+                    }).then(() => {
+                        window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
                     });
+
                 });
             </script>
         </body>

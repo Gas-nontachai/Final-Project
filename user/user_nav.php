@@ -1,20 +1,69 @@
 <style>
     .swal2-container {
         z-index: 9999 !important;
-        /* ปรับค่าให้เหมาะสมตามที่ต้องการ */
+    }
+
+    .bgcolor {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding-bottom: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Custom styles for responsiveness */
+    .nav-item {
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .bgcolor {
+            padding: 5px 15px;
+        }
+
+        .nav-item {
+            text-align: center;
+        }
+
+        h5 {
+            font-size: 1.2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .bgcolor {
+            padding: 5px 10px;
+        }
+
+        h5 {
+            font-size: 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            padding: 10px;
+        }
     }
 </style>
 
-<nav class="row g-2">
+
+<nav class="row g-2 bgcolor">
     <!-- btn sidebar -->
     <div class="col-12 d-flex justify-content-between px-5 py-3">
         <div class="col-4">
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-window-sidebar" viewBox="0 0 16 16">
-                    <path d="M2.5 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1 .5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
-                    <path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v2H1V3a1 1 0 0 1 1-1zM1 13V6h4v8H2a1 1 0 0 1-1-1m5 1V6h9v7a1 1 0 0 1-1 1z" />
-                </svg>
-            </button>
+            <div class="d-flex align-items-end ">
+                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-window-sidebar" viewBox="0 0 16 16">
+                        <path d="M2.5 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1 .5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                        <path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v2H1V3a1 1 0 0 1 1-1zM1 13V6h4v8H2a1 1 0 0 1-1-1m5 1V6h9v7a1 1 0 0 1-1 1z" />
+                    </svg>
+                </button>
+                <h5>
+                    <strong>ยินดีต้อนรับสู่ จองล็อค.คอม</strong>
+                </h5>
+            </div>
+
             <!-- sidebar -->
             <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
                 <div class="offcanvas-header">
@@ -24,7 +73,7 @@
                 <div class="offcanvas-body d-flex flex-column mb-3 ">
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
-                        <li>
+                        <li class="nav-item">
                             <a href="./index.php" class="my-1 border nav-link link-dark btn btn-outline-info">
                                 <div class="mx-2 p-2 d-flex align-items-center ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-house-door-fill " viewBox="0 0 16 16">
@@ -34,7 +83,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <li class="nav-item">
                             <a href="./index.php" class="my-1 border nav-link link-dark btn btn-outline-info">
                                 <div class="mx-2 p-2 d-flex align-items-center ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-shop" viewBox="0 0 16 16">
@@ -44,7 +93,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <li class="nav-item">
                             <a href="./booking_history.php" class="my-1 border nav-link link-dark btn btn-outline-info">
                                 <div class="mx-2 p-2 d-flex align-items-center ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-clock-history" viewBox="0 0 16 16">
@@ -55,6 +104,8 @@
                                     <strong class="mx-2 "> ประวัติการจอง </strong>
                                 </div>
                             </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="./comment_page.php" class="my-1 border nav-link link-dark btn btn-outline-info">
                                 <div class="mx-2 p-2 d-flex align-items-center ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-chat-left-text" viewBox="0 0 16 16">
@@ -65,12 +116,34 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../asset/pdf/user_manual.pdf" target="_blank" class="my-1 border nav-link link-dark btn btn-outline-info">
+                                <div class="mx-2 p-2 d-flex align-items-center ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-journal-bookmark" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M6 8V1h1v6.117L8.743 6.07a.5.5 0 0 1 .514 0L11 7.117V1h1v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8" />
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+                                    </svg>
+                                    <strong class="mx-2 ">คู่มือการใช้งาน</strong>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./contactus.php" class="my-1 border nav-link link-dark btn btn-outline-info">
+                                <div class="mx-2 p-2 d-flex align-items-center ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-building" viewBox="0 0 16 16">
+                                        <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+                                        <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z" />
+                                    </svg>
+                                    <strong class="mx-2 ">ช่องทางการติดต่อ</strong>
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                     <hr>
                 </div>
             </div>
         </div>
-        <!-- profile btn -->
         <!-- profile btn -->
         <div class="d-flex align-items-center ">
             <div class="row  ">
@@ -84,18 +157,27 @@
                         <strong>
                             <?php
                             $user_id = $_SESSION["user_id"];
-                            $stmt = $conn->prepare("SELECT token FROM tbl_user WHERE user_id = ?");
+
+                            $stmt = $conn->prepare("SELECT user_id, username, shop_name, tel, email, token, 
+                                  firstname, lastname, userrole, 
+                                  CONCAT(prefix, firstname, ' ', lastname) AS fullname
+                        FROM market_booking.tbl_user
+                        WHERE user_id = ?");
                             $stmt->bind_param("i", $user_id);
 
                             $stmt->execute();
-                            $stmt->bind_result($token);
+
+                            // Bind the results to variables
+                            $stmt->bind_result($SQLuser_id, $SQLusername, $SQLshop_name, $SQLtel, $SQLemail, $SQLtoken, $SQLfirstname, $SQLlastname, $SQLuserrole, $SQLfullname);
+
+                            // Fetch the results
                             $stmt->fetch();
 
-                            echo htmlspecialchars($token);
-
-                            $stmt->close();
-                            $conn->close();
+                            // Output the token (or any other variable as needed)
+                            echo htmlspecialchars($SQLtoken);
+                            $token = htmlspecialchars($SQLtoken);
                             ?>
+
                         </strong>
                     </p>
 
@@ -117,12 +199,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>UserID:</strong> <?php echo $user_id; ?></p>
-                        <p><strong>Username:</strong> <?php echo $username; ?></p>
-                        <p><strong>shop_name:</strong> <?php echo $shop_name; ?></p>
-                        <p><strong>ชื่อ-นามสกุล:</strong> <?php echo $fullname; ?></p>
-                        <p><strong>เบอร์โทรศัพท์:</strong> <?php echo $tel; ?></p>
-                        <p><strong>อีเมล:</strong> <?php echo $email; ?></p>
+                        <p><strong>UserID:</strong> <?php echo $SQLuser_id; ?></p>
+                        <p><strong>Username:</strong> <?php echo $SQLusername; ?></p>
+                        <p><strong>ชื่อร้าน:</strong> <?php echo $SQLshop_name; ?></p>
+                        <p><strong>ชื่อ-นามสกุล:</strong> <?php echo $SQLfullname; ?></p>
+                        <p><strong>เบอร์โทรศัพท์:</strong> <?php echo $SQLtel; ?></p>
+                        <p><strong>อีเมล:</strong> <?php echo $SQLemail; ?></p>
                         <div class=" d-flex align-items-start">
                             <p><strong>ประเภทผู้ใช้งาน:</strong> <?php echo $userrole; ?></p>
                             <span class="question-icon mx-2" data-bs-toggle="tooltip" data-bs-placement="right" title="0 ผู้ใช้งานทั่วไป&lt;br&gt;1 แอดมิน/ผู้ดูแลระบบ">
@@ -156,12 +238,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>UserID:</strong> <?php echo $user_id; ?></p>
-                        <p><strong>Username:</strong> <?php echo $username; ?></p>
+                        <p><strong>UserID:</strong> <?php echo $SQLuser_id; ?></p>
+                        <p><strong>Username:</strong> <?php echo $SQLusername; ?></p>
                         <div class="mb-3 row">
                             <label for="shopname" class="col-sm-3 col-form-label"><strong>shop_name:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="editshopname" id="editshopname" value="<?php echo $shop_name; ?>">
+                                <input type="text" class="form-control" name="editshopname" id="editshopname" value="<?php echo $SQLshop_name; ?>">
                             </div>
                         </div>
 
@@ -175,28 +257,28 @@
                                 </select>
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="editfirstname" value="<?php echo $firstname; ?>">
+                                <input type="text" class="form-control" name="editfirstname" value="<?php echo $SQLfirstname; ?>">
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" name="editlastname" value="<?php echo $lastname; ?>">
+                                <input type="text" class="form-control" name="editlastname" value="<?php echo $SQLlastname; ?>">
                             </div>
                         </div>
 
                         <div class="mb-3 row">
                             <label for="tel" class="col-sm-3 col-form-label"><strong>เบอร์โทรศัพท์:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="edittel" id="edittel" value="<?php echo $tel; ?>">
+                                <input type="text" class="form-control" name="edittel" id="edittel" value="<?php echo $SQLtel; ?>">
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="email" class="col-sm-3 col-form-label"><strong>อีเมล:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="editemail" id="editemail" value="<?php echo $email; ?>">
+                                <input type="text" class="form-control" name="editemail" id="editemail" value="<?php echo $SQLemail; ?>">
                             </div>
                         </div>
 
                         <div class="d-flex align-items-start">
-                            <p><strong>ประเภทผู้ใช้งาน:</strong> <?php echo $userrole; ?></p>
+                            <p><strong>ประเภทผู้ใช้งาน:</strong> <?php echo $SQLuserrole; ?></p>
                             <span class="question-icon mx-2" data-bs-toggle="tooltip" data-bs-placement="right" title="0 ผู้ใช้งานทั่วไป&lt;br&gt;1 แอดมิน/ผู้ดูแลระบบ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-question-fill" viewBox="0 0 16 16">
                                     <path d="M5.933.87a2.89 2.89 0 0 1 4.134 0l.622.638.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622-.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01zM7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0m1.602-2.027c.04-.534.198-.815.846-1.26.674-.475 1.05-1.09 1.05-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.7 1.7 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745.336 0 .504-.24.554-.627" />

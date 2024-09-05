@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -286,16 +286,36 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     <div class="container-fluid d-flex justify-content-around align-items-start">
                         <div class="row ms-5" style="width: 50%;">
                             <?php
-                            $sql = "SELECT DATE_FORMAT(booking_date, '%Y-%m') AS month, COUNT(*) AS total_bookings FROM booked GROUP BY month";
-                            $result = $conn->query($sql);
+                            // ดึงข้อมูลการจองต่อเดือน
+                            $sql_month = "SELECT DATE_FORMAT(booking_date, '%Y-%m') AS month, COUNT(*) AS total_bookings FROM booked GROUP BY month";
+                            $result_month = $conn->query($sql_month);
 
-                            $data = array();
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $data[] = $row;
+                            $data_month = array();
+                            if ($result_month->num_rows > 0) {
+                                while ($row = $result_month->fetch_assoc()) {
+                                    $data_month[] = $row;
+                                }
+                            }
+
+                            // ดึงข้อมูลการจองต่อวัน
+                            $sql_day = "SELECT DATE(booking_date) AS day, COUNT(*) AS total_bookings FROM booked GROUP BY day";
+                            $result_day = $conn->query($sql_day);
+
+                            $data_day = array();
+                            if ($result_day->num_rows > 0) {
+                                while ($row = $result_day->fetch_assoc()) {
+                                    $data_day[] = $row;
                                 }
                             }
                             ?>
+                            <div class="container mt-5">
+                                <h1 class="mb-4"> <strong>ยอดการจองต่อวัน</strong> </h1>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <canvas id="dailyBookingsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="container mt-5">
                                 <h1 class="mb-4"> <strong>ยอดการจองต่อเดือน</strong> </h1>
                                 <div class="row">
@@ -305,24 +325,27 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 </div>
                             </div>
 
-                            <script>
-                                var dataFromPHP = <?php echo json_encode($data); ?>;
 
-                                var labels = dataFromPHP.map(function(e) {
+
+                            <script>
+                                // กราฟยอดการจองต่อเดือน
+                                var dataFromPHP_month = <?php echo json_encode($data_month); ?>;
+
+                                var labels_month = dataFromPHP_month.map(function(e) {
                                     return e.month;
                                 });
-                                var values = dataFromPHP.map(function(e) {
+                                var values_month = dataFromPHP_month.map(function(e) {
                                     return e.total_bookings;
                                 });
 
-                                var ctx = document.getElementById('monthlyBookingsChart').getContext('2d');
-                                var myChart = new Chart(ctx, {
+                                var ctx_month = document.getElementById('monthlyBookingsChart').getContext('2d');
+                                var myChart_month = new Chart(ctx_month, {
                                     type: 'bar',
                                     data: {
-                                        labels: labels,
+                                        labels: labels_month,
                                         datasets: [{
                                             label: 'ยอดการจอง',
-                                            data: values,
+                                            data: values_month,
                                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                             borderColor: 'rgba(75, 192, 192, 1)',
                                             borderWidth: 1
@@ -360,8 +383,65 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                         }
                                     }
                                 });
+
+                                // กราฟยอดการจองต่อวัน
+                                var dataFromPHP_day = <?php echo json_encode($data_day); ?>;
+
+                                var labels_day = dataFromPHP_day.map(function(e) {
+                                    return e.day;
+                                });
+                                var values_day = dataFromPHP_day.map(function(e) {
+                                    return e.total_bookings;
+                                });
+
+                                var ctx_day = document.getElementById('dailyBookingsChart').getContext('2d');
+                                var myChart_day = new Chart(ctx_day, {
+                                    type: 'line', // เปลี่ยนเป็น line เพื่อดูแนวโน้มการจองต่อวัน
+                                    data: {
+                                        labels: labels_day,
+                                        datasets: [{
+                                            label: 'ยอดการจอง',
+                                            data: values_day,
+                                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                            borderColor: 'rgba(153, 102, 255, 1)',
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                position: 'top',
+                                            },
+                                            tooltip: {
+                                                callbacks: {
+                                                    label: function(context) {
+                                                        return context.label + ': ' + context.raw;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            x: {
+                                                beginAtZero: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'วัน'
+                                                }
+                                            },
+                                            y: {
+                                                beginAtZero: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'ยอดการจองทั้งหมด'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
                             </script>
                         </div>
+
                         <div class="row" style="width: 50%; ">
                             <style>
                                 .chart-container {

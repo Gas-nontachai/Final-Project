@@ -1,11 +1,6 @@
 <?php
 session_start();
-require("../condb.php");
-
-if (isset($_SESSION["username"])) {
-    header("Location: ../index.php");
-    exit();
-}
+require("./condb.php");
 
 $message = ''; // ตัวแปรเก็บข้อความแจ้งเตือน
 
@@ -42,9 +37,9 @@ if (isset($_POST["submit"])) {
                 $updateStmt->execute();
 
                 if ($row['userrole'] == 0) {
-                    $message = 'ล็อคอินสำเร็จ|../user/index.php';
+                    $message = 'ล็อคอินสำเร็จ|./user/index.php';
                 } elseif ($row['userrole'] == 1) {
-                    $message = 'ล็อคอินสำเร็จ|./index.php';
+                    $message = 'ล็อคอินสำเร็จ|./admin/index.php';
                 } else {
                     $message = 'บทบาทไม่รู้จัก';
                 }
@@ -110,37 +105,40 @@ if (isset($_POST["submit"])) {
     </style>
 </head>
 
-<body>
-    <div class="login-form">
-        <h1>เข้าสู่ระบบ</h1>
-        <form action="login.php" method="POST">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Username">
-                <span id="span_id" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">รหัสผ่าน</label>
-                <div class="input-group">
-                    <input oninput="checkPassword()" type="password" class="form-control" name="pw" id="pw" placeholder="ใส่รหัสผ่านของคุณ">
-                    <span class="input-group-text" onclick="togglePasswordVisibility('pw', 'eyeIcon')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                        </svg> </span>
+<body style="background-image: url(./asset/img/img.market2.jpg); width: 100%; height: 100vh; background-repeat: repeat; background-size: cover;">
+    <div class="p-4 rounded " style="background-color:rgba(255, 255, 255, 0.7);">
+        <div class="login-form">
+            <h1>เข้าสู่ระบบ</h1>
+            <form action="login.php" method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Username">
+                    <span id="span_id" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" id="term" onchange="termofser()" class="form-check-input">
-                <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">เงื่อนไขข้อกำหนดการใช้งาน</a>
-                </label>
-            </div>
-            <button type="submit" name="submit" id="submit" class="btn btn-primary w-100" disabled>เข้าสู่ระบบ</button>
-            <div class="mt-3 text-center">
-                <p>หากคุณยังไม่มีบัญชี <a href="register.php">สมัครที่นี่</a></p>
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label for="password" class="form-label">รหัสผ่าน</label>
+                    <div class="input-group">
+                        <input oninput="checkPassword()" type="password" class="form-control" name="pw" id="pw" placeholder="ใส่รหัสผ่านของคุณ">
+                        <span class="input-group-text" onclick="togglePasswordVisibility('pw', 'eyeIcon')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                            </svg> </span>
+                    </div>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" id="term" onchange="termofser()" class="form-check-input">
+                    <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">เงื่อนไขข้อกำหนดการใช้งาน</a>
+                    </label>
+                </div>
+                <button type="submit" name="submit" id="submit" class="btn btn-primary w-100" disabled>เข้าสู่ระบบ</button>
+                <div class="mt-3 text-center">
+                    <p>หากคุณยังไม่มีบัญชี <a href="register.php">สมัครที่นี่</a></p>
+                </div>
+            </form>
+        </div>
     </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">

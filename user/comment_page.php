@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "../admin/login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
@@ -60,7 +60,11 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <link rel="stylesheet" href="../asset/css/font.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-image: url(../asset/img/img.market2.jpg);
+            width: 100%;
+            height: 100%;
+            background-repeat: repeat;
+            background-size: cover;
         }
 
         .card {
@@ -142,7 +146,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     $result = mysqli_query($conn, $sql);
     ?>
     <!-- แสดงความคิดเห็นที่เคยแสดงความคิดเห็น -->
-    <div class="mt-4 container-fluid" style="width: 90%;">
+    <div class="mt-4 container-fluid  bgcolor p-4 rounded" style="width: 90%;">
         <h4>ความคิดเห็นของฉัน</h4>
         <?php if (mysqli_num_rows($result) > 0): ?>
             <ul class="list-group">

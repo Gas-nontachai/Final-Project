@@ -35,7 +35,7 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                         confirmButtonText: 'ตกลง'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '../admin/login.php';
+                            window.location.href = '../login.php';
                         }
                     });
                   </script>

@@ -1,5 +1,9 @@
-<?php session_start();
+<?php
+session_start();
 require("../condb.php");
+
+// Variable to store messages for JavaScript
+$jsMessage = "";
 
 do {
     // เริ่มการทำธุรกรรม
@@ -47,7 +51,7 @@ do {
             foreach ($lock_numbers as $number) {
                 $number = trim($number); // ตัดช่องว่างรอบๆ
                 $update_locks_query = "UPDATE locks 
-                                       SET booking_id = NULL, available = 0 
+                                       SET booking_id = NULL, available = 0
                                        WHERE lock_name = ?";
                 $stmt = $conn->prepare($update_locks_query);
                 if ($stmt === FALSE) {
@@ -76,26 +80,61 @@ do {
         // ทำการ commit ธุรกรรม
         $conn->commit();
 
-        // แสดงจำนวนแถวที่ได้รับผลกระทบ
-        echo "จำนวนแถวที่ถูกอัปเดตสถานะ: $affected_rows_move<br>";
-        echo "จำนวนแถวที่ถูกย้าย: $affected_rows_move<br>";
-        echo "จำนวนแถวที่ถูกอัปเดต: $affected_rows_update<br>";
-        echo "จำนวนแถวที่ถูกลบ: $affected_rows_delete<br>";
+        // แสดงจำนวนแถวที่ได้รับผลกระทบ และเตรียมการ redirect
+        $jsMessage = "Swal.fire({
+                        title: 'สำเร็จ!',
+                        html: 'จำนวนแถวที่ถูกอัปเดตสถานะ: $affected_rows_move<br>จำนวนแถวที่ถูกย้าย: $affected_rows_move<br>จำนวนแถวที่ถูกอัปเดต: $affected_rows_update<br>จำนวนแถวที่ถูกลบ: $affected_rows_delete',
+                        icon: 'success',
+                        confirmButtonText: 'ตกลง'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'index.php';
+                        }
+                    });";
 
-        // ตรวจสอบจำนวนแถวที่ถูกลบ
         if ($affected_rows_delete == 0) {
-            // ถ้าไม่มีข้อมูลที่ได้รับผลกระทบ ให้หยุดลูป
             break;
         }
     } catch (Exception $e) {
-        // ทำการ rollback ธุรกรรมหากเกิดข้อผิดพลาด
+        // ทำการ rollback ธุรกรรมหากเกิดข้อผิดพลาด และเตรียมการ redirect
         $conn->rollback();
 
-        // แสดงหรือบันทึกข้อผิดพลาด
-        echo 'ข้อผิดพลาด: ' . htmlspecialchars($e->getMessage()) . "<br>";
-        echo 'คำสั่ง SQL ที่ล้มเหลว: ' . htmlspecialchars($conn->error);
-        break; // หยุดลูปหากเกิดข้อผิดพลาด
+        // แสดงข้อผิดพลาดผ่าน SweetAlert และเตรียมการ redirect
+        $jsMessage = "Swal.fire({
+                        title: 'ข้อผิดพลาด!',
+                        html: 'ข้อผิดพลาด: " . addslashes($e->getMessage()) . "',
+                        icon: 'error',
+                        confirmButtonText: 'ตกลง'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'index.php';
+                        }
+                    });";
+        break;
     }
 } while (true);
 
 $conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ผลลัพธ์การดำเนินการ</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../asset/css/font.css">
+</head>
+
+<body>
+    <script>
+        // Execute the Swal message and handle redirect
+        <?php echo $jsMessage; ?>
+    </script>
+</body>
+
+</html>

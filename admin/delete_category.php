@@ -24,7 +24,7 @@ if (!isset($_SESSION["username"])) {
                     showConfirmButton: false // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
-                        window.location.href = "./login.php";
+                        window.location.href = "../login.php";
                     }
                 });
             });
