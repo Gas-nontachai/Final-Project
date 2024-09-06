@@ -183,7 +183,7 @@ if (isset($_POST["submit"])) {
                     icon: redirectUrl ? 'success' : 'error',
                     timer: 2000,
                     timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false, // ซ่อนปุ่ม "OK"
+                    showConfirmButton: true, 
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer && redirectUrl) {
                         window.location.href = redirectUrl;
