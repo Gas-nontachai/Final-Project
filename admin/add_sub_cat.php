@@ -18,10 +18,10 @@ if (!isset($_SESSION["username"])) {
                         document.addEventListener("DOMContentLoaded", function() {
                             Swal.fire({
                                 title: "กรุณาล็อคอินก่อน",
-                                icon: "error",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                               icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "../login.php";
@@ -61,10 +61,10 @@ if (isset($_POST['category']) && isset($_POST['sub_category'])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "เพิ่มประเภทย่อยเรียบร้อย",
-                    icon: "success",
-                    timer: 2000, // แสดงเป็นเวลา 3 วินาที
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                     icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";
@@ -91,9 +91,9 @@ if (isset($_POST['category']) && isset($_POST['sub_category'])) {
                 Swal.fire({
                     title: "ข้อมูลผิดพลาด/สูญหาย!",
                     icon: "error",
-                    timer: 2000, // แสดงเป็นเวลา 3 วินาที
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";

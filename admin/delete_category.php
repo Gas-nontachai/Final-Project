@@ -18,10 +18,10 @@ if (!isset($_SESSION["username"])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
-                    icon: "error",
-                    timer: 2000, 
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                     icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -51,9 +51,9 @@ if (!isset($_GET['id_category']) || empty($_GET['id_category'])) {
                 Swal.fire({
                     title: "รหัสหมวดหมู่ไม่ถูกต้อง",
                     icon: "error",
-                    timer: 2000, 
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";
@@ -92,7 +92,7 @@ if ($conn->query($sql_delete_subcategories)) {
                                 icon: "success",
                                 timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./manage_cat.php";

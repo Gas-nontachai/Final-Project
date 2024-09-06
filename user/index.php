@@ -21,9 +21,9 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
-                    timer: 2000,
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -310,8 +310,10 @@ if (isset($_GET['category_id'])) {
                                         <td>" . $booking_type_display   . " ( " . htmlspecialchars($row["zone_detail"]) . ")</td>
                                         <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
                             ";
-                                if ($row["booking_status"] === '4') {
+                                if ($row["booking_status"] === '4' || $row["booking_status"] === '8') {
                                     echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
+                                } else if ($row["booking_status"] === '1' || $row["booking_status"] === '2' || $row["booking_status"] === '3' || $row["booking_status"] === '9') {
+                                    echo "<td style='color: orange;'>" . htmlspecialchars($row["status"]) . "</td>";
                                 } else {
                                     echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
                                 }
@@ -725,7 +727,7 @@ if (isset($_GET['category_id'])) {
 					<tbody>
                     <tr>
                     <th>หมายเลขการจอง</th>
-						<th>${data.booking_id}</th>
+						<tr>${data.booking_id}</tr>
                         </tr>
 							<tr>
 						<th scope="row">ชื่อ-สกุล</th>
@@ -804,47 +806,54 @@ if (isset($_GET['category_id'])) {
                     </div>
 
                     <form action="./reserve_order.php" method="post">
-                        <div class="mb-3 row">
-                            <label for="fullname" class="col col-form-label">
-                                <strong>ชื่อผู้จอง :</strong><?php echo $fullname; ?>
-                            </label><label for="shop_name" class="col col-form-label">
-                                <strong>ชื่อร้าน :</strong><?php echo $shop_name; ?>
-                            </label>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="zone" class="col-sm-3 col-form-label">
-                                <strong>โซน :</strong>
-                            </label>
-                            <div class="col-sm-9">
-                                <select name="zone" id="zone" class="form-select" onchange="updatePrices()">
-                                    <option value="#">กรุณาเลือกโซน</option>
-                                    <?php
-                                    $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
-                                    $result = $conn->query($sql);
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td><strong>ชื่อผู้จอง:</strong></td>
+                                    <td><?php echo $fullname; ?></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ชื่อร้าน:</strong></td>
+                                    <td><?php echo $shop_name; ?></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>โซน:</strong></td>
+                                    <td>
+                                        <select name="zone" id="zone" class="form-select" onchange="updatePrices()">
+                                            <option value="#">กรุณาเลือกโซน</option>
+                                            <?php
+                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
+                                            $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<option value="' . $row['zone_id'] . '">' . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No categories found</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-12">
-                                <strong id="priceDisplay">
-                                    ราคาต่อวัน: ฿ ราคาต่อเดือน: ฿
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
-                        </div>
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo '<option value="' . $row['zone_id'] . '">' . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="">No categories found</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <strong id="priceDisplay">
+                                            ราคาต่อวัน: ฿ ราคาต่อเดือน: ฿
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Step 2 Modal -->
@@ -897,6 +906,7 @@ if (isset($_GET['category_id'])) {
                                 <option value="#">กรุณาเลือกสินค้าที่จะขาย</option>
                             </select>
                         </div>
+                        <strong style="color: red;">*กรุณาเลือกประเภทสินค้าให้สอดคล้องกับโซน*</strong>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
@@ -920,39 +930,46 @@ if (isset($_GET['category_id'])) {
                     <div class="progress mb-4">
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 3</div>
                     </div>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td class="col-sm-3">
+                                    <strong>ประเภท:</strong>
+                                </td>
+                                <td class="col-sm-9">
+                                    <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
+                                        <option value="PerDay">รายวัน</option>
+                                        <option value="PerMonth">รายเดือน</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-3">
+                                    <strong>จำนวน(ล็อค):</strong>
+                                </td>
+                                <td class="col-sm-9">
+                                    <input type="number" class="form-control" name="amount" min="1" id="amount" oninput="updateTotalPrice()" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <strong id="TotalPrice">
+                                        ราคาสุทธิ : ฿
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <div class="mb-3 row">
-                        <label for="typeReserve" class="col-sm-3 col-form-label">
-                            <strong>ประเภทการจอง :</strong>
-                        </label>
-                        <div class="col-sm-9">
-                            <select name="typeReserve" id="typeReserve" class="form-select" onchange="updateTotalPrice()">
-                                <option value="PerDay">รายวัน</option>
-                                <option value="PerMonth">รายเดือน</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="amount" class="col-sm-3 col-form-label">
-                            <strong>จำนวน :</strong>
-                        </label>
-                        <div class="col-sm-9">
-                            <input type="number" class="form-control" name="amount" min="1" id="amount" oninput="updateTotalPrice()" required>
-                        </div>
-                        <div class="col-sm-12">
-                            <strong id="TotalPrice">
-                                ราคาสุทธิ : ฿
-                            </strong>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
-                        <input class="btn btn-success" type="submit" name="submit" value="Submit">
-                        </form>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
+                    <input class="btn btn-success" type="submit" name="submit" value="ยืนยันการจอง">
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- JavaScript -->

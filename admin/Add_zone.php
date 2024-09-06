@@ -19,9 +19,9 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
-                    timer: 2000,
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -57,10 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
-                        icon: "error",
-                        timer: 2000, // แสดงเป็นเวลา 3 วินาที
+                       icon: "error",
+                        timer: 2000, 
                         timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 icon: "success",
                                 timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./crud_page.php";

@@ -19,10 +19,10 @@ if (!isset($_SESSION["username"])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
-                    icon: "error",
-                    timer: 2000,
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                   icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         icon: "error",
                         timer: 2000, 
                         timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                            window.history.back();
@@ -109,10 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             document.addEventListener("DOMContentLoaded", function() {
                                 Swal.fire({
                                     title: "อัพเดตข้อมูลแล้ว",
-                                    icon: "success",
-                                    timer: 2000, 
-                                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                     icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                                 }).then((result) => {
                                     if (result.dismiss === Swal.DismissReason.timer) {
                                         window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน

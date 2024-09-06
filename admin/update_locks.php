@@ -78,10 +78,10 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
                           document.addEventListener("DOMContentLoaded", function() {
                               Swal.fire({
                                   title: "ทำการปรับเปลี่ยนสถานะเรียบร้อย",
-                                  icon: "success",
-                                  timer: 2000, // แสดงเป็นเวลา 2 วินาที
-                                  timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                  showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                   icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                               }).then((result) => {
                                   if (result.dismiss === Swal.DismissReason.timer) {
                                       window.location.href = "./confirm_reserve.php"; // เปลี่ยนเส้นทางไปยังหน้า index.php
@@ -128,10 +128,10 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "กรุณาเลือกล็อคก่อน",
-                    icon: "error",
-                    timer: 2000, // แสดงเป็นเวลา 2 วินาที
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                  icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./confirm_reserve.php"; // เปลี่ยนเส้นทางไปยังหน้า index.php

@@ -47,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
                             title: "ชำระเงินด้วย Token สำเร็จ",
-                            icon: "success",
-                            timer: 2000,
-                            timerProgressBar: true, 
-                            showConfirmButton: false 
+                             icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./index.php";
@@ -83,7 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         title: "เหรียญของคุณไม่เพียงพอ",
                         text: "กรุณาเติมเหรียญเพื่อดำเนินการต่อ",
                         icon: "error",
-                        confirmButtonText: "ตกลง"
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then(() => {
                         window.location.href = "./index.php"; 
                     });

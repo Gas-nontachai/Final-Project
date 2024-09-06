@@ -37,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         document.addEventListener("DOMContentLoaded", function() {
                             Swal.fire({
                                 title: "อัปโหลดสลิปสำเร็จ กำลังรอการตรวจสอบ",
-                                icon: "success",
-                                timer: 2000,
+                                 icon: "success",
+                                timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน

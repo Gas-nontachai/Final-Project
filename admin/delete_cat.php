@@ -19,9 +19,9 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
-                    timer: 2000, 
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -75,7 +75,7 @@ if (isset($_GET['id_category'])) {
                                 icon: "success",
                                 timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./manage_cat.php";
@@ -108,10 +108,10 @@ if (isset($_GET['id_category'])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "เออเร่อ: ' . $e->getMessage() . '",
-                    icon: "error",
-                    timer: 2000, 
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                 icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";
@@ -141,10 +141,10 @@ if (isset($_GET['id_category'])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "คำขอผิดพลาด",
-                    icon: "error",
-                    timer: 2000, 
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: false // ซ่อนปุ่ม "OK"
+                     icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";

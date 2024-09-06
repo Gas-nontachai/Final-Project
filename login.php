@@ -134,7 +134,9 @@ if (isset($_POST["submit"])) {
                 <button type="submit" name="submit" id="submit" class="btn btn-primary w-100" disabled>เข้าสู่ระบบ</button>
                 <div class="mt-3 text-center">
                     <p>หากคุณยังไม่มีบัญชี <a href="register.php">สมัครที่นี่</a></p>
+                    <a href="./index.php" class="mt-3 text-center">กลับหน้าแรก</a>
                 </div>
+
             </form>
         </div>
     </div>

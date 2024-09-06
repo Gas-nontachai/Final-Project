@@ -23,7 +23,7 @@ if (isset($_POST["submit"])) {
                         icon: "error",
                         timer: 2000, 
                         timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./register.php";
@@ -66,10 +66,10 @@ if (isset($_POST["submit"])) {
                     document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
                             title: "Username นี้ได้มีการสมัครไปแล้ว",
-                            icon: "error",
-                            timer: 2000, 
-                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                            showConfirmButton: false // ซ่อนปุ่ม "OK"
+                           icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./register.php";
@@ -96,10 +96,10 @@ if (isset($_POST["submit"])) {
                     document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
                             title: "หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว",
-                            icon: "error",
-                            timer: 2000, 
-                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                            showConfirmButton: false // ซ่อนปุ่ม "OK"
+                         icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./register.php";
@@ -133,7 +133,7 @@ if (isset($_POST["submit"])) {
                                 icon: "success",
                                 timer: 2000, 
                                 timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./login.php";

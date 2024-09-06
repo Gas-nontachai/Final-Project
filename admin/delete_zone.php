@@ -33,7 +33,7 @@ if (isset($_GET['zone_id'])) {
                         icon: "error",
                         timer: 2000, 
                         timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
@@ -74,10 +74,10 @@ if (isset($_GET['zone_id'])) {
                     document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
                             title: "ลบโซนสำเร็จ",
-                            icon: "success",
-                            timer: 2000, 
-                            timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                            showConfirmButton: false // ซ่อนปุ่ม "OK"
+                             icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./crud_page.php";

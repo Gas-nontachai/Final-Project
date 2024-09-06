@@ -69,10 +69,10 @@ if ($conn->query($sql_update_category) === TRUE) {
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "อัพเดทหมวดหมู่เรียบร้อยแล้ว",
-                        icon: "success",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                        showConfirmButton: false // ซ่อนปุ่ม "OK"
+                         icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./manage_cat.php";

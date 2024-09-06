@@ -96,8 +96,10 @@ if (isset($_GET['booking_id'])) {
                                 Swal.fire({
                                     title: "ยืนยันการคืนเงินสำเร็จ",
                                     text: "การคืนเงินหมายเลขการจอง ' . $booking_id . ' เสร็จสิ้นแล้ว และ token ของผู้ใช้ถูกอัปเดตเรียบร้อย",
-                                    icon: "success",
-                                    confirmButtonText: "ตกลง"
+                                      icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                                 }).then(() => {
                                     window.location.href = "refund_page.php";
                                 });
@@ -149,4 +151,3 @@ if (isset($_GET['booking_id'])) {
     header("Location: refund_page.php");
     exit();
 }
-?>

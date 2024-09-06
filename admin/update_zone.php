@@ -18,10 +18,10 @@ if (!isset($_SESSION["username"])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
-                    icon: "error",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
+                  icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
@@ -79,10 +79,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "ไม่สามารถลดจำนวนล็อคได้เนื่องจากมีการจองอยู่",
-                        icon: "error",
-                        timer: 2000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
+                       icon: "error",
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
@@ -113,9 +113,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Swal.fire({
                         title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
                         icon: "error",
-                        timer: 2000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
+                        timer: 2000, 
+                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
                         if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
@@ -181,10 +181,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         document.addEventListener("DOMContentLoaded", function() {
                             Swal.fire({
                                 title: "อัพเดตโซนสำเร็จ",
-                                icon: "success",
-                                timer: 2000,
-                                timerProgressBar: true,
-                                showConfirmButton: false
+                                 icon: "success",
+                                timer: 2000, 
+                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                                showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./crud_page.php";
