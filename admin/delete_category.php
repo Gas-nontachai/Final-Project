@@ -19,13 +19,10 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                      icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
-                    }
+                    
                 });
             });
         </script>
@@ -51,13 +48,10 @@ if (!isset($_GET['id_category']) || empty($_GET['id_category'])) {
                 Swal.fire({
                     title: "รหัสหมวดหมู่ไม่ถูกต้อง",
                     icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";
-                    }
+                    
                 });
             });
         </script>
@@ -90,13 +84,10 @@ if ($conn->query($sql_delete_subcategories)) {
                             Swal.fire({
                                 title: "ลบหมวดหมู่และหมวดหมู่ย่อยเรียบร้อยแล้ว",
                                 icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./manage_cat.php";
-                                }
+                                
                             });
                         });
                     </script>

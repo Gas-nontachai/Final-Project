@@ -38,13 +38,10 @@ try {
                     title: "ส่งคำขอคืนเงินเรียบร้อย",
                     title: "หลังจากผู้ดูแลระบบยืนยันแล้วคุณจะได้รับเหรียญตามเงินที่จ่ายไป",
                     icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
-                    }
+                    
                 });
             });
         </script>

@@ -20,13 +20,9 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                    icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
-                    }
                 });
             });
         </script>
@@ -63,13 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Swal.fire({
                         title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
                         icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
                            window.history.back();
-                        }
+                        
                     });
                 });
             </script>
@@ -110,13 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 Swal.fire({
                                     title: "อัพเดตข้อมูลแล้ว",
                                      icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                                 }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
                                         window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
-                                    }
                                 });
                             });
                         </script>

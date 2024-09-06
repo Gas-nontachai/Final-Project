@@ -22,13 +22,10 @@ echo '<!DOCTYPE html>
             Swal.fire({
                 title: "ออกจากระบบเรียบร้อย",
                  icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
             }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
-                }
+                
             });
         });
     </script>

@@ -19,13 +19,10 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
-                    }
+                    
                 });
             });
         </script>
@@ -417,8 +414,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                         Swal.fire({
                             icon: 'success',
                             title: 'ความคิดเห็นถูกลบแล้ว',
-                            showConfirmButton: false,
-                            timer: 1500
+                            showConfirmButton: true,
                         }).then(() => {
                             location.reload();
                         });

@@ -19,13 +19,9 @@ if (!isset($_SESSION["username"])) {
                             Swal.fire({
                                 title: "กรุณาล็อคอินก่อน",
                                 icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "../login.php";
-                                }
                             });
                         });
                     </script>
@@ -76,13 +72,9 @@ if ($stmt->execute()) {
                             Swal.fire({
                                 title: "เพิ่มประเภทสินค้าเรียบร้อย",
                                 icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./manage_cat.php";
-                                }
                             });
                         });
                     </script>

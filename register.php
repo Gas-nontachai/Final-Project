@@ -21,13 +21,9 @@ if (isset($_POST["submit"])) {
                     Swal.fire({
                         title: "กรุณากรอกข้อมูลในช่องที่ต้องกรอกทั้งหมด",
                         icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./register.php";
-                        }
                     });
                 });
             </script>
@@ -67,13 +63,10 @@ if (isset($_POST["submit"])) {
                         Swal.fire({
                             title: "Username นี้ได้มีการสมัครไปแล้ว",
                            icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                        
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./register.php";
-                            }
                         });
                     });
                 </script>
@@ -97,13 +90,9 @@ if (isset($_POST["submit"])) {
                         Swal.fire({
                             title: "หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว",
                          icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./register.php";
-                            }
                         });
                     });
                 </script>
@@ -131,13 +120,9 @@ if (isset($_POST["submit"])) {
                             Swal.fire({
                                 title: "สมัครสมาชิกสำเร็จ",
                                 icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./login.php";
-                                }
                             });
                         });
                     </script>

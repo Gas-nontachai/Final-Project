@@ -95,8 +95,6 @@ try {
                         title: "สำเร็จ!",
                         text: "ดำเนินการสำเร็จ: จำนวนแถวที่ถูกอัปเดตสถานะ: ' . $affected_rows_move . ', จำนวนแถวที่ถูกย้าย: ' . $affected_rows_move . ', จำนวนแถวที่ถูกอัปเดต: ' . $affected_rows_update . ', จำนวนแถวที่ถูกลบ: ' . $affected_rows_delete . '",
                          icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then(function() {
                         window.location.href = "index.php"; // เปลี่ยนเป็นหน้าที่ต้องการหลังแสดง Swal
@@ -122,8 +120,6 @@ try {
                         title: "เกิดข้อผิดพลาด!",
                         text: "' . htmlspecialchars($e->getMessage()) . '",
                         icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     });
                 </script>

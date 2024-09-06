@@ -293,8 +293,7 @@
             Swal.fire({
                 icon: 'success',
                 title: 'แก้ไขเวลาเปิด-ปิดสำเร็จ',
-                showConfirmButton: false,
-                timer: 1500,
+                showConfirmButton: true,
                 didClose: () => {
                     // Refresh the page
                     location.reload();

@@ -48,13 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         Swal.fire({
                             title: "ชำระเงินด้วย Token สำเร็จ",
                              icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./index.php";
-                            }
                         });
                     });
                 </script>
@@ -83,8 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         title: "เหรียญของคุณไม่เพียงพอ",
                         text: "กรุณาเติมเหรียญเพื่อดำเนินการต่อ",
                         icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then(() => {
                         window.location.href = "./index.php"; 

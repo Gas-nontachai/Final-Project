@@ -19,13 +19,10 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                     icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "../login.php";
-                    }
+                    
                 });
             });
         </script>
@@ -73,13 +70,12 @@ if (isset($_GET['id_category'])) {
                             Swal.fire({
                                 title: "ลบประเภทหลักและประเภทย่อยสำเร็จ",
                                 icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
+                               
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                             }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
+                               
                                     window.location.href = "./manage_cat.php";
-                                }
+                                
                             });
                         });
                     </script>
@@ -109,13 +105,10 @@ if (isset($_GET['id_category'])) {
                 Swal.fire({
                     title: "เออเร่อ: ' . $e->getMessage() . '",
                  icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";
-                    }
+                    
                 });
             });
         </script>
@@ -142,13 +135,10 @@ if (isset($_GET['id_category'])) {
                 Swal.fire({
                     title: "คำขอผิดพลาด",
                      icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
                         window.location.href = "./manage_cat.php";
-                    }
+                    
                 });
             });
         </script>

@@ -181,13 +181,10 @@ if (isset($_POST["submit"])) {
                 Swal.fire({
                     title: messageText,
                     icon: redirectUrl ? 'success' : 'error',
-                    timer: 2000,
-                    timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                    showConfirmButton: true, 
+                    showConfirmButton: true, // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer && redirectUrl) {
-                        window.location.href = redirectUrl;
-                    }
+                    window.location.href = redirectUrl;
+
                 });
 
             <?php endif; ?>

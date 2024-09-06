@@ -31,13 +31,10 @@ if (isset($_GET['zone_id'])) {
                     Swal.fire({
                         title: "ไม่สามารถลบโซนได้ เนื่องจากยังมีล็อกที่ใช้งานอยู่.",
                         icon: "error",
-                        timer: 2000, 
-                        timerProgressBar: true, // แสดงแถบความก้าวหน้า
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
                             window.location.href = "./crud_page.php";
-                        }
+                        
                     });
                 });
             </script>
@@ -75,13 +72,10 @@ if (isset($_GET['zone_id'])) {
                         Swal.fire({
                             title: "ลบโซนสำเร็จ",
                              icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
                                 window.location.href = "./crud_page.php";
-                            }
+                            
                         });
                     });
                 </script>
