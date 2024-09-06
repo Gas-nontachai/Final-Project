@@ -20,8 +20,8 @@ if (!isset($_SESSION["username"])) {
                                 title: "กรุณาล็อคอินก่อน",
                                 icon: "error",
                                 timer: 2000,
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                timerProgressBar: true,
+                                showConfirmButton: false
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "../login.php";
@@ -35,19 +35,28 @@ if (!isset($_SESSION["username"])) {
 }
 
 // รับข้อมูลจากฟอร์ม
-$category = $_POST['category'];
-$subcategories = explode(' ', $_POST['sub_category']);
+$category = isset($_POST['category']) ? $conn->real_escape_string(trim($_POST['category'])) : '';
+$subcategories = isset($_POST['sub_category']) ? explode(' ', trim($_POST['sub_category'])) : [];
 
-// Insert category
-$sql = "INSERT INTO category (cat_name) VALUES ('$category')";
-if ($conn->query($sql) === TRUE) {
-    $category_id = $conn->insert_id;
+if ($category === '') {
+    die('Category name is required.');
+}
+
+// Insert category using prepared statements
+$stmt = $conn->prepare("INSERT INTO category (cat_name) VALUES (?)");
+$stmt->bind_param("s", $category);
+if ($stmt->execute()) {
+    $category_id = $stmt->insert_id;
 
     // Insert subcategories
+    $stmt = $conn->prepare("INSERT INTO sub_category (id_category, sub_cat_name) VALUES (?, ?)");
     foreach ($subcategories as $sub_category) {
-        $sql = "INSERT INTO sub_category (id_category, sub_cat_name) VALUES ('$category_id', '$sub_category')";
-        if (!$conn->query($sql)) {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+        $sub_category = $conn->real_escape_string(trim($sub_category));
+        if ($sub_category !== '') {
+            $stmt->bind_param("is", $category_id, $sub_category);
+            if (!$stmt->execute()) {
+                echo "Error: " . $stmt->error;
+            }
         }
     }
 
@@ -67,9 +76,9 @@ if ($conn->query($sql) === TRUE) {
                             Swal.fire({
                                 title: "เพิ่มประเภทสินค้าเรียบร้อย",
                                 icon: "success",
-                                timer: 2000, 
-                                timerProgressBar: true, // แสดงแถบความก้าวหน้า
-                                showConfirmButton: false // ซ่อนปุ่ม "OK"
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false
                             }).then((result) => {
                                 if (result.dismiss === Swal.DismissReason.timer) {
                                     window.location.href = "./manage_cat.php";
@@ -80,7 +89,8 @@ if ($conn->query($sql) === TRUE) {
                 </body>
                 </html>';
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $stmt->error;
 }
 
+$stmt->close();
 $conn->close();

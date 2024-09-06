@@ -143,23 +143,46 @@ if (isset($_GET['category_id'])) {
                                 if ($result = $conn->query($sql)) {
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
+                                            $zone_id = $row["zone_id"];
+                                            $sql_count = "SELECT COUNT(id_locks) AS total_locks, 
+                                                                SUM(CASE WHEN available = 0 THEN 1 ELSE 0 END) AS available_locks 
+                                                         FROM locks 
+                                                         WHERE zone_id = $zone_id";
+                                            $result_count = $conn->query($sql_count);
+                                            $count_data = $result_count->fetch_assoc();
+                                            $total_locks = $count_data['total_locks'];
+                                            $available_locks = $count_data['available_locks'];
+
+                                            $percentage_available = ($total_locks > 0) ? ($available_locks / $total_locks) * 100 : 0;
+
+                                            $color = '';
+                                            if ($percentage_available > 50) {
+                                                $color = '<strong class="text-success border border-secondary border-2 px-2 mx-1 rounded">
+                                                            ว่าง: ' . $available_locks . '/' . $total_locks . '
+                                                        </strong>';  // สีเขียว
+                                            } else if ($percentage_available <= 20) {
+                                                $color = '<strong class="text-danger border border-secondary border-2 px-2 mx-1 rounded">
+                                                            ว่าง: ' . $available_locks . '/' . $total_locks . '
+                                                        </strong>';  // สีแดง
+                                            }
+
                                             echo '
-                                    <div class="">
-                                       <div class="row ">
-                                            <div class="col">
-                                                <div class="d-flex justify-content-start">
-                                                        <div class="">
-                                                        <p class="zone_detail" 
-                                                            data-bs-toggle="tooltip" 
-                                                            data-bs-placement="right" 
-                                                            title="รายวัน ' . $row["pricePerDate"] . '฿<br>รายเดือน ' . $row["pricePerMonth"] . '฿">
-                                                            โซน: <strong>' . $row["zone_name"] . '</strong><br>(' . $row["zone_detail"] . ')
-                                                        </p>
+                                                    <div class="">
+                                                    <div class="row ">
+                                                            <div class="col">
+                                                                <div class="d-flex justify-content-start">
+                                                                        <div class="">
+                                                                        <p class="zone_detail" 
+                                                                            data-bs-toggle="tooltip" 
+                                                                            data-bs-placement="right" 
+                                                                            title="รายวัน ' . $row["pricePerDate"] . '฿<br>รายเดือน ' . $row["pricePerMonth"] . '฿">
+                                                                            โซน: <strong>' . $row["zone_name"] . '</strong> (' . $row["zone_detail"] . ')' . $color . '
+                                                                        </p>
+                                                                        </div>
+                                                                </div>
                                                         </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                    ';
+                                                    </div>
+                                                    ';
                                             $sql2 = "SELECT * FROM locks WHERE zone_id = " . $row["zone_id"];
                                             if ($result2 = $conn->query($sql2)) {
                                                 if ($result2->num_rows > 0) {

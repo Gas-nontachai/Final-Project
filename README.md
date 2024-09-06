@@ -1,6 +1,6 @@
 - ก่อนใช้งานสร้างฐานข้อมูลชื่อ market_booking เพื่อใช้ในการ import sql เข้ามา
-- admin เข้าใช้งานได้เลย username: admin password: admin888
-- user เข้าใช้งานได้เลย username: user password: user8888
+- admin เข้าใช้งานได้เลย username: admin password: admin
+- user เข้าใช้งานได้เลย username: user password: user
 - ตั้งค่า Task Scheduler บน Windows
     - เปิด Task Scheduler (พิมพ์ "Task Scheduler" ในช่องค้นหา)
     - เลือก "Create Basic Task..." ในแถบด้านขวา

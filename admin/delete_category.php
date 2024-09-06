@@ -34,7 +34,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+if (!isset($_GET['id_category']) || empty($_GET['id_category'])) {
     echo '<!DOCTYPE html>
     <html lang="th">
     <head>
@@ -66,7 +66,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit();
 }
 
-$category_id = $_GET['id'];
+$category_id = $_GET['id_category'];
 
 // ลบหมวดหมู่ย่อยก่อน
 $sql_delete_subcategories = "DELETE FROM sub_category WHERE id_category = '$category_id'";

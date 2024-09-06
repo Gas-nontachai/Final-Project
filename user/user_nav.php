@@ -328,18 +328,19 @@
             if (closingDate <= openingDate) {
                 // ช่วงเวลาเปิด-ปิดข้ามวัน เช่น 23:00:00 ถึง 05:00:00
                 if (now >= openingDate || now <= closingDate) {
-                    document.getElementById('status').innerHTML = "ขณะนี้สามารถจองพื้นที่การขายได้(ระบบเปิด)";
+                    document.getElementById('status').innerHTML = "<span style='color: green;'>ขณะนี้สามารถจองพื้นที่การขายได้ (ระบบเปิด)</span>";
                 } else {
-                    document.getElementById('status').innerHTML = "ขณะนี้ไม่สามารถจองพื้นที่การขายได้(ระบบปิด)";
+                    document.getElementById('status').innerHTML = "<span style='color: red;'>ขณะนี้ไม่สามารถจองพื้นที่การขายได้ (ระบบปิด)</span>";
                 }
             } else {
                 // ช่วงเวลาเปิด-ปิดในวันเดียวกัน
                 if (now >= openingDate && now <= closingDate) {
-                    document.getElementById('status').innerHTML = "ขณะนี้สามารถจองพื้นที่การขายได้(ระบบเปิด)";
+                    document.getElementById('status').innerHTML = "<span style='color: green;'>ขณะนี้สามารถจองพื้นที่การขายได้ (ระบบเปิด)</span>";
                 } else {
-                    document.getElementById('status').innerHTML = "ขณะนี้ไม่สามารถจองพื้นที่การขายได้(ระบบปิด)";
+                    document.getElementById('status').innerHTML = "<span style='color: red;'>ขณะนี้ไม่สามารถจองพื้นที่การขายได้ (ระบบปิด)</span>";
                 }
             }
+
         }
 
         // เรียกใช้ฟังก์ชัน updateTime ทุกๆ 1 วินาที

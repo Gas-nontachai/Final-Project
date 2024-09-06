@@ -100,7 +100,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
                     if ($result->num_rows > 0) {
                         echo "<table class='table table-striped'>";
-                        echo "<thead><tr><th>Category</th><th>Subcategories</th><th>Actions</th></tr></thead>";
+                        echo "<thead><tr><th>หมวดหมู่</th><th>หมวดหมู่ย่อย</th><th>การกระทำ</th></tr></thead>";
                         echo "<tbody>";
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr class='category-item' data-category-id='" . $row["id_category"] . "'>";
