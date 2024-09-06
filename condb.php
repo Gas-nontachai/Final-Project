@@ -10,6 +10,6 @@ try {
 if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 } else {
-  // echo "<h1> test from vps 2</h1>";
+  // echo "<h1> connect success!! </h1>";
 }
 date_default_timezone_set('Asia/Bangkok');
