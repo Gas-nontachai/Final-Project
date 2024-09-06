@@ -94,12 +94,72 @@ $start_from = ($page - 1) * $results_per_page;
                     $row_total = $result_total->fetch_row();
                     $total_records = $row_total[0];
                     $total_pages = ceil($total_records / $results_per_page);
+                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                    $adjacents = 1; // จำนวนหน้าที่จะแสดงข้างหน้าและข้างหลังเลขหน้า  
 
                     echo "<nav>";
-                    echo "<ul class='pagination'>";
-                    for ($i = 1; $i <= $total_pages; $i++) {
-                        echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                    echo "<ul class='pagination justify-content-center'>";
+
+                    // ปุ่ม Previous
+                    if ($current_page > 1) {
+                        echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page - 1) . "'>Previous</a></li>";
                     }
+
+                    // แสดงปุ่มเลขหน้า
+                    if ($total_pages <= (1 + ($adjacents * 2))) {
+                        // ถ้ามีหน้าน้อย แสดงทุกหน้า
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            if ($i == $current_page) {
+                                echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                            } else {
+                                echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                            }
+                        }
+                    } else {
+                        // ถ้ามีหลายหน้า
+                        if ($current_page <= ($adjacents * 2)) {
+                            // ถ้าอยู่ในหน้าต้น ๆ แสดงหน้าต้น ๆ
+                            for ($i = 1; $i <= (4 + ($adjacents * 2)); $i++) {
+                                if ($i == $current_page) {
+                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                                }
+                            }
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='?page=" . $total_pages . "'>" . $total_pages . "</a></li>";
+                        } elseif ($current_page > ($total_pages - ($adjacents * 2))) {
+                            // ถ้าอยู่ในหน้าท้าย ๆ แสดงหน้าท้าย ๆ
+                            echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            for ($i = ($total_pages - (4 + ($adjacents * 2))); $i <= $total_pages; $i++) {
+                                if ($i == $current_page) {
+                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                                }
+                            }
+                        } else {
+                            // ถ้าอยู่ตรงกลาง แสดงหน้าใกล้เคียง
+                            echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            for ($i = ($current_page - $adjacents); $i <= ($current_page + $adjacents); $i++) {
+                                if ($i == $current_page) {
+                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                                }
+                            }
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='?page=" . $total_pages . "'>" . $total_pages . "</a></li>";
+                        }
+                    }
+
+                    // ปุ่ม Next
+                    if ($current_page < $total_pages) {
+                        echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page + 1) . "'>Next</a></li>";
+                    }
+
                     echo "</ul>";
                     echo "</nav>";
                     $sql = "SELECT 

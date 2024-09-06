@@ -116,79 +116,76 @@ if (isset($_GET['category_id'])) {
     <!-- Display -->
     <div class="container mt-4 bgcolor py-4 rounded">
         <div class="container ">
-            <div class="row d-flex justify-content-center align-item-center">
-                <div class="row">
-                    <div class="col">
-                        <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded">
-                            <!-- fetch_zone_detail -->
-                            <?php
-                            include('./fetch_zone_detail.php');
-                            ?>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- Display -->
-                        <div class="col-12 container my-4 p-2 border rounded overflow-auto" style="width: 100%; height: 40rem; background-color: rgba(255, 255, 255);">
-                            <ul class="nav nav-tabs" id="myTab">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab1Content"><strong>คำขอจองพื้นที่</strong></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#tab2Content"><strong>ได้รับเลขล็อคแล้ว</strong></a>
-                                </li>
-                            </ul>
+            <div class="d-flex flex-column">
+                <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded">
+                    <!-- fetch_zone_detail -->
+                    <?php
+                    include('./fetch_zone_detail.php');
+                    ?>
+                </div>
 
-                            <div class="tab-content  p-3">
-                                <!-- Tab 1: คำขอจองพื้นที่ -->
-                                <div class="tab-pane fade show active" id="tab1Content">
-                                    <div class="mt-2" id="bookingTable1">
-                                        <div class="tab-pane fade show active mt-2 mx-2 p-2" id="category">
-                                            <div class="d-flex justify-content-between align-items-end">
-                                                <p>กำลังดำเนินการโดย <?php echo htmlspecialchars($fullname); ?></p>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <!-- ฟอร์มค้นหา -->
-                                                <form method="get" class="mb-3">
-                                                    <input type="text" name="search" placeholder="ค้นหาด้วยรหัสการจอง" class="form-control" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
-                                                    <button type="submit" class="btn btn-primary mt-2">ค้นหา</button>
-                                                </form>
-                                                <!-- การแบ่งหน้า -->
-                                                <nav aria-label="Page navigation">
-                                                    <ul class="pagination mb-3">
-                                                        <?php
-                                                        // ตรวจสอบและกำหนดค่าตัวแปร $page
-                                                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                                                        $totalPages = isset($totalPages) ? $totalPages : 1; // กำหนดค่าเริ่มต้นให้ $totalPages
+                <!-- Display -->
+                <div class="col-12 container my-4 p-2 border rounded overflow-auto" style="width: 100%; height: 40rem; background-color: rgba(255, 255, 255);">
+                    <ul class="nav nav-tabs" id="myTab">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab1Content"><strong>คำขอจองพื้นที่</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab2Content"><strong>ได้รับเลขล็อคแล้ว</strong></a>
+                        </li>
+                    </ul>
 
-                                                        if ($page > 1): ?>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page - 1; ?>">ก่อนหน้า</a>
-                                                            </li>
-                                                        <?php endif; ?>
-                                                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                                            <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                                                                <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                                                            </li>
-                                                        <?php endfor; ?>
-                                                        <?php if ($page < $totalPages): ?>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page + 1; ?>">ถัดไป</a>
-                                                            </li>
-                                                        <?php endif; ?>
-                                                    </ul>
-                                                </nav>
-                                            </div>
-                                            <div class="mt-2" id="bookingTable">
+                    <div class="tab-content  p-3">
+                        <!-- Tab 1: คำขอจองพื้นที่ -->
+                        <div class="tab-pane fade show active" id="tab1Content">
+                            <div class="mt-2" id="bookingTable1">
+                                <div class="tab-pane fade show active mt-2 mx-2 p-2" id="category">
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <p>กำลังดำเนินการโดย <?php echo htmlspecialchars($fullname); ?></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- ฟอร์มค้นหา -->
+                                        <form method="get" class="mb-3">
+                                            <input type="text" name="search" placeholder="ค้นหาด้วยรหัสการจอง" class="form-control" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                                            <button type="submit" class="btn btn-primary mt-2">ค้นหา</button>
+                                        </form>
+                                        <!-- การแบ่งหน้า -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination mb-3">
                                                 <?php
-                                                $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
-                                                $searchCondition = $search ? "AND BK.booking_id LIKE '%$search%'" : '';
-
-                                                $itemsPerPage = 10;
+                                                // ตรวจสอบและกำหนดค่าตัวแปร $page
                                                 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                                                $offset = ($page - 1) * $itemsPerPage;
+                                                $totalPages = isset($totalPages) ? $totalPages : 1; // กำหนดค่าเริ่มต้นให้ $totalPages
 
-                                                // การดึงข้อมูล
-                                                $sql = "SELECT BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
+                                                if ($page > 1): ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page - 1; ?>">ก่อนหน้า</a>
+                                                    </li>
+                                                <?php endif; ?>
+                                                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                    <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                                        <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                                    </li>
+                                                <?php endfor; ?>
+                                                <?php if ($page < $totalPages): ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page + 1; ?>">ถัดไป</a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="mt-2" id="bookingTable">
+                                        <?php
+                                        $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+                                        $searchCondition = $search ? "AND BK.booking_id LIKE '%$search%'" : '';
+
+                                        $itemsPerPage = 10;
+                                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                                        $offset = ($page - 1) * $itemsPerPage;
+
+                                        // การดึงข้อมูล
+                                        $sql = "SELECT BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
                         FROM booking AS BK 
                         INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                         INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
@@ -200,16 +197,16 @@ if (isset($_GET['category_id'])) {
                         ORDER BY BK.booking_date DESC
                         LIMIT $itemsPerPage OFFSET $offset";
 
-                                                $result = $conn->query($sql);
+                                        $result = $conn->query($sql);
 
-                                                // การคำนวณจำนวนหน้าทั้งหมด
-                                                $totalResult = $conn->query("SELECT COUNT(*) AS total FROM booking WHERE booking_status != 1 AND booking_status != 2 AND booking_status != 3 $searchCondition");
-                                                $totalRow = $totalResult->fetch_assoc()['total'];
-                                                $totalPages = ceil($totalRow / $itemsPerPage);
+                                        // การคำนวณจำนวนหน้าทั้งหมด
+                                        $totalResult = $conn->query("SELECT COUNT(*) AS total FROM booking WHERE booking_status != 1 AND booking_status != 2 AND booking_status != 3 $searchCondition");
+                                        $totalRow = $totalResult->fetch_assoc()['total'];
+                                        $totalPages = ceil($totalRow / $itemsPerPage);
 
-                                                if ($result->num_rows > 0) {
-                                                    echo "<table class='table table-striped'>";
-                                                    echo "<thead>
+                                        if ($result->num_rows > 0) {
+                                            echo "<table class='table table-striped'>";
+                                            echo "<thead>
                             <tr>
                                 <th>รหัสการจอง</th>
                                 <th>รายละเอียดโซน</th>
@@ -221,126 +218,130 @@ if (isset($_GET['category_id'])) {
                                 <th>การกระทำ</th>
                             </tr>
                         </thead>";
-                                                    echo "<tbody>";
+                                            echo "<tbody>";
 
-                                                    while ($row = $result->fetch_assoc()) {
-                                                        $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
-                                                        $slip_img = $row["slip_img"] ? "<img src='" . htmlspecialchars($row["slip_img"]) . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
+                                            while ($row = $result->fetch_assoc()) {
+                                                $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
+                                                $slip_img = $row["slip_img"] ? "<img src='" . htmlspecialchars($row["slip_img"]) . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
 
-                                                        echo "<tr>
+                                                echo "<tr>
                                 <td>" . htmlspecialchars($row["booking_id"]) . "</td>
                                 <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
                                 <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>
                                 <td>" . htmlspecialchars($row["booking_type"]) . "</td>
-                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
-                                <td style='color: red;'>" . htmlspecialchars($row["status"]) . "</td>
-                                <td>" . $booking_date . "</td>";
-                                                        switch ($row["booking_status"]) {
-                                                            case 1:
-                                                                echo " <td>
+                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
+                                                if ($row["booking_status"] === '4') {
+                                                    echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
+                                                } else {
+                                                    echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
+                                                }
+                                                echo "                                <td>" . $booking_date . "</td>";
+                                                switch ($row["booking_status"]) {
+                                                    case 1:
+                                                        echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         </td>";
-                                                                break;
-                                                            case 2:
-                                                                echo " <td>
-                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
-                                        </td>";
-                                                                break;
-                                                            case 3:
-                                                                echo " <td>
+                                                        break;
+                                                    case 2:
+                                                        echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                         </td>";
-                                                            case 5:
-                                                                echo " <td>
+                                                        break;
+                                                    case 3:
+                                                        echo " <td>
+                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                        <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
+                                        </td>";
+                                                    case 5:
+                                                        echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                     <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
                                    </td>";
-                                                                break;
-                                                            case 6:
-                                                                echo " <td>
+                                                        break;
+                                                    case 6:
+                                                        echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                     </td>";
-                                                                break;
-                                                            case 7:
-                                                                echo " <td>
+                                                        break;
+                                                    case 7:
+                                                        echo " <td>
                                     <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
                                     </td>";
-                                                                break;
-                                                            case 9:
-                                                                echo " <td>
+                                                        break;
+                                                    case 9:
+                                                        echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                         </td>";
-                                                                break;
-                                                            default:
-                                                                echo "ไม่ทราบสถานะ";
-                                                        }
-                                                        echo "</tr>";
-                                                    }
-
-                                                    echo "</tbody>
-                            </table>";
-                                                } else {
-                                                    echo "<p class='text-center'>ยังไม่ได้มีการจอง</p>";
+                                                        break;
+                                                    default:
+                                                        echo "ไม่ทราบสถานะ";
                                                 }
-                                                ?>
-                                            </div>
-                                        </div>
+                                                echo "</tr>";
+                                            }
+
+                                            echo "</tbody>
+                            </table>";
+                                        } else {
+                                            echo "<p class='text-center'>ยังไม่ได้มีการจอง</p>";
+                                        }
+                                        ?>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <!-- Tab 2: ได้รับเลขล็อคแล้ว -->
-                                <div class="tab-pane fade" id="tab2Content">
-                                    <div class="mt-2" id="bookingTable2">
-                                        <div class="tab-pane fade show active mt-2 mx-2 p-2" id="category">
-                                            <div class="d-flex justify-content-between align-items-end">
-                                                <p>กำลังดำเนินการโดย <?php echo htmlspecialchars($fullname); ?></p>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <!-- ฟอร์มค้นหา -->
-                                                <form method="get" class="mb-3">
-                                                    <input type="text" name="search" placeholder="ค้นหาด้วยรหัสการจอง" class="form-control" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
-                                                    <button type="submit" class="btn btn-primary mt-2">ค้นหา</button>
-                                                </form>
-                                                <!-- การแบ่งหน้า -->
-                                                <nav aria-label="Page navigation">
-                                                    <ul class="pagination mb-3">
-                                                        <?php
-                                                        // ตรวจสอบและกำหนดค่าตัวแปร $page
-                                                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                                                        $totalPages = isset($totalPages) ? $totalPages : 1; // กำหนดค่าเริ่มต้นให้ $totalPages
-
-                                                        if ($page > 1): ?>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page - 1; ?>">ก่อนหน้า</a>
-                                                            </li>
-                                                        <?php endif; ?>
-                                                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                                            <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                                                                <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                                                            </li>
-                                                        <?php endfor; ?>
-                                                        <?php if ($page < $totalPages): ?>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page + 1; ?>">ถัดไป</a>
-                                                            </li>
-                                                        <?php endif; ?>
-                                                    </ul>
-                                                </nav>
-                                            </div>
-                                            <div class="mt-2" id="bookingTable">
+                        <!-- Tab 2: ได้รับเลขล็อคแล้ว -->
+                        <div class="tab-pane fade" id="tab2Content">
+                            <div class="mt-2" id="bookingTable2">
+                                <div class="tab-pane fade show active mt-2 mx-2 p-2" id="category">
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <p>กำลังดำเนินการโดย <?php echo htmlspecialchars($fullname); ?></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- ฟอร์มค้นหา -->
+                                        <form method="get" class="mb-3">
+                                            <input type="text" name="search" placeholder="ค้นหาด้วยรหัสการจอง" class="form-control" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                                            <button type="submit" class="btn btn-primary mt-2">ค้นหา</button>
+                                        </form>
+                                        <!-- การแบ่งหน้า -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination mb-3">
                                                 <?php
-                                                $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
-                                                $searchCondition = $search ? "AND BK.booking_id LIKE '%$search%'" : '';
-
-                                                $itemsPerPage = 10;
+                                                // ตรวจสอบและกำหนดค่าตัวแปร $page
                                                 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                                                $offset = ($page - 1) * $itemsPerPage;
+                                                $totalPages = isset($totalPages) ? $totalPages : 1; // กำหนดค่าเริ่มต้นให้ $totalPages
 
-                                                // การดึงข้อมูล
-                                                $sql = "SELECT BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
+                                                if ($page > 1): ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page - 1; ?>">ก่อนหน้า</a>
+                                                    </li>
+                                                <?php endif; ?>
+                                                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                    <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                                        <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                                    </li>
+                                                <?php endfor; ?>
+                                                <?php if ($page < $totalPages): ?>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?search=<?php echo urlencode($search); ?>&page=<?php echo $page + 1; ?>">ถัดไป</a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="mt-2" id="bookingTable">
+                                        <?php
+                                        $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+                                        $searchCondition = $search ? "AND BK.booking_id LIKE '%$search%'" : '';
+
+                                        $itemsPerPage = 10;
+                                        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                                        $offset = ($page - 1) * $itemsPerPage;
+
+                                        // การดึงข้อมูล
+                                        $sql = "SELECT BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
                         FROM booking AS BK 
                         INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                         INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
@@ -352,16 +353,16 @@ if (isset($_GET['category_id'])) {
                         ORDER BY BK.booking_date DESC
                         LIMIT $itemsPerPage OFFSET $offset";
 
-                                                $result = $conn->query($sql);
+                                        $result = $conn->query($sql);
 
-                                                // การคำนวณจำนวนหน้าทั้งหมด
-                                                $totalResult = $conn->query("SELECT COUNT(*) AS total FROM booking WHERE booking_status != 1 AND booking_status != 2 AND booking_status != 3 $searchCondition");
-                                                $totalRow = $totalResult->fetch_assoc()['total'];
-                                                $totalPages = ceil($totalRow / $itemsPerPage);
+                                        // การคำนวณจำนวนหน้าทั้งหมด
+                                        $totalResult = $conn->query("SELECT COUNT(*) AS total FROM booking WHERE booking_status != 1 AND booking_status != 2 AND booking_status != 3 $searchCondition");
+                                        $totalRow = $totalResult->fetch_assoc()['total'];
+                                        $totalPages = ceil($totalRow / $itemsPerPage);
 
-                                                if ($result->num_rows > 0) {
-                                                    echo "<table class='table table-striped'>";
-                                                    echo "<thead>
+                                        if ($result->num_rows > 0) {
+                                            echo "<table class='table table-striped'>";
+                                            echo "<thead>
                             <tr>
                                 <th>รหัสการจอง</th>
                                 <th>รายละเอียดโซน</th>
@@ -373,64 +374,65 @@ if (isset($_GET['category_id'])) {
                                 <th>การกระทำ</th>
                             </tr>
                         </thead>";
-                                                    echo "<tbody>";
+                                            echo "<tbody>";
 
-                                                    while ($row = $result->fetch_assoc()) {
-                                                        $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
-                                                        $slip_img = $row["slip_img"] ? "<img src='" . htmlspecialchars($row["slip_img"]) . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
+                                            while ($row = $result->fetch_assoc()) {
+                                                $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
+                                                $slip_img = $row["slip_img"] ? "<img src='" . htmlspecialchars($row["slip_img"]) . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
 
-                                                        echo "<tr>
+                                                echo "<tr>
                                 <td>" . htmlspecialchars($row["booking_id"]) . "</td>
                                 <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
                                 <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>
                                 <td>" . htmlspecialchars($row["booking_type"]) . "</td>
-                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
-                                <td style='color: red;'>" . htmlspecialchars($row["status"]) . "</td>
-                                <td>" . $booking_date . "</td>";
-                                                        switch ($row["booking_status"]) {
-                                                            case 4:
-                                                                echo " <td>
+                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
+                                                if ($row["booking_status"] === '4') {
+                                                    echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
+                                                } else {
+                                                    echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
+                                                }
+                                                echo "  <td>" . $booking_date . "</td>";
+                                                switch ($row["booking_status"]) {
+                                                    case 4:
+                                                        echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         </td>";
-                                                                break;
-                                                            case 5:
-                                                                echo " <td>
+                                                        break;
+                                                    case 5:
+                                                        echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
                                     </td>";
-                                                                break;
-                                                            case 6:
-                                                                echo " <td>
+                                                        break;
+                                                    case 6:
+                                                        echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         </td>";
-                                                                break;
-                                                            case 7:
-                                                                echo " <td>
+                                                        break;
+                                                    case 7:
+                                                        echo " <td>
                                         <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
                                         </td>";
-                                                                break;
-                                                            default:
-                                                                echo "ไม่ทราบสถานะ";
-                                                        }
-                                                        echo "</tr>";
-                                                    }
-
-                                                    echo "</tbody>
-                            </table>";
-                                                } else {
-                                                    echo "<p class='text-center'>ยังไม่ได้มีการจอง</p>";
+                                                        break;
+                                                    default:
+                                                        echo "ไม่ทราบสถานะ";
                                                 }
-                                                ?>
-                                            </div>
-                                        </div>
+                                                echo "</tr>";
+                                            }
+
+                                            echo "</tbody>
+                            </table>";
+                                        } else {
+                                            echo "<p class='text-center'>ยังไม่ได้มีการจอง</p>";
+                                        }
+                                        ?>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+
                     </div>
                 </div>
-
 
                 <script>
                     function confirmCancel(booking_id) {
@@ -512,13 +514,24 @@ if (isset($_GET['category_id'])) {
                                     } else {
                                         content = `
                                         <table class="table table-striped">			
-                                            <thead>
-                                            <tr>
-                                                <th>หมายเลขการจอง</th>
-                                                <th>${data.booking_id}</th>
-                                            </tr>
-                                            </thead>
+                                           <thead>
+                        <div class="d-flex justify-content-center align-items-end">
+                            <p>เลขล็อคที่ได้รับ :</p>
+                            ${data.book_lock_number 
+                                ? `<h4 class="mx-3 rounded py-2 px-4 bg-primary text-white">${data.book_lock_number}</h4>` 
+                                : `<h4 class="mx-3 rounded py-2 px-4 bg-secondary text-white">ยังไม่ได้รับเลขล็อค</h4>`
+                            }
+                        </div>
+                    </thead>
                                             <tbody>
+                                             <tr>
+                    <th>หมายเลขการจอง</th>
+						<th>${data.booking_id}</th>
+                        </tr>
+							<tr>
+						<th scope="row">ชื่อ-สกุล</th>
+						<td>${data.fullname}</td>
+					</tr>
                                                     <tr>
                                                 <th scope="row">ชื่อ-สกุล</th>
                                                 <td>${data.fullname}</td>
@@ -549,7 +562,7 @@ if (isset($_GET['category_id'])) {
                                             </tr>	
                                             <tr>
                                                 <th scope="row">สถานะ</th>
-                                                <td> ${data.status} บาท</td>
+                                                <td> ${data.status}</td>
                                             </tr>	
                                             <tr>
                                                 <th scope="row">วันที่การจอง</th>
