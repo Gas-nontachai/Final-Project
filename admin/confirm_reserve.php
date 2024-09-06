@@ -523,7 +523,7 @@ if (isset($_GET['category_id'])) {
                                             <tbody>
                                              <tr>
                     <th>หมายเลขการจอง</th>
-						<th>${data.booking_id}</th>
+						<td>${data.booking_id}</td>
                         </tr>
 							<tr>
 						<th scope="row">ชื่อ-สกุล</th>
@@ -569,10 +569,6 @@ if (isset($_GET['category_id'])) {
                                                 <th scope="row">วันที่คำขอหมดอายุ</th>
                                                 <td> ${data.expiration_date ? data.expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
                                             </tr>	
-                                            <tr>
-                                                <th scope="row">เลขล็อคที่ได้รับ</th>
-                                                <td>   ${data.book_lock_number ? data.book_lock_number : 'ยังไม่ได้รับเลขล็อค'}</td>
-                                            </tr>	
                         `;
 
                                         if (data.slip_img) {
@@ -587,7 +583,8 @@ if (isset($_GET['category_id'])) {
                                         } else {
                                             switch (parseInt(data.booking_status, 10)) {
                                                 case 1:
-                                                    content += `<button class="btn btn-success">แจ้งชำระเงิน</button>`;
+                                                    content += `</tbody>
+                                                </table>`;
                                                     break;
                                                 case 2:
                                                     content += `</tbody>
