@@ -157,11 +157,11 @@ if (isset($_GET['category_id'])) {
 
                                             $color = '';
                                             if ($percentage_available > 50) {
-                                                $color = '<strong class="text-success border border-secondary border-2 px-2 mx-1 rounded">
+                                                $color = '<strong class="text-success border border-secondary border-2 px-2 mx-3 rounded">
                                                             ว่าง: ' . $available_locks . '/' . $total_locks . '
                                                         </strong>';  // สีเขียว
                                             } else if ($percentage_available <= 20) {
-                                                $color = '<strong class="text-danger border border-secondary border-2 px-2 mx-1 rounded">
+                                                $color = '<strong class="text-danger border border-secondary border-2 px-2 mx-3 rounded">
                                                             ว่าง: ' . $available_locks . '/' . $total_locks . '
                                                         </strong>';  // สีแดง
                                             }
@@ -934,7 +934,7 @@ if (isset($_GET['category_id'])) {
                     </div>
                     <div class="mb-3 row">
                         <label for="amount" class="col-sm-3 col-form-label">
-                            <strong>จำนวน :</strong>
+                            <strong>จำนวน(ล็อค) :</strong>
                         </label>
                         <div class="col-sm-9">
                             <input type="number" class="form-control" name="amount" min="1" id="amount" oninput="updateTotalPrice()" required>

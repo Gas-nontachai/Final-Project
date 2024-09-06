@@ -25,11 +25,11 @@
 
                     $color = '';
                     if ($percentage_available > 50) {
-                        $color = '<strong class="text-success border border-secondary border-2 px-2 mx-1 rounded">
+                        $color = '<strong class="text-success border border-secondary border-2 px-2 mx-3 rounded">
                                                             ว่าง: ' . $available_locks . '/' . $total_locks . '
                                                         </strong>';  // สีเขียว
                     } else if ($percentage_available <= 20) {
-                        $color = '<strong class="text-danger border border-secondary border-2 px-2 mx-1 rounded">
+                        $color = '<strong class="text-danger border border-secondary border-2 px-2 mx-3 rounded">
                                                             ว่าง: ' . $available_locks . '/' . $total_locks . '
                                                         </strong>';  // สีแดง
                     }
