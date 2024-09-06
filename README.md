@@ -1,0 +1,12 @@
+- ก่อนใช้งานสร้างฐานข้อมูลชื่อ market_booking เพื่อใช้ในการ import sql เข้ามา
+- admin เข้าใช้งานได้เลย username: admin password: admin
+- user เข้าใช้งานได้เลย username: user password: user
+- ตั้งค่า Task Scheduler บน Windows
+    - เปิด Task Scheduler (พิมพ์ "Task Scheduler" ในช่องค้นหา)
+    - เลือก "Create Basic Task..." ในแถบด้านขวา
+    - ตั้งชื่อและคำอธิบายให้กับ Task นี้ (เช่น "Move Expired Bookings")
+    - ตั้งเวลาที่ต้องการให้ Task นี้ทำงาน (เช่น ทุกวันเวลา 23:59:59)
+    - เลือก "Start a program" และกด "Next"
+    - ในช่อง "Program/script" ให้ใส่ path ของ PHP executable (C:\xampp\php\php.exe)
+    - ในช่อง "Add arguments (optional)" ให้ใส่ path ของ script (C:\xampp\htdocs\market_booking\admin\move_expired_bookings.php)
+    - กด "Next" และ "Finish"
