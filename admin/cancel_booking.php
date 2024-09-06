@@ -38,7 +38,7 @@ try {
         $get_locks_query = "SELECT DISTINCT book_lock_number FROM booking WHERE expiration_date <= NOW()";
         $result = $conn->query($get_locks_query);
         if ($result === FALSE) {
-            throw new Exception("ไม่สามารถดึงข้อมูลล็อกได้: " . $conn->error);
+            throw new Exception("ไม่สามารถดึงข้อมูลล็อคได้: " . $conn->error);
         }
 
         $lock_names = [];
@@ -46,7 +46,7 @@ try {
             $lock_names[] = $row['book_lock_number']; // เก็บข้อมูลจากทุกแถว
         }
 
-        // อัปเดตล็อก
+        // อัปเดตล็อค
         foreach ($lock_names as $lock_name) {
             $lock_numbers = explode(',', $lock_name);
             foreach ($lock_numbers as $number) {
@@ -56,11 +56,11 @@ try {
                                        WHERE lock_name = ?";
                 $stmt = $conn->prepare($update_locks_query);
                 if ($stmt === FALSE) {
-                    throw new Exception("ไม่สามารถเตรียมคำสั่งอัปเดตล็อกได้: " . $conn->error);
+                    throw new Exception("ไม่สามารถเตรียมคำสั่งอัปเดตล็อคได้: " . $conn->error);
                 }
                 $stmt->bind_param('s', $number);
                 if ($stmt->execute() === FALSE) {
-                    throw new Exception("ไม่สามารถอัปเดตล็อก: " . $stmt->error);
+                    throw new Exception("ไม่สามารถอัปเดตล็อค: " . $stmt->error);
                 }
                 $stmt->close();
             }
