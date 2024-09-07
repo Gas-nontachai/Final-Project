@@ -5,7 +5,7 @@ require("../condb.php");
 if (isset($_POST['fetch_booking_details'])) {
     $booking_id = intval($_POST['booking_id']);
 
-    $sql = "SELECT BK.expiration_date, BK.book_lock_number, U.tel, BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
+    $sql = "SELECT BK.booking_status, BK.expiration_date, BK.book_lock_number, U.tel, BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
             FROM booking AS BK 
             INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
             INNER JOIN tbl_user AS U ON BK.member_id = U.user_id

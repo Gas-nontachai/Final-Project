@@ -224,7 +224,7 @@ $start_from = ($page - 1) * $results_per_page;
 					</tr>
                     <tr>
 						<th scope="row">จำนวนการจอง</th>
-						<td> ${data.booking_amount} ล็อค}</td>
+						<td> ${data.booking_amount} ล็อค</td>
 					</tr>	
                     <tr>
 						<th scope="row">ราคารวม</th>

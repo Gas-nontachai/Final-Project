@@ -73,14 +73,14 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <!-- Display -->
     <div class="container mt-4">
         <div class="container ">
-            <div class="row d-flex justify-content-center align-item-center">
+            <div class="row d-flex justify-content-center align-item-center overflow-auto">
                 <!-- BTN -->
                 <div class="row d-flex justify-content-center bgcolor rounded align-item-center">
                     <div class="col-12 d-flex justify-content-evenly px-3 pb-4">
                         <a href="./confirm_reserve.php" type="button" class="btn btn-success m-2"> ตรวจสอบการชำระเงิน / ยืนยันการจอง / ยกเลิกการจอง
                         </a>
                     </div>
-                    <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded">
+                    <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded overflow-auto">
                         <!-- fetch_zone_detail -->
                         <?php
                         include('./fetch_zone_detail.php');

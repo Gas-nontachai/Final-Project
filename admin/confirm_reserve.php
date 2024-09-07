@@ -113,8 +113,8 @@ if (isset($_GET['category_id'])) {
     <!-- Display -->
     <div class="container mt-4 bgcolor py-4 rounded">
         <div class="container ">
-            <div class="d-flex flex-column">
-                <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded">
+            <div class="d-flex flex-column overflow-auto">
+                <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded ">
                     <!-- fetch_zone_detail -->
                     <?php
                     include('./fetch_zone_detail.php');
@@ -224,9 +224,16 @@ if (isset($_GET['category_id'])) {
                                                 echo "<tr>
                                 <td>" . htmlspecialchars($row["booking_id"]) . "</td>
                                 <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
-                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>
-                                <td>" . htmlspecialchars($row["booking_type"]) . "</td>
-                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
+                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>";
+                                                if ($row["booking_type"] === 'PerDay') {
+                                                    $booking_type_display = 'รายวัน';
+                                                } elseif ($row["booking_type"] === 'PerMonth') {
+                                                    $booking_type_display = 'รายเดือน';
+                                                } else {
+                                                    $booking_type_display = 'ไม่ทราบประเภทการจอง';
+                                                }
+                                                echo "<td>" . $booking_type_display . "</td>";
+                                                echo "  <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
                                                 if ($row["booking_status"] === '4') {
                                                     echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
                                                 } else {
@@ -465,8 +472,6 @@ if (isset($_GET['category_id'])) {
                         window.location.href = url.toString();
                     });
                 </script>
-
-
                 <!-- View Modal -->
                 <div class="modal fade" id="viewBookingModal" tabindex="-1" aria-labelledby="viewBookingModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -478,13 +483,16 @@ if (isset($_GET['category_id'])) {
                             <div class="modal-body">
                                 <!-- Content will be dynamically filled by JavaScript -->
                             </div>
+                            <div class="modal-footer">
+                                <!-- Cancel Order Button and Close Button will be inserted here by JavaScript -->
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <script>
                     document.addEventListener('DOMContentLoaded', () => {
-                        // ฟังการคลิกเพื่อเปิดโมดัล
+                        // Listen for click to open the modal
                         document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
                             button.addEventListener('click', function() {
                                 const bookingId = this.getAttribute('data-id');
@@ -506,115 +514,92 @@ if (isset($_GET['category_id'])) {
                                 .then(response => response.json())
                                 .then(data => {
                                     let content = '';
+                                    let cancelButton = '';
                                     if (data.error) {
                                         content = `<p>${data.error}</p>`;
                                     } else {
                                         content = `
-                                        <table class="table table-striped">			
-                                           <thead>
-                        <div class="d-flex justify-content-center align-items-end">
-                            <p>เลขล็อคที่ได้รับ :</p>
-                            ${data.book_lock_number 
-                                ? `<h4 class="mx-3 rounded py-2 px-4 bg-primary text-white">${data.book_lock_number}</h4>` 
-                                : `<h4 class="mx-3 rounded py-2 px-4 bg-secondary text-white">ยังไม่ได้รับเลขล็อค</h4>`
-                            }
-                        </div>
-                    </thead>
-                                            <tbody>
-                                             <tr>
-                    <th>หมายเลขการจอง</th>
-						<td>${data.booking_id}</td>
-                        </tr>
-							<tr>
-						<th scope="row">ชื่อ-สกุล</th>
-						<td>${data.fullname}</td>
-					</tr>
-                                                    <tr>
-                                                <th scope="row">ชื่อ-สกุล</th>
-                                                <td>${data.fullname}</td>
-                                            </tr>
-                                                    <tr>
-                                                <th scope="row">เบอร์โทรติดต่อ</th>
-                                                <td>${data.tel}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">ชื่อโซน</th>
-                                                <td>${data.zone_name} (${data.zone_detail})</td>
-                                                </tr>
-                                            <tr>
-                                                <th scope="row">หมวดหมู่</th>
-                                                <td> ${data.cat_name} (${data.sub_cat_name})</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">ประเภทการจอง</th>
-                                                <td> ${data.booking_type_display}</td>
-                                            </tr>	
-                                            <tr>
-                                                <th scope="row">จำนวนการจอง</th>
-                                                <td> ${data.booking_amount} ล็อค}</td>
-                                            </tr>	
-                                            <tr>
-                                                <th scope="row">รวม</th>
-                                                <td> ${data.total_price} บาท</td>
-                                            </tr>	
-                                            <tr>
-                                                <th scope="row">สถานะ</th>
-                                                <td> ${data.status}</td>
-                                            </tr>	
-                                            <tr>
-                                                <th scope="row">วันที่การจอง</th>
-                                                <td>${data.booking_date}</td>
-                                            </tr>	
-                                            <tr>
-                                                <th scope="row">วันที่คำขอหมดอายุ</th>
-                                                <td> ${data.expiration_date ? data.expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
-                                            </tr>	
-                        `;
+                        <table class="table table-striped">
+                            <thead>
+                                <div class="d-flex justify-content-center align-items-end">
+                                    <p>เลขล็อคที่ได้รับ :</p>
+                                    ${data.book_lock_number 
+                                        ? `<h4 class="mx-3 rounded py-2 px-4 bg-primary text-white">${data.book_lock_number}</h4>` 
+                                        : `<h4 class="mx-3 rounded py-2 px-4 bg-secondary text-white">ยังไม่ได้รับเลขล็อค</h4>`
+                                    }
+                                </div>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>หมายเลขการจอง</th>
+                                    <td>${data.booking_id}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ชื่อ-สกุล</th>
+                                    <td>${data.fullname}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">เบอร์โทรติดต่อ</th>
+                                    <td>${data.tel}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ชื่อโซน</th>
+                                    <td>${data.zone_name} (${data.zone_detail})</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">หมวดหมู่</th>
+                                    <td>${data.cat_name} (${data.sub_cat_name})</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">ประเภทการจอง</th>
+                                    <td>${data.booking_type_display}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">จำนวนการจอง</th>
+                                    <td>${data.booking_amount} ล็อค</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">รวม</th>
+                                    <td>${data.total_price} บาท</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">สถานะ</th>
+                                    <td>${data.status}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">วันที่การจอง</th>
+                                    <td>${data.booking_date}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">วันที่คำขอหมดอายุ</th>
+                                    <td>${data.expiration_date ? data.expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
+                                </tr>`;
 
                                         if (data.slip_img) {
                                             content += `
-                                                        <tr>
-                                                            <th scope="row">รูปภาพใบเสร็จ</th>
-                                                            <td>  <img  src="../asset/slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
-                                                        </tr>
-                                                    </tbody>
-                                                    </table>
-                                                   `;
-                                        } else {
-                                            switch (parseInt(data.booking_status, 10)) {
-                                                case 1:
-                                                    content += `</tbody>
-                                                </table>`;
-                                                    break;
-                                                case 2:
-                                                    content += `</tbody>
-                                                </table>`;
-                                                    break;
-                                                case 3:
-                                                    content += `</tbody>
-                                                                    </table>`;
-                                                    break;
-                                                case 4:
-                                                    content += `</tbody>
-                                                                </table>`;
-                                                    break;
-                                                case 5:
-                                                    content += `<button class="btn btn-danger">ยืนยันการยกเลิก</button></tbody>
-                                                                </table>`;
-                                                    break;
-                                                case 6:
-                                                    content += `<strong style="color: red;">ยกเลิกเรียบร้อยแล้ว</strong></tbody>
-                                                                 </table>`;
-                                                    break;
-                                                case 9:
-                                                    content += `</tbody>
-                                                                </table>`;
-                                                    break;
-                                                default:
-                                                    content += `<p>ไม่ทราบสถานะ</p></tbody>
-                                                                </table>`;
-                                                    break;
-                                            }
+                                <tr>
+                                    <th scope="row">รูปภาพใบเสร็จ</th>
+                                    <td><img src="../asset/slip_img/${data.slip_img}" alt="ภาพใบเสร็จ" class="img-fluid"></td>
+                                </tr>`;
+                                        }
+
+                                        content += `
+                            </tbody>
+                        </table>`;
+
+                                        // Add cancel button to modal footer
+                                        const footer = document.querySelector('#viewBookingModal .modal-footer');
+                                        footer.innerHTML = `
+                            <button id="cancelOrderBtn" class="btn btn-danger">ยกเลิกการจอง</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                        `;
+
+                                        // Attach event listener to the cancel button
+                                        const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+                                        if (cancelOrderBtn) {
+                                            cancelOrderBtn.addEventListener('click', () => {
+                                                handleOrderCancellation(data.booking_id, data.booking_status);
+                                            });
                                         }
                                     }
                                     document.querySelector('#viewBookingModal .modal-body').innerHTML = content;
@@ -624,8 +609,68 @@ if (isset($_GET['category_id'])) {
                                     document.querySelector('#viewBookingModal .modal-body').innerHTML = '<p>มีข้อผิดพลาดในการดึงข้อมูลการจอง</p>';
                                 });
                         }
+
+                        function handleOrderCancellation(bookingId, status) {
+                            let url = '';
+                            let text = '';
+
+                            if (status == 1) {
+                                url = `cancel_order.php?booking_id=${bookingId}`;
+                                text = "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการจองนี้?";
+                            } else if (status == 2 || status == 3) {
+                                url = `cancel_refund.php?booking_id=${bookingId}`;
+                                text = "คุณแน่ใจหรือไม่ว่าต้องการคืนเงินสำหรับการจองนี้?";
+                            }
+
+                            Swal.fire({
+                                title: 'ยืนยันการดำเนินการ?',
+                                text: text,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'ใช่, ดำเนินการเลย!',
+                                cancelButtonText: 'ไม่, ยกเลิก',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    fetch(url, {
+                                            method: 'GET', // ใช้ GET เพื่อส่งข้อมูลใน URL
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                            }
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                Swal.fire(
+                                                    'สำเร็จ!',
+                                                    data.message,
+                                                    'success'
+                                                ).then(() => {
+                                                    location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire(
+                                                    'เกิดข้อผิดพลาด!',
+                                                    data.message,
+                                                    'error'
+                                                );
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('เกิดข้อผิดพลาดในการดำเนินการ:', error);
+                                            Swal.fire(
+                                                'เกิดข้อผิดพลาด!',
+                                                'ไม่สามารถดำเนินการได้ในขณะนี้.',
+                                                'error'
+                                            );
+                                        });
+                                }
+                            });
+                        }
+
+
                     });
                 </script>
+
                 <!-- Confirm Modal -->
                 <div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
                     <div class="modal-dialog">

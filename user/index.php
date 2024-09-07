@@ -744,7 +744,7 @@ if (isset($_GET['category_id'])) {
 					</tr>	
 					<tr>
 						<th scope="row">จำนวนการจอง</th>
-						<td> ${data.booking_amount} ล็อค}</td>
+						<td> ${data.booking_amount} ล็อค</td>
 					</tr>	
 					<tr>
 						<th scope="row">รวม</th>
