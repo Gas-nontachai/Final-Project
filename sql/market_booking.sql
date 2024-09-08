@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 08, 2024 at 08:05 AM
+-- Generation Time: Sep 08, 2024 at 11:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -351,18 +351,6 @@ INSERT INTO `operating_hours` (`id`, `opening_time`, `closing_time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pre_category`
---
-
-CREATE TABLE `pre_category` (
-  `idpre_category` int(11) NOT NULL,
-  `pre_cat_name` varchar(45) NOT NULL,
-  `subdetail` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `sub_category`
 --
 
@@ -549,12 +537,6 @@ ALTER TABLE `operating_hours`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pre_category`
---
-ALTER TABLE `pre_category`
-  ADD PRIMARY KEY (`idpre_category`);
-
---
 -- Indexes for table `sub_category`
 --
 ALTER TABLE `sub_category`
@@ -625,12 +607,6 @@ ALTER TABLE `locks`
 --
 ALTER TABLE `operating_hours`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `pre_category`
---
-ALTER TABLE `pre_category`
-  MODIFY `idpre_category` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sub_category`
