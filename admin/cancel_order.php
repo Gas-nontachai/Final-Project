@@ -54,10 +54,10 @@ if (isset($_GET['booking_id'])) {
         }
 
         // Success response
-        echo json_encode(['success' => true, 'message' => 'Booking successfully cancelled']);
+        echo json_encode(['success' => true, 'message' => 'ยกเลิกการจองเรียบร้อยแล้ว']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Booking not found']);
+        echo json_encode(['success' => false, 'message' => 'ไม่พบการจอง']);
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Booking ID not provided']);
+    echo json_encode(['success' => false, 'message' => 'ไม่ได้ระบุรหัสการจอง']);
 }

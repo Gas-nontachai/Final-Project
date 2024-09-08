@@ -16,12 +16,14 @@ if (isset($_POST['fetch_booking_details'])) {
                 B.booking_type, 
                 B.slip_img, 
                 B.book_lock_number, 
-                B.booking_date
+                B.booking_date,
+                ZD.zone_name, ZD.zone_detail
                 FROM market_booking.booking AS B
                 LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
                 LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
                 LEFT JOIN category AS C ON B.product_type = C.id_category
                 LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
+                LEFT JOIN zone_detail AS ZD ON ZD.zone_id = B.zone_id
             WHERE B.booking_id = ?";
 
     $stmt = $conn->prepare($sql);

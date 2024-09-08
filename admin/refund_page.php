@@ -110,7 +110,7 @@ $start_from = ($page - 1) * $results_per_page;
                                 LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
                                 LEFT JOIN category AS C ON B.product_type = C.id_category
                                 LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
-                                WHERE booking_status = 7";
+                                WHERE booking_status = 7 OR booking_status = 5";
                         $result = mysqli_query($conn, $sql);
                         ?>
                         <div class="container">
@@ -142,9 +142,10 @@ $start_from = ($page - 1) * $results_per_page;
                                                         </button>
 
                                                         <a href="#" class="btn btn-sm btn-danger"
-                                                            onclick="confirmRefund('<?php echo $row['booking_id']; ?>'); return false;">
-                                                            ยืนยันการคืนเงิน
+                                                            onclick="confirmRefund('<?php echo $row['booking_id']; ?>', '<?php echo $row['booking_status']; ?>'); return false;">
+                                                            ยืนยันการยกเลิกการจอง
                                                         </a>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,8 +232,8 @@ $start_from = ($page - 1) * $results_per_page;
 						<td> ${data.total_price} บาท</td>
 					</tr>
 					<tr>
-						<th scope="row">โซน</th>
-						<td>${data.zone_name} (${data.zone_detail})</td>
+					<th scope="row">โซน</th>
+                        <td>${data.zone_name}(${data.zone_detail})</td>
 						</tr>
 					<tr>
 						<th scope="row">ประเภทสินค้า</th>
@@ -245,7 +246,7 @@ $start_from = ($page - 1) * $results_per_page;
 					</tr>	
                     <tr>
 						<th scope="row">ประเภทการจอง</th>
-						<td> ${data.booking_type}</td>
+						<td> ${data.booking_type_display}</td>
 					</tr>	
                     <tr>
 						<th scope="row">เลขล็อคที่ได้รับ</th>
@@ -276,7 +277,7 @@ $start_from = ($page - 1) * $results_per_page;
             }
         });
 
-        function confirmRefund(booking_id) {
+        function confirmRefund(booking_id, booking_status) {
             Swal.fire({
                 title: "คุณแน่ใจหรือไม่?",
                 text: "คุณกำลังจะคืนเงินให้กับ " + booking_id + " น้า",
@@ -288,7 +289,11 @@ $start_from = ($page - 1) * $results_per_page;
                 cancelButtonText: "ยกเลิก"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'confirm_refund.php?booking_id=' + booking_id;
+                    if (booking_status == 7) {
+                        window.location.href = 'confirm_refund.php?booking_id=' + booking_id;
+                    } else if (booking_status == 5) {
+                        window.location.href = 'cancel_booking2.php?booking_id=' + booking_id;
+                    }
                 }
             });
         }

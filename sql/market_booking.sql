@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2024 at 04:51 PM
+-- Generation Time: Sep 08, 2024 at 08:05 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -113,7 +113,15 @@ INSERT INTO `booked` (`id_booked`, `booking_id`, `member_id`, `booking_amount`, 
 (0000000077, 68, 6, '1', '40', 3, 125, 8, 'PerDay', 33, 'slip_20240906_170419_66dad3a3c544f.png', '2024-09-06 09:42:51', 'A7', '2024-09-07 08:00:00'),
 (0000000078, 66, 6, '1', '40', 3, 126, 11, 'PerDay', 33, 'slip_20240906_115139_66da8a5bb67d2.png', '2024-09-06 04:51:07', 'A1', '2024-09-06 08:00:00'),
 (0000000079, 69, 13, '2', '80', 3, 125, 11, 'PerDay', 33, 'slip_20240906_165208_66dad0c8ed937.png', '2024-09-06 09:51:35', 'A2, A3', '2024-09-06 08:00:00'),
-(0000000080, 72, 6, '2', '80', 3, 125, 11, 'PerDay', 33, NULL, '2024-09-06 09:59:00', 'A4, A5', '2024-09-06 08:00:00');
+(0000000080, 72, 6, '2', '80', 3, 125, 11, 'PerDay', 33, NULL, '2024-09-06 09:59:00', 'A4, A5', '2024-09-06 08:00:00'),
+(0000000081, 75, 15, '1', '40', 6, 92, 6, 'PerDay', 29, NULL, '2024-09-06 17:26:45', NULL, NULL),
+(0000000082, 76, 14, '5', '5000', 3, 162, 13, 'PerMonth', 29, 'slip_20240907_013608_66db4b98f3acf.jpeg', '2024-09-06 18:35:50', NULL, NULL),
+(0000000083, 73, 14, '2', '80', 6, 88, 11, 'PerDay', 29, 'slip_20240907_013329_66db4af93e254.png', '2024-09-06 15:42:09', 'B1, B2', '2024-09-07 08:00:00'),
+(0000000084, 77, 16, '1', '40', 3, 161, 13, 'PerDay', 33, 'slip_20240907_155549_66dc15151c0f3.png', '2024-09-07 08:48:30', NULL, NULL),
+(0000000085, 80, 16, '2', '80', 4, 84, 6, 'PerDay', 33, NULL, '2024-09-07 11:10:27', NULL, NULL),
+(0000000086, 81, 16, '2', '80', 3, 161, 8, 'PerDay', 33, 'slip_20240908_114357_66dd2b8d52a6f.png', '2024-09-08 04:43:47', NULL, NULL),
+(0000000087, 82, 16, '2', '80', 8, 168, 12, 'PerDay', 33, NULL, '2024-09-08 04:44:07', NULL, NULL),
+(0000000088, 83, 16, '1', '40', 7, 98, 12, 'PerDay', 33, NULL, '2024-09-08 05:27:42', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -136,6 +144,14 @@ CREATE TABLE `booking` (
   `booking_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'วันเวลาที่จอง',
   `expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `book_lock_number`, `booking_date`, `expiration_date`) VALUES
+(0000000078, 000016, 4, 'PerDay', 033, 3, 120, 3, 162, NULL, 'A1, A2, A3', '2024-09-07 09:25:17', '2024-09-08 08:00:00'),
+(0000000079, 000016, 4, 'PerDay', 033, 2, 80, 3, 161, 'slip_20240907_180929_66dc3469139d7.png', 'A4, A5', '2024-09-07 11:07:00', '2024-09-08 08:00:00');
 
 -- --------------------------------------------------------
 
@@ -163,7 +179,9 @@ INSERT INTO `booking_status` (`id`, `status`) VALUES
 (8, 'คืนเงินเรียบร้อยแล้ว'),
 (9, 'ชำระเงินผ่านเหรียญแล้ว(รอรับเลขล็อค)'),
 (10, 'ยกเลิกคำขอเนื่องจากคำขอหมดอายุ'),
-(11, 'หมดอายุการจอง');
+(11, 'หมดอายุการจอง'),
+(12, 'ยกเลิก(ประเภทสินค้าไม่สอดล้องกับโซน)'),
+(13, 'คืนเงินเรียบร้อยแล้ว(ประเภทสินค้าไม่สอดคล้องกับโซน');
 
 -- --------------------------------------------------------
 
@@ -184,7 +202,7 @@ INSERT INTO `category` (`id_category`, `cat_name`) VALUES
 (3, 'อาหาร'),
 (4, 'เครื่องดื่ม'),
 (6, 'เสื้อผ้าและแฟชั่น'),
-(7, 'จิปาถะของจุ๊บจิ๊บ'),
+(7, 'จิปาถะ เบ็ดเตล็ด'),
 (8, 'เปิดท้ายของมือสอง');
 
 -- --------------------------------------------------------
@@ -207,7 +225,9 @@ CREATE TABLE `comments` (
 
 INSERT INTO `comments` (`id`, `user_id`, `comment`, `rating`, `created_at`) VALUES
 (1, 6, 'ดีมากๆงับ', 5, '2024-08-16 13:48:42'),
-(12, 13, 'ดีมากๆ', 5, '2024-09-06 09:54:36');
+(12, 13, 'ดีมากๆ', 5, '2024-09-06 09:54:36'),
+(13, 14, 'ตลาดบริการดีมากๆเลยค่ะ จัดสรรล็อคได้ดีมากๆ', 5, '2024-09-06 15:51:54'),
+(14, 16, 'ดีมากๆงับ', 5, '2024-09-07 09:38:41');
 
 -- --------------------------------------------------------
 
@@ -288,11 +308,11 @@ INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `availabl
 (614, 'D18', 032, NULL, 0),
 (615, 'D19', 032, NULL, 0),
 (616, 'D20', 032, NULL, 0),
-(617, 'A1', 033, NULL, 0),
-(618, 'A2', 033, NULL, 0),
-(619, 'A3', 033, NULL, 0),
-(620, 'A4', 033, NULL, 0),
-(621, 'A5', 033, NULL, 0),
+(617, 'A1', 033, 0000000078, 1),
+(618, 'A2', 033, 0000000078, 1),
+(619, 'A3', 033, 0000000078, 1),
+(620, 'A4', 033, 0000000079, 1),
+(621, 'A5', 033, 0000000079, 1),
 (622, 'A6', 033, NULL, 0),
 (623, 'A7', 033, NULL, 0),
 (624, 'A8', 033, NULL, 0),
@@ -326,7 +346,7 @@ CREATE TABLE `operating_hours` (
 --
 
 INSERT INTO `operating_hours` (`id`, `opening_time`, `closing_time`) VALUES
-(1, '10:00:00', '16:00:00');
+(1, '08:00:00', '05:00:00');
 
 -- --------------------------------------------------------
 
@@ -417,10 +437,13 @@ CREATE TABLE `tbl_user` (
 
 INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `email`, `username`, `password`, `userrole`, `shop_name`, `token`, `last_login`) VALUES
 (000001, 'นาย', 'Nontachai', 'Prosri', '0885639233', 'bigboy2546.77@gmail.com', 'GGas', 'nontachai01', 1, 'GGasShop', 0, NULL),
-(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin', 'admin', 'admin', 1, 'admin', 0, '2024-09-06 21:48:35'),
-(000006, 'นาย', 'User', 'Test', '0222222222', 'userTest@gmail.com', 'user', 'user', 0, 'UserShop', 40, '2024-09-06 21:28:22'),
+(000005, 'นาย', 'แอดมิน', 'admin', '0999999999', 'admin@ex.com', 'admin', 'admin', 1, 'admin', 9999, '2024-09-07 21:38:05'),
+(000006, 'นาย', 'User', 'Test', '0222222222', 'userTest@gmail.com', 'user', 'user', 0, 'UserShop', 40, '2024-09-06 11:21:24'),
 (000010, 'นาย', 'ทดสอบ', 'ระบบ', '0891247281', 'Test@gmail.com', 'Test', 'test8888', 0, 'TestShop', 80, '2024-08-24 17:02:28'),
-(000013, 'นางสาว', 'ทดสอบ', 'ระบบ', '0981231123', 'usertest@gmail.com', 'usertest', '1212312121a', 0, 'ร้านทดสอบ', 0, '2024-09-06 16:50:10');
+(000013, 'นางสาว', 'ทดสอบ', 'ระบบ', '0981231123', 'usertest@gmail.com', 'usertest', '1212312121a', 0, 'ร้านทดสอบ', 0, '2024-09-06 16:50:10'),
+(000014, 'นางสาว', 'ณัฐเนตร', 'พยัคฆ์เดช', '0945347566', '66010915510@msu.ac.th', 'Mix', 'nm060847', 0, 'mmiixx', 0, '2024-09-06 23:58:06'),
+(000015, 'นางสาว', 'Kan', 'Ok', '0902738970', 'kanokwan.pd@rmuti.ac.th', 'Pin', 'kanokwan13', 0, 'P', 0, '2024-09-06 10:14:18'),
+(000016, 'นาย', 'นนทชัย', 'โพธิ์ศรี', '0881726738', 'GasUser@gmail.com', 'GasUser', 'nontachai01', 0, 'GasMOdernShop', 80, '2024-09-07 21:43:31');
 
 -- --------------------------------------------------------
 
@@ -565,13 +588,13 @@ ALTER TABLE `zone_detail`
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
-  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=81;
+  MODIFY `id_booked` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจองแบบเรียบร้อยแล้ว', AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=73;
+  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `booking_status`
@@ -589,7 +612,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `locks`
@@ -619,7 +642,7 @@ ALTER TABLE `sub_category`
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=14;
+  MODIFY `user_id` int(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `zone_detail`

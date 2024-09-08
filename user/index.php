@@ -724,7 +724,7 @@ if (isset($_GET['category_id'])) {
 					<tbody>
                     <tr>
                     <th>หมายเลขการจอง</th>
-						<tr>${data.booking_id}</tr>
+						<td>${data.booking_id}</td>
                         </tr>
 							<tr>
 						<th scope="row">ชื่อ-สกุล</th>
