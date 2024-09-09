@@ -155,12 +155,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             echo "<td>" . $row["tel"] . "</td>";
                             echo "<td>" . $row["email"] . "</td>";
                             echo "<td>" . $row["shop_name"] . "</td>";
-                            echo "<td>" . $row["userrole"] . "
-                        <span class='question-icon mx-2' data-bs-toggle='tooltip' data-bs-placement='right' title='0 ผู้ใช้งานทั่วไป<br>1 แอดมิน/ผู้ดูแลระบบ'>
-                            <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-patch-question-fill' viewBox='0 0 16 16'>
-                                <path d='M5.933.87a2.89 2.89 0 0 1 4.134 0l.622.638.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622-.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01zM7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0m1.602-2.027c.04-.534.198-.815.846-1.26.674-.475 1.05-1.09 1.05-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.7 1.7 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03.96 0 .556-.433.867-1.014 1.318-.725.485-.947.821-.948 1.27z'/>
-                            </svg>
-                        </span></td>";
+                            echo "<td>" . ($row["userrole"] == 1 ? "แอดมิน" : "ผู้ใช้ทั่วไป") . "</td>";
                             echo "<td class='d-flex'>
                     <button class='btn mx-1 btn-sm btn-primary edit-btn' data-bs-toggle='modal' data-bs-target='#editModal' data-user-id='" . $row["user_id"] . "'>แก้ไข</button>
                         <button class='btn mx-1 btn-sm btn-danger delete-btn' $canDelete data-user-id='" . $row["user_id"] . "'>ลบ</button>
@@ -219,8 +214,9 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="edit_tel" class="form-label">โทรศัพท์</label>
-                            <input type="text" class="form-control" id="edit_tel" name="tel">
+                            <label for="edit_tel" class="form-label">เบอร์โทรศัพท์</label>
+                            <input oninput="check_tel()" type="tel" class="form-control" name="tel" id="edit_tel">
+                            <span id="span_tel" class=""></span>
                         </div>
                         <div class="mb-3">
                             <label for="edit_email" class="form-label">อีเมล</label>
@@ -254,6 +250,30 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-VoPF2pPpG8kc7Us7A5qOYeZ8y7Gz7W0C3P2BujJ8JhJ6O1KoFnvXtHktv5I4SKfQ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function check_tel() {
+            var input = document.getElementById('edit_tel');
+            var value = input.value;
+            const span_tel = document.getElementById('span_tel');
+
+            if (value.length < 10) {
+                span_tel.style.color = "red";
+                span_tel.textContent = "กรุณากรอกให้ครบ 10 หลัก";
+            } else if (value.length > 10) {
+                span_tel.style.color = "yellow";
+                span_tel.textContent = "กรุณากรอกไม่เกิน 10 หลัก";
+                input.value = value.slice(0, 10);
+
+                setTimeout(function() {
+                    span_tel.style.color = "green";
+                    span_tel.textContent = "ครบ 10 หลัก";
+                }, 2000);
+            } else {
+                span_tel.style.color = "green";
+                span_tel.textContent = "ครบ 10 หลัก";
+            }
+
+            return true;
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // การสลับการแสดงรหัสผ่าน
             document.querySelectorAll('.password-toggle').forEach(el => {
