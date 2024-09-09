@@ -87,7 +87,7 @@ $start_from = ($page - 1) * $results_per_page;
                             <div class="w-50">
                                 <form method="GET">
                                     <div class="input-group mb-3">
-                                        <input class="form-control" type="text" name="search_query" placeholder="ค้นหาโดยรหัสการจอง, ชื่อ-สกุล">
+                                        <input class="form-control" type="text" name="search_query" placeholder="รหัสการจอง,ชื่อ-สกุล">
                                         <button class="btn btn-outline-secondary" type="submit">ค้นหา</button>
                                         <a href="?reset=true" class="btn btn-outline-secondary">รีเซ็ต</a>
                                     </div>

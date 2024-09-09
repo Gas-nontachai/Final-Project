@@ -222,7 +222,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <input class="btn btn-success" type="submit" value="Submit">
+                    <input class="btn btn-success" type="submit" value="เพิ่มประเภทสินค้า">
 
                 </div>
                 </form>
@@ -236,7 +236,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="AddSubCatModalLabel"><strong>AddSubCatModal</strong></h1>
+                    <h1 class="modal-title fs-5" id="AddSubCatModalLabel"><strong>เพิ่มประเภทสินค้าย่อย</strong></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
                 </div>
                 <div class="modal-body">
@@ -277,7 +277,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <input class="btn btn-success" type="submit" value="Submit">
+                    <input class="btn btn-success" type="submit" value="เพิ่มประเภทสินค้าย่อย">
 
                 </div>
                 </form>
