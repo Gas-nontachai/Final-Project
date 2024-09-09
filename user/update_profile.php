@@ -30,7 +30,34 @@ if (!isset($_SESSION["username"])) {
     </html>';
     exit();
 }
-
+if ($_SESSION["userrole"] == 1) {
+    session_destroy();
+    echo '<!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ไม่มีสิทธิ์เข้าถึง</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="../asset/css/font.css">
+    </head>
+    <body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "หน้านี้สำหรับผู้ใช้ทั่วไป คุณคือผู้ดูแลระบบ",
+                    icon: "error",
+                    showConfirmButton: true
+                }).then((result) => {
+                    window.location.href = "../login.php";
+                });
+            });
+        </script>
+    </body>
+    </html>';
+    exit();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ดึงและทำความสะอาดข้อมูลฟอร์ม
     $user_id = $_SESSION['user_id']; // สมมติว่า user_id ถูกเก็บในเซสชัน

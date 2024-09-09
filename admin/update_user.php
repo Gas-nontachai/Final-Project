@@ -1,34 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require("../condb.php");
-if ($_SESSION["userrole"] == 0) {
-    session_destroy();
-    echo '<!DOCTYPE html>
-    <html lang="th">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ไม่มีสิทธิ์เข้าถึง</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <link rel="stylesheet" href="../asset/css/font.css">
-    </head>
-    <body>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                Swal.fire({
-                    title: "คุณไม่มีสิทธิ์เข้าถึง เฉพาะผู้ดูแลเท่านั้น",
-                    icon: "error",
-                    showConfirmButton: true
-                }).then((result) => {
-                    window.location.href = "../login.php";
-                });
-            });
-        </script>
-    </body>
-    </html>';
-    exit();
-}
+
 // ตรวจสอบว่ามีพารามิเตอร์ที่ต้องการหรือไม่
 if (
     isset($_POST['user_id']) &&
@@ -40,10 +13,6 @@ if (
     isset($_POST['email']) &&
     isset($_POST['user_role'])
 ) {
-
-    // ดีบัก: แสดงข้อมูลที่ได้รับจาก POST
-    error_log(print_r($_POST, true));
-
     $user_id = $_POST['user_id'];
     $username = $_POST['username'];
     $password = $_POST['password']; // ควรพิจารณาเข้ารหัสก่อนเก็บในฐานข้อมูล
@@ -53,32 +22,55 @@ if (
     $email = $_POST['email'];
     $userrole = $_POST['user_role'];
 
-    // เตรียม SQL statement เพื่ออัปเดตข้อมูลผู้ใช้
-    $sql = "UPDATE tbl_user SET 
-            username = ?, 
-            password = ?, 
-            shop_name = ?, 
-            tel = ?, 
-            token = ?, 
-            email = ?, 
-            userrole = ?
-            WHERE user_id = ?";
+    // ตรวจสอบการซ้ำของชื่อผู้ใช้
+    $check_username = "SELECT * FROM tbl_user WHERE username = ?";
+    $stmt = $conn->prepare($check_username);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $stmt = $conn->prepare($sql);
+    // ตรวจสอบการซ้ำของหมายเลขโทรศัพท์
+    $check_tel = "SELECT * FROM tbl_user WHERE tel = ?";
+    $stmt_tel = $conn->prepare($check_tel);
+    $stmt_tel->bind_param("s", $tel);
+    $stmt_tel->execute();
+    $result_tel = $stmt_tel->get_result();
 
-    // เรียกใช้ bind_param ให้ถูกต้อง
-    $stmt->bind_param("sssssssi", $username, $password, $shop_name, $tel, $token, $email, $userrole, $user_id);
-
-    // เรียกใช้คำสั่งและตรวจสอบความสำเร็จ
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+    if (mysqli_num_rows($result) > 0) {
+        echo json_encode(['success' => false, 'message' => 'Username นี้ได้มีการสมัครไปแล้ว']);
+        exit();
+    } else if (mysqli_num_rows($result_tel) > 0) {
+        echo json_encode(['success' => false, 'message' => 'หมายเลขโทรศัพท์นี้ได้สมัครสมาชิกไปแล้ว']);
+        exit();
     } else {
-        echo json_encode(['success' => false, 'message' => 'ไม่สามารถอัปเดตข้อมูลผู้ใช้: ' . $stmt->error]);
+        // เข้ารหัสรหัสผ่าน
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "UPDATE tbl_user SET 
+                username = ?, 
+                password = ?, 
+                shop_name = ?, 
+                tel = ?, 
+                token = ?, 
+                email = ?, 
+                userrole = ?
+                WHERE user_id = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssssi", $username, $hashed_password, $shop_name, $tel, $token, $email, $userrole, $user_id);
+
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'ไม่สามารถอัปเดตข้อมูลผู้ใช้: ' . $stmt->error]);
+        }
+
+        $stmt->close();
     }
 
-    $stmt->close();
+    $stmt_tel->close();
+    $conn->close();
 } else {
     echo json_encode(['success' => false, 'message' => 'ข้อมูลที่ต้องการหายไป']);
 }
-
-$conn->close();
+?>
