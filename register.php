@@ -241,16 +241,16 @@ if (isset($_POST["submit"])) {
                 </div>
                 <div class="form-group">
                     <label for="firstname">ชื่อ</label>
-                    <input type="text" class="form-control" name="firstname" placeholder="สมบูรณ์">
+                    <input type="text" class="form-control" name="firstname" placeholder="ชื่อ">
                 </div>
                 <div class="form-group">
                     <label for="lastname">นามสกุล</label>
-                    <input type="text" class="form-control" name="lastname" placeholder="ยิ่งใหญ่">
+                    <input type="text" class="form-control" name="lastname" placeholder="นามสกุล">
                 </div>
                 <div class="form-group">
                     <label for="tel">เบอร์โทรศัพท์</label>
                     <input oninput="check_tel()" type="tel" class="form-control" name="tel" id="tel" placeholder="088xxxxxxx">
-                    <span id="span_tel" class="text-danger"></span>
+                    <span id="span_tel" class=""></span>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>

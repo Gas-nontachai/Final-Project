@@ -244,11 +244,11 @@
                                 <input type="text" class="form-control" name="editlastname" value="<?php echo $SQLlastname; ?>">
                             </div>
                         </div>
-
                         <div class="mb-3 row">
                             <label for="tel" class="col-sm-3 col-form-label"><strong>เบอร์โทรศัพท์:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="edittel" id="edittel" value="<?php echo $SQLtel; ?>">
+                                <input oninput="check_tel()" type="tel" class="form-control" name="edittel" id="edittel" value="<?php echo $SQLtel; ?>">
+                                <span id="span_tel" class=""></span>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -302,6 +302,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function check_tel() {
+            var input = document.getElementById('edittel');
+            var value = input.value;
+            const span_tel = document.getElementById('span_tel');
+
+            if (value.length < 10) {
+                span_tel.style.color = "red";
+                span_tel.textContent = "กรุณากรอกให้ครบ 10 หลัก";
+            } else if (value.length > 10) {
+                span_tel.style.color = "yellow";
+                span_tel.textContent = "กรุณากรอกไม่เกิน 10 หลัก";
+                input.value = value.slice(0, 10);
+
+                setTimeout(function() {
+                    span_tel.style.color = "green";
+                    span_tel.textContent = "ครบ 10 หลัก";
+                }, 2000);
+            } else {
+                span_tel.style.color = "green";
+                span_tel.textContent = "ครบ 10 หลัก";
+            }
+
+            return true;
+        }
+
         function updateTime() {
             var now = new Date();
             var currentTime = now.toTimeString().split(' ')[0];

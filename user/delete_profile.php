@@ -56,8 +56,8 @@ if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
                   <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js'></script>
                   <script>
                     Swal.fire({
-                        title: 'ไม่สามารถลบโปรไฟล์ได้ในขณะนี้',
-                        text: 'เนื่องจากมีการจองล็อคอยู่ โปรดรอคำขอจองล็อคหมดอายุแล้วลองใหม่อีกครั้ง',
+                        title: 'ผิดพลาด!',
+                        text: 'เกิดข้อผิดพลาดในการลบโปรไฟล์: " . $conn->error . "',
                         icon: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'ตกลง'
