@@ -106,7 +106,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../asset/pdf/user_manual.pdf" target="_blank" class="my-1 border nav-link link-dark btn btn-outline-info">
+                            <a href="../asset/pdf/คู่มือการใช้งานสำหรับผู้ใช้งาน.pdf" target="_blank" class="my-1 border nav-link link-dark btn btn-outline-info">
                                 <div class="mx-2 p-2 d-flex align-items-center ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="ms-3 bi bi-journal-bookmark" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M6 8V1h1v6.117L8.743 6.07a.5.5 0 0 1 .514 0L11 7.117V1h1v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8" />
