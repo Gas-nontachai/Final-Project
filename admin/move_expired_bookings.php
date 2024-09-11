@@ -17,12 +17,11 @@ try {
     }
 
     // อัปเดตสถานะ booking_status = 11 สำหรับการจองที่หมดอายุ
-    $update_status_query_expired = "UPDATE booking 
-                                    SET booking_status = 11 
-                                    WHERE (expiration_date < DATE_ADD(NOW(), INTERVAL 1 DAY) 
-                                    AND booking_type = 'PerDay')
-                                    OR (expiration_date < DATE_ADD(NOW(), INTERVAL 1 MONTH) 
-                                    AND booking_type = 'PerMonth')";
+    $update_status_query_expired = "UPDATE booking
+                                        SET booking_status = 11
+                                        WHERE (booking_type = 'PerDay' AND expiration_date < NOW() - INTERVAL 1 DAY)
+                                        OR (booking_type = 'PerMonth' AND expiration_date < NOW() - INTERVAL 1 MONTH);
+                                        ";
     if ($conn->query($update_status_query_expired) === FALSE) {
         throw new Exception("ไม่สามารถอัปเดตสถานะการจองเป็น 11 ได้: " . $conn->error);
     }

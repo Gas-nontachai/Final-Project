@@ -121,38 +121,107 @@ if ($userrole == 0) {
                             <a href="?reset=true" class="btn btn-outline-secondary">รีเซ็ต</a>
                         </div>
                     </form>
+
                     <?php
-                    // จำนวนระเบียนต่อหน้า
-                    $records_per_page = 5;
+                    // กำหนดค่า $results_per_page
+                    $results_per_page = 5; // จำนวนสมาชิกที่ต้องการแสดงต่อหน้า
 
-                    // รับหน้าปัจจุบันจาก query string, ถ้าไม่ตั้งค่าให้ค่าเริ่มต้นเป็น 1
+                    // คำนวณจำนวนหน้าทั้งหมด
+                    $sql_total = "SELECT COUNT(*) FROM tbl_user";
+                    $result_total = $conn->query($sql_total);
+                    $row_total = $result_total->fetch_row();
+                    $total_records = $row_total[0];
+
+                    // ตรวจสอบว่า $results_per_page มากกว่า 0
+                    if ($results_per_page > 0) {
+                        $total_pages = ceil($total_records / $results_per_page);
+                    } else {
+                        echo "Error: Results per page must be greater than 0.";
+                        exit;
+                    }
+
                     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    $adjacents = 1; // จำนวนหน้าที่จะแสดงข้างหน้าและข้างหลังเลขหน้า
 
-                    // คำนวณระเบียนเริ่มต้นสำหรับหน้าปัจจุบัน
-                    $start_from = ($current_page - 1) * $records_per_page;
+                    echo "<nav>";
+                    echo "<ul class='pagination justify-content-center'>";
 
-                    // สร้างคำสั่ง SQL ด้วยการแบ่งหน้า
+                    // ปุ่ม Previous
+                    if ($current_page > 1) {
+                        echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page - 1) . "'>Previous</a></li>";
+                    }
+
+                    // แสดงปุ่มเลขหน้า
+                    if ($total_pages <= (1 + ($adjacents * 2))) {
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            if ($i == $current_page) {
+                                echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                            } else {
+                                echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                            }
+                        }
+                    } else {
+                        if ($current_page <= ($adjacents * 2)) {
+                            for ($i = 1; $i <= (4 + ($adjacents * 2)); $i++) {
+                                if ($i == $current_page) {
+                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                                }
+                            }
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='?page=" . $total_pages . "'>" . $total_pages . "</a></li>";
+                        } elseif ($current_page > ($total_pages - ($adjacents * 2))) {
+                            echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            for ($i = ($total_pages - (4 + ($adjacents * 2))); $i <= $total_pages; $i++) {
+                                if ($i == $current_page) {
+                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                                }
+                            }
+                        } else {
+                            echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            for ($i = ($current_page - $adjacents); $i <= ($current_page + $adjacents); $i++) {
+                                if ($i == $current_page) {
+                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
+                                }
+                            }
+                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='?page=" . $total_pages . "'>" . $total_pages . "</a></li>";
+                        }
+                    }
+
+                    // ปุ่ม Next
+                    if ($current_page < $total_pages) {
+                        echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page + 1) . "'>Next</a></li>";
+                    }
+
+                    echo "</ul>";
+                    echo "</nav>";
+
+                    // ค้นหาข้อมูลตาม search_query
                     $sql = "SELECT * FROM tbl_user";
-
                     if (isset($_GET['search_query']) && !empty($_GET['search_query'])) {
-                        $search_query = $_GET['search_query'];
+                        $search_query = $conn->real_escape_string($_GET['search_query']);
                         $sql .= " WHERE user_id LIKE '%$search_query%' 
-                          OR CONCAT_WS(' ', prefix, firstname, lastname) LIKE '%$search_query%' 
-                          OR username LIKE '%$search_query%'
-                          OR tel LIKE '%$search_query%'";
+                OR CONCAT_WS(' ', prefix, firstname, lastname) LIKE '%$search_query%' 
+                OR username LIKE '%$search_query%' 
+                OR tel LIKE '%$search_query%'";
                     }
 
                     if (isset($_GET['reset'])) {
                         $sql = "SELECT * FROM tbl_user";
                     }
 
-                    // นับจำนวนระเบียนทั้งหมด
-                    $total_records_sql = $sql;
-                    $result_count = $conn->query($total_records_sql);
-                    $total_records = $result_count->num_rows;
+                    // การแบ่งหน้า
+                    $start_from = ($current_page - 1) * $results_per_page;
+                    $sql .= " LIMIT $start_from, $results_per_page";
 
-                    // แก้ไขคำสั่ง SQL เพื่อรวม LIMIT และ OFFSET สำหรับการแบ่งหน้า
-                    $sql .= " LIMIT $start_from, $records_per_page";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
@@ -173,45 +242,33 @@ if ($userrole == 0) {
                         echo "<tbody>";
 
                         while ($row = $result->fetch_assoc()) {
-                            $fullmembername = $row["prefix"] . "" . $row["firstname"] . " " . $row["lastname"];
-                            $password = htmlspecialchars($row["password"]); // ทำความสะอาดข้อมูลเพื่อความปลอดภัย
+                            $fullmembername = htmlspecialchars($row["prefix"] . " " . $row["firstname"] . " " . $row["lastname"]);
+                            $password = htmlspecialchars($row["password"]);
                             $canDelete = (strtotime($row['last_login']) < strtotime('-1 year')) ? '' : 'disabled';
-                            echo "<tr data-user-id='" . $row["user_id"] . "'>";
-                            echo "<td><strong>" . $row["user_id"] . "</strong></td>";
-                            echo "<td>" . $row["username"] . "</td>";
+                            echo "<tr data-user-id='" . htmlspecialchars($row["user_id"]) . "'>";
+                            echo "<td><strong>" . htmlspecialchars($row["user_id"]) . "</strong></td>";
+                            echo "<td>" . htmlspecialchars($row["username"]) . "</td>";
                             echo "<td><span class='password-toggle' data-password='$password'>********</span></td>";
                             echo "<td>" . $fullmembername . "</td>";
-                            echo "<td>" . $row["tel"] . "</td>";
-                            echo "<td>" . $row["email"] . "</td>";
-                            echo "<td>" . $row["shop_name"] . "</td>";
+                            echo "<td>" . htmlspecialchars($row["tel"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($row["shop_name"]) . "</td>";
                             echo "<td>" . ($row["userrole"] == 1 ? "แอดมิน" : "ผู้ใช้ทั่วไป") . "</td>";
                             echo "<td class='d-flex'>
-                    <button class='btn mx-1 btn-sm btn-primary edit-btn' data-bs-toggle='modal' data-bs-target='#editModal' data-user-id='" . $row["user_id"] . "'>แก้ไข</button>
-                        <button class='btn mx-1 btn-sm btn-danger delete-btn' $canDelete data-user-id='" . $row["user_id"] . "'>ลบ</button>
-                        </td>";
+                        <button class='btn mx-1 btn-sm btn-primary edit-btn' data-bs-toggle='modal' data-bs-target='#editModal' data-user-id='" . htmlspecialchars($row["user_id"]) . "'>แก้ไข</button>
+                        <button class='btn mx-1 btn-sm btn-danger delete-btn' $canDelete data-user-id='" . htmlspecialchars($row["user_id"]) . "'>ลบ</button>
+                    </td>";
                             echo "</tr>";
                         }
                         echo "</tbody>";
                         echo "</table>";
-
-                        // การควบคุมการแบ่งหน้า
-                        $total_pages = ceil($total_records / $records_per_page);
-                        echo "<nav aria-label='Page navigation'>";
-                        echo "<ul class='pagination'>";
-
-                        for ($page = 1; $page <= $total_pages; $page++) {
-                            $active = ($page == $current_page) ? 'active' : '';
-                            echo "<li class='page-item $active'><a class='page-link' href='?page=$page" . (isset($_GET['search_query']) ? "&search_query=" . urlencode($_GET['search_query']) : '') . "'>$page</a></li>";
-                        }
-
-                        echo "</ul>";
-                        echo "</nav>";
                     } else {
                         echo "ไม่พบข้อมูล";
                     }
                     ?>
                 </div>
             </div>
+
         </div>
 
     </div>

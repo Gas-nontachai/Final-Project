@@ -620,13 +620,19 @@ if (isset($_GET['category_id'])) {
                                         content += `
                             </tbody>
                         </table>`;
-
-                                        // Add cancel button to modal footer
                                         const footer = document.querySelector('#viewBookingModal .modal-footer');
-                                        footer.innerHTML = `
-                            <button id="cancelOrderBtn" class="btn btn-danger">ยกเลิกการจอง</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                        `;
+                                        if ([1, 2, 3].includes(data.booking_status)) {
+                                            // Add cancel button to modal footer
+                                            footer.innerHTML = `
+                                                                <button id="cancelOrderBtn" class="btn btn-danger">ยกเลิกการจอง</button>
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                                                            `;
+                                        } else {
+                                            footer.innerHTML = `
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                                                            `;
+                                        }
+
 
                                         // Attach event listener to the cancel button
                                         const cancelOrderBtn = document.getElementById('cancelOrderBtn');

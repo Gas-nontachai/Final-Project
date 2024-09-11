@@ -307,18 +307,19 @@ if (isset($_GET['category_id'])) {
                             echo "<table class='table table-striped'>";
                             echo "<thead>
                         <tr>
+                            <th>การกระทำ</th>
                             <th>รหัสการจอง</th>
                             <th>วันที่จอง</th>
                             <th>รายละเอียดโซน</th>
                             <th>จำนวน</th>
                             <th>สถานะ</th>
                             <th>วันหมดอายุคำจอง</th>
-                            <th>การกระทำ</th>
                         </tr>
                     </thead>";
                             echo "<tbody>";
 
                             while ($row = $result->fetch_assoc()) {
+
                                 $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
                                 $slip_img = $row["slip_img"] ? "<img src='" . $row["slip_img"] . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
                                 if ($row["booking_type"] === 'PerDay') {
@@ -328,25 +329,7 @@ if (isset($_GET['category_id'])) {
                                 } else {
                                     $booking_type_display = 'ไม่ทราบประเภทการจอง';
                                 }
-                                echo "<tr>
-                                        <td>" . htmlspecialchars($row["booking_id"]) . "</td>
-                                        <td>" . $booking_date . "</td>
-                                        <td>" . $booking_type_display   . " ( " . htmlspecialchars($row["zone_detail"]) . ")</td>
-                                        <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
-                            ";
-                                if ($row["booking_status"] === '4' || $row["booking_status"] === '8') {
-                                    echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
-                                } else if ($row["booking_status"] === '1' || $row["booking_status"] === '2' || $row["booking_status"] === '3' || $row["booking_status"] === '9') {
-                                    echo "<td style='color: orange;'>" . htmlspecialchars($row["status"]) . "</td>";
-                                } else {
-                                    echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
-                                }
-
-                                if ($row["booking_status"] === '4') {
-                                    echo "<td>" . htmlspecialchars($row["expiration_date"]) . "</td>";
-                                } else {
-                                    echo "<td>คำขอยังไม่สมบูรณ์</td>";
-                                }
+                                echo "<tr>";
                                 switch ($row["booking_status"]) {
                                     case 1:
                                         echo "<td>
@@ -402,6 +385,25 @@ if (isset($_GET['category_id'])) {
                                     default:
                                         echo "ไม่ทราบสถานะ";
                                 }
+                                echo " <td>" . htmlspecialchars($row["booking_id"]) . "</td>
+                                        <td>" . $booking_date . "</td>
+                                        <td>" . $booking_type_display   . " ( " . htmlspecialchars($row["zone_detail"]) . ")</td>
+                                        <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>
+                            ";
+                                if ($row["booking_status"] === '4' || $row["booking_status"] === '8') {
+                                    echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
+                                } else if ($row["booking_status"] === '1' || $row["booking_status"] === '2' || $row["booking_status"] === '3' || $row["booking_status"] === '9') {
+                                    echo "<td style='color: orange;'>" . htmlspecialchars($row["status"]) . "</td>";
+                                } else {
+                                    echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
+                                }
+
+                                if ($row["booking_status"] === '4') {
+                                    echo "<td>" . htmlspecialchars($row["expiration_date"]) . "</td>";
+                                } else {
+                                    echo "<td>คำขอยังไม่สมบูรณ์</td>";
+                                }
+
                                 echo " </tr>";
                             }
 
@@ -488,11 +490,11 @@ if (isset($_GET['category_id'])) {
                         <label><strong>เลือกช่องทางการชำระเงิน:</strong></label>
                         <div>
                             <input type="radio" name="paymentMethod" value="mobile" id="mobileBanking">
-                            <label for="mobileBanking">Mobile Banking</label>
+                            <label for="mobileBanking">Mobile Banking(บัญชีธนาคาร)</label>
                         </div>
                         <div>
                             <input type="radio" name="paymentMethod" value="token" id="tokenPayment">
-                            <label for="tokenPayment">Token</label>
+                            <label for="tokenPayment">Token(เหรียญในระบบ)</label>
                         </div>
                     </div>
 
@@ -846,12 +848,27 @@ if (isset($_GET['category_id'])) {
                                         <select name="zone" id="zone" class="form-select" onchange="updatePrices()">
                                             <option value="#">กรุณาเลือกโซน</option>
                                             <?php
-                                            $sql = "SELECT * FROM zone_detail ORDER BY zone_name";
-                                            $result = $conn->query($sql);
+                                            $sql = "SELECT z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth,
+                                                        SUM(CASE WHEN l.available = 0 THEN 1 ELSE 0 END) AS available_locks
+                                                    FROM zone_detail z
+                                                    INNER JOIN locks l ON z.zone_id = l.zone_id
+                                                    GROUP BY z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth
+                                                    ORDER BY z.zone_name;";
 
+                                            $result = $conn->query($sql);
                                             if ($result->num_rows > 0) {
                                                 while ($row = $result->fetch_assoc()) {
-                                                    echo '<option value="' . $row['zone_id'] . '">' . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . '</option>';
+                                                    // Check if available_locks is 0 to disable the option
+                                                    $disabled = ($row['available_locks'] == 0) ? 'disabled' : '';
+
+                                                    // Set the style and text, either showing "โซนเต็ม" in red or the normal zone detail
+                                                    $redStyle = ($row['available_locks'] == 0) ? 'color:red;' : '';
+                                                    $text = ($row['available_locks'] == 0) ? ' - โซนเต็ม' : '';
+
+                                                    // Echo the option, conditionally adding the disabled attribute, style, and dynamic text
+                                                    echo '<option style="' . $redStyle . '" value="' . $row['zone_id'] . '" ' . $disabled . '>'
+                                                        . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . $text
+                                                        . '</option>';
                                                 }
                                             } else {
                                                 echo '<option value="">No categories found</option>';

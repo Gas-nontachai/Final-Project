@@ -1,6 +1,8 @@
 <?php
 session_start();
 require("../condb.php");
+
+// Check if the user is an admin and redirect if true
 if ($_SESSION["userrole"] == 1) {
     session_destroy();
     echo '<!DOCTYPE html>
@@ -29,6 +31,8 @@ if ($_SESSION["userrole"] == 1) {
     </html>';
     exit();
 }
+
+// Check if the user is logged in
 if (!isset($_SESSION["username"])) {
     echo '<!DOCTYPE html>
     <html lang="th">
@@ -46,10 +50,9 @@ if (!isset($_SESSION["username"])) {
                 Swal.fire({
                     title: "กรุณาล็อคอินก่อน",
                    icon: "error",
-                        showConfirmButton: true // ซ่อนปุ่ม "OK"
+                   showConfirmButton: true
                 }).then((result) => {
-                        window.location.href = "../login.php";
-                    
+                    window.location.href = "../login.php";
                 });
             });
         </script>
@@ -58,6 +61,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
+// Initialize variables
 $member_id = $_SESSION["user_id"];
 $username = $_SESSION["username"];
 $shop_name = $_SESSION["shop_name"];
@@ -68,8 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
     $zone = $_POST["zone"];
     $booking_type = $_POST["typeReserve"];
     $booking_amount = $_POST["amount"];
-    $booking_status = "1";
-    $booking_lock_number = "NONE"; // Assuming this is needed
+    $booking_status = "1"; // Assuming "1" means booked
     $total_price = 0;
 
     // Calculate total price based on the booking type and amount
@@ -92,13 +95,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
         $stmt->close();
     }
 
-    // Insert the booking information into the database
-    $sql = "INSERT INTO booking (member_id, booking_status, booking_type, zone_id, booking_amount, total_price, product_type, sub_product_type) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    // Get the current date and time in the required format
+    $current_time = date('Y-m-d H:i:s');
+
+    // Insert booking information into the database
+    $sql = "INSERT INTO booking (member_id, booking_status, booking_type, zone_id, booking_amount, total_price, product_type, sub_product_type, booking_date) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("isssisss", $member_id, $booking_status, $booking_type, $zone, $booking_amount, $total_price, $product_type, $sub_product_type);
+        $stmt->bind_param("isssissss", $member_id, $booking_status, $booking_type, $zone, $booking_amount, $total_price, $product_type, $sub_product_type, $current_time);
 
         if ($stmt->execute()) {
             echo '<!DOCTYPE html>
@@ -117,11 +123,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                        Swal.fire({
                             title: "ส่งคำขอจองพื้นที่การขายเรียบร้อย",
                             icon: "success",
-                                showConfirmButton: true // ซ่อนปุ่ม "OK"
+                            showConfirmButton: true
                         }).then(() => {
-                            window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                            window.location.href = "./index.php";
                         });
-
                     });
                 </script>
             </body>
@@ -143,11 +148,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                         Swal.fire({
                             title: "เกิดข้อผิดพลาดในการจอง ข้อมูลไม่ครบถ้วน",
                            icon: "error",
-                        showConfirmButton: true // ซ่อนปุ่ม "OK"
+                           showConfirmButton: true
                         }).then(() => {
-                            window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                            window.location.href = "./index.php";
                         });
-
                     });
                 </script>
             </body>
@@ -172,12 +176,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
                     Swal.fire({
                         title: "เกิดข้อผิดพลาดในการจอง",
                         icon: "error",
-                        
-                        showConfirmButton: true // ซ่อนปุ่ม "OK"
+                        showConfirmButton: true
                     }).then(() => {
-                        window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                        window.location.href = "./index.php";
                     });
-
                 });
             </script>
         </body>
