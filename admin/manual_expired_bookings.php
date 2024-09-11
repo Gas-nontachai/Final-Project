@@ -1,7 +1,14 @@
 <?php
 session_start();
 require("../condb.php");
+
 try {
+    // กำหนดตัวแปร current_time
+    $current_time = date('Y-m-d H:i:s');
+
+    // แสดง current_time สำหรับการดีบัก
+    echo 'Current Time: ' . $current_time . '<br>';
+
     // เริ่มการทำธุรกรรม
     $conn->begin_transaction();
 
@@ -19,9 +26,8 @@ try {
     // อัปเดตสถานะ booking_status = 11 สำหรับการจองที่หมดอายุ
     $update_status_query_expired = "UPDATE booking
                                         SET booking_status = 11
-                                        WHERE (booking_type = 'PerDay' AND expiration_date < NOW() - INTERVAL 1 DAY)
-                                        OR (booking_type = 'PerMonth' AND expiration_date < NOW() - INTERVAL 1 MONTH);
-                                        ";
+                                        WHERE (booking_type = 'PerDay' AND expiration_date < '$current_time' - INTERVAL 1 DAY)
+                                        OR (booking_type = 'PerMonth' AND expiration_date < '$current_time' - INTERVAL 1 MONTH)";
     if ($conn->query($update_status_query_expired) === FALSE) {
         throw new Exception("ไม่สามารถอัปเดตสถานะการจองเป็น 11 ได้: " . $conn->error);
     }
@@ -92,8 +98,8 @@ try {
                     Swal.fire({
                         title: "สำเร็จ!",
                         text: "ดำเนินการสำเร็จ: จำนวนแถวที่ถูกอัปเดตสถานะ: ' . $affected_rows_move . ', จำนวนแถวที่ถูกย้าย: ' . $affected_rows_move . ', จำนวนแถวที่ถูกอัปเดต: ' . $affected_rows_update . ', จำนวนแถวที่ถูกลบ: ' . $affected_rows_delete . '",
-                         icon: "success",
-                                showConfirmButton: true // ซ่อนปุ่ม "OK"
+                        icon: "success",
+                        showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then(function() {
                         window.location.href = "index.php"; // เปลี่ยนเป็นหน้าที่ต้องการหลังแสดง Swal
                     });
