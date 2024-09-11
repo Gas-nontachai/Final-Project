@@ -123,7 +123,7 @@ if ($userrole == 0) {
                     </form>
                     <?php
                     // จำนวนระเบียนต่อหน้า
-                    $records_per_page = 10;
+                    $records_per_page = 5;
 
                     // รับหน้าปัจจุบันจาก query string, ถ้าไม่ตั้งค่าให้ค่าเริ่มต้นเป็น 1
                     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;

@@ -180,11 +180,11 @@ if (isset($_GET['category_id'])) {
                                             $percentage_available = ($total_locks > 0) ? ($available_locks / $total_locks) * 100 : 0;
 
                                             $color = '';
-                                            if ($percentage_available > 50) {
+                                            if ($percentage_available > 30) {
                                                 $color = '<strong class="text-success border border-secondary border-2 px-2 mx-1 rounded">
                                                             ว่าง: ' . $available_locks . '/' . $total_locks . '
                                                         </strong>';  // สีเขียว
-                                            } else if ($percentage_available <= 20) {
+                                            } else if ($percentage_available <= 30) {
                                                 $color = '<strong class="text-danger border border-secondary border-2 px-2 mx-1 rounded">
                                                             ว่าง: ' . $available_locks . '/' . $total_locks . '
                                                         </strong>';  // สีแดง

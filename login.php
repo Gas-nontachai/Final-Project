@@ -37,14 +37,14 @@ if (isset($_POST["submit"])) {
                 $updateStmt->execute();
 
                 if ($row['userrole'] == 0) {
-                    $message = 'ล็อคอินสำเร็จ|./user/index.php';
+                    $message = 'success|ล็อคอินสำเร็จ|./user/index.php';
                 } elseif ($row['userrole'] == 1) {
-                    $message = 'ล็อคอินสำเร็จ|./admin/index.php';
+                    $message = 'success|ล็อคอินสำเร็จ|./admin/index.php';
                 } else {
-                    $message = 'บทบาทไม่รู้จัก';
+                    $message = 'error|บทบาทไม่รู้จัก';
                 }
             } else {
-                $message = 'รหัสผ่านไม่ถูกต้อง';
+                $message = 'error|รหัสผ่านไม่ถูกต้อง|./login.php';
             }
         }
     }
@@ -175,12 +175,13 @@ if (isset($_POST["submit"])) {
         document.addEventListener('DOMContentLoaded', function() {
             <?php if ($message): ?>
                 var messageParts = "<?php echo $message; ?>".split('|');
-                var messageText = messageParts[0];
-                var redirectUrl = messageParts[1] || null;
+                var icontest = messageParts[0];
+                var messageText = messageParts[1];
+                var redirectUrl = messageParts[2] || null;
 
                 Swal.fire({
                     title: messageText,
-                    icon: redirectUrl ? 'success' : 'error',
+                    icon: icontest,
                     showConfirmButton: true, // ซ่อนปุ่ม "OK"
                 }).then((result) => {
                     window.location.href = redirectUrl;

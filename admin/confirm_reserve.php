@@ -414,9 +414,16 @@ if (isset($_GET['category_id'])) {
                                                 echo "<tr>
                                 <td>" . htmlspecialchars($row["booking_id"]) . "</td>
                                 <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
-                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>
-                                <td>" . htmlspecialchars($row["booking_type"]) . "</td>
-                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
+                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>";
+                                                if ($row["booking_type"] === 'PerDay') {
+                                                    $booking_type_display = 'รายวัน';
+                                                } elseif ($row["booking_type"] === 'PerMonth') {
+                                                    $booking_type_display = 'รายเดือน';
+                                                } else {
+                                                    $booking_type_display = 'ไม่ทราบประเภทการจอง';
+                                                }
+                                                echo "<td>" . $booking_type_display . "</td>
+                                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
                                                 if ($row["booking_status"] === '4') {
                                                     echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
                                                 } else {
