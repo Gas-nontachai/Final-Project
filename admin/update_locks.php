@@ -47,7 +47,7 @@ if (isset($_POST['booking_id']) && isset($_POST['zone_id']) && isset($_POST['id_
 
             // คำนวณวันที่หมดอายุ
             if ($booking_type == 'PerDay') {
-                $expiration_date = date('Y-m-d 08:00:00', strtotime($booking_date . ' +1 day'));
+                $expiration_date = date('Y-m-d 23:59:58', strtotime($booking_date));
             } elseif ($booking_type == 'PerMonth') {
                 $expiration_date = date('Y-m-d 23:59:58', strtotime($booking_date . ' +1 month'));
             }
