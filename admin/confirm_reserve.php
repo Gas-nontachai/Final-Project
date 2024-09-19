@@ -141,12 +141,7 @@ if (isset($_GET['category_id'])) {
     <div class="container mt-4 bgcolor py-4 rounded">
         <div class="container ">
             <div class="d-flex flex-column overflow-auto">
-                <div class="col-12 d-flex flex-wrap justify-content-center align-item-center py-4 rounded ">
-                    <!-- fetch_zone_detail -->
-                    <?php
-                    include('./fetch_zone_detail.php');
-                    ?>
-                </div>
+
 
                 <!-- Display -->
                 <div class="col-12 container my-4 p-2 border rounded overflow-auto" style="width: 100%; height: 40rem; background-color: rgba(255, 255, 255);">
@@ -210,16 +205,16 @@ if (isset($_GET['category_id'])) {
 
                                         // การดึงข้อมูล
                                         $sql = "SELECT BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
-                        FROM booking AS BK 
-                        INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
-                        INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
-                        INNER JOIN category AS C ON BK.product_type = C.id_category
-                        INNER JOIN sub_category AS SC ON BK.sub_product_type = SC.idsub_category
-                        INNER JOIN zone_detail AS ZD ON BK.zone_id = ZD.zone_id
-                        WHERE booking_status != 4
-                        $searchCondition
-                        ORDER BY BK.booking_date DESC
-                        LIMIT $itemsPerPage OFFSET $offset";
+                                                FROM booking AS BK 
+                                                INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
+                                                INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
+                                                INNER JOIN category AS C ON BK.product_type = C.id_category
+                                                INNER JOIN sub_category AS SC ON BK.sub_product_type = SC.idsub_category
+                                                INNER JOIN zone_detail AS ZD ON BK.zone_id = ZD.zone_id
+                                                WHERE booking_status != 4
+                                                $searchCondition
+                                                ORDER BY BK.booking_date DESC
+                                                LIMIT $itemsPerPage OFFSET $offset";
 
                                         $result = $conn->query($sql);
 
@@ -228,93 +223,107 @@ if (isset($_GET['category_id'])) {
                                         $totalRow = $totalResult->fetch_assoc()['total'];
                                         $totalPages = ceil($totalRow / $itemsPerPage);
 
-                                        if ($result->num_rows > 0) {
-                                            echo "<table class='table table-striped'>";
-                                            echo "<thead>
-                            <tr>
-                                <th>รหัสการจอง</th>
-                                <th>รายละเอียดโซน</th>
-                                <th>หมวดหมู่</th>
-                                <th>ประเภทการจอง</th>
-                                <th>จำนวนการจอง</th>
-                                <th>สถานะ</th>
-                                <th>วันที่จอง</th>
-                                <th>การกระทำ</th>
-                            </tr>
-                        </thead>";
-                                            echo "<tbody>";
+                                        if ($result->num_rows > 0) { ?>
+                                            <ul class="list-group">
+                                                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                                    <li class="list-group-item">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div>
+                                                                <span> <strong><?php echo $row['booking_id']; ?></strong> </span>
+                                                                <span><?php echo $row['fullname']; ?></span>
+                                                                <p>
+                                                                    <strong>
+                                                                        ยอดทั้งหมด <?php echo htmlspecialchars($row['total_price']); ?> บาท
+                                                                    </strong>
+                                                                </p>
+                                                                <p>
+                                                                    <strong>
+                                                                        สถานะ : <?php
+                                                                                if ($row["booking_status"] === '4' || $row["booking_status"] === '8') {
+                                                                                    echo "<span style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</span>";
+                                                                                } else if ($row["booking_status"] === '1' || $row["booking_status"] === '2' || $row["booking_status"] === '3' || $row["booking_status"] === '9') {
+                                                                                    echo "<span style='color: orange;'>" . htmlspecialchars($row["status"]) . "</span>";
+                                                                                } else {
+                                                                                    echo "<span style='color: red ;'>" . htmlspecialchars($row["status"]) . "</span>";  // You can change 'green' to any other color or style you prefer
+                                                                                }
 
-                                            while ($row = $result->fetch_assoc()) {
-                                                $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
-                                                $slip_img = $row["slip_img"] ? "<img src='" . htmlspecialchars($row["slip_img"]) . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
 
-                                                echo "<tr>
-                                <td>" . htmlspecialchars($row["booking_id"]) . "</td>
-                                <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
-                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>";
-                                                if ($row["booking_type"] === 'PerDay') {
-                                                    $booking_type_display = 'รายวัน';
-                                                } elseif ($row["booking_type"] === 'PerMonth') {
-                                                    $booking_type_display = 'รายเดือน';
-                                                } else {
-                                                    $booking_type_display = 'ไม่ทราบประเภทการจอง';
-                                                }
-                                                echo "<td>" . $booking_type_display . "</td>";
-                                                echo "  <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
-                                                if ($row["booking_status"] === '4') {
-                                                    echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
-                                                } else {
-                                                    echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
-                                                }
-                                                echo "                                <td>" . $booking_date . "</td>";
-                                                switch ($row["booking_status"]) {
-                                                    case 1:
-                                                        echo " <td>
+
+                                                                                ?>
+                                                                    </strong>
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                <div>
+                                                                    <span>วันที่จอง : <?php echo $row['booking_date']; ?></span>
+                                                                    <br>
+                                                                    <span>วันที่หมดอายุการจอง :<?php if ($row["booking_status"] === '4') {
+                                                                                                    echo "<span>" . htmlspecialchars($row["expiration_date"]) . "</span>";
+                                                                                                } else {
+                                                                                                    echo "<span>คำขอยังไม่สมบูรณ์</span>";
+                                                                                                } ?></span>
+                                                                </div>
+                                                                <div class="mt-1">
+
+                                                                    <?php switch ($row["booking_status"]) {
+                                                                        case 1:
+                                                                            echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         </td>";
-                                                        break;
-                                                    case 2:
-                                                        echo " <td>
+                                                                            break;
+                                                                        case 2:
+                                                                            echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                         </td>";
-                                                        break;
-                                                    case 3:
-                                                        echo " <td>
+                                                                            break;
+                                                                        case 3:
+                                                                            echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                         </td>";
-                                                    case 5:
-                                                        echo " <td>
+                                                                            break;
+                                                                        case 5:
+                                                                            echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                     <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
                                    </td>";
-                                                        break;
-                                                    case 6:
-                                                        echo " <td>
+                                                                            break;
+                                                                        case 6:
+                                                                            echo " <td>
                                     <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                     </td>";
-                                                        break;
-                                                    case 7:
-                                                        echo " <td>
+                                                                            break;
+                                                                        case 7:
+                                                                            echo " <td>
                                     <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
                                     </td>";
-                                                        break;
-                                                    case 9:
-                                                        echo " <td>
+                                                                            break;
+                                                                        case 9:
+                                                                            echo " <td>
                                         <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
                                         <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
                                         </td>";
-                                                        break;
-                                                    default:
-                                                        echo "ไม่ทราบสถานะ";
-                                                }
-                                                echo "</tr>";
-                                            }
+                                                                        case 10:
+                                                                            echo " <td>
+                                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                                </td>";
+                                                                            break;
+                                                                        default:
+                                                                            echo " <td>
+                                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                                </td>";
+                                                                    } ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                            echo "</tbody>
-                            </table>";
-                                        } else {
+
+                                                    </li>
+                                                <?php endwhile; ?>
+                                            </ul>
+
+                                        <?php  } else {
                                             echo "<p class='text-center'>ยังไม่ได้มีการจอง</p>";
                                         }
                                         ?>
@@ -391,76 +400,85 @@ if (isset($_GET['category_id'])) {
                                         $totalRow = $totalResult->fetch_assoc()['total'];
                                         $totalPages = ceil($totalRow / $itemsPerPage);
 
-                                        if ($result->num_rows > 0) {
-                                            echo "<table class='table table-striped'>";
-                                            echo "<thead>
-                            <tr>
-                                <th>รหัสการจอง</th>
-                                <th>รายละเอียดโซน</th>
-                                <th>หมวดหมู่</th>
-                                <th>ประเภทการจอง</th>
-                                <th>จำนวนการจอง</th>
-                                <th>สถานะ</th>
-                                <th>วันที่จอง</th>
-                                <th>การกระทำ</th>
-                            </tr>
-                        </thead>";
-                                            echo "<tbody>";
+                                        if ($result->num_rows > 0) { ?>
+                                            <ul class="list-group">
+                                                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                                    <li class="list-group-item">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div>
+                                                                <span> <strong><?php echo $row['booking_id']; ?></strong> </span>
+                                                                <span><?php echo $row['fullname']; ?></span>
+                                                                <p>
+                                                                    <strong>
+                                                                        ยอดทั้งหมด <?php echo htmlspecialchars($row['total_price']); ?> บาท
+                                                                    </strong>
+                                                                </p>
+                                                                <p>
+                                                                    <strong>
+                                                                        สถานะ : <?php
+                                                                                if ($row["booking_status"] === '4' || $row["booking_status"] === '8') {
+                                                                                    echo "<span style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</span>";
+                                                                                } else if ($row["booking_status"] === '1' || $row["booking_status"] === '2' || $row["booking_status"] === '3' || $row["booking_status"] === '9') {
+                                                                                    echo "<span style='color: orange;'>" . htmlspecialchars($row["status"]) . "</span>";
+                                                                                } else {
+                                                                                    echo "<span style='color: red ;'>" . htmlspecialchars($row["status"]) . "</span>";  // You can change 'green' to any other color or style you prefer
+                                                                                }
 
-                                            while ($row = $result->fetch_assoc()) {
-                                                $booking_date = date("เวลา H:i d/m/Y", strtotime($row["booking_date"]));
-                                                $slip_img = $row["slip_img"] ? "<img src='" . htmlspecialchars($row["slip_img"]) . "' alt='Slip Image' style='width: 50px; height: auto;'>" : "ยังไม่มีการอัพโหลดสลิป";
 
-                                                echo "<tr>
-                                <td>" . htmlspecialchars($row["booking_id"]) . "</td>
-                                <td>" . htmlspecialchars($row["zone_detail"]) . "</td>
-                                <td>" . htmlspecialchars($row["cat_name"]) . "(" . htmlspecialchars($row["sub_cat_name"]) . ")</td>";
-                                                if ($row["booking_type"] === 'PerDay') {
-                                                    $booking_type_display = 'รายวัน';
-                                                } elseif ($row["booking_type"] === 'PerMonth') {
-                                                    $booking_type_display = 'รายเดือน';
-                                                } else {
-                                                    $booking_type_display = 'ไม่ทราบประเภทการจอง';
-                                                }
-                                                echo "<td>" . $booking_type_display . "</td>
-                                                <td>" . htmlspecialchars($row["booking_amount"]) . " ล็อค</td>";
-                                                if ($row["booking_status"] === '4') {
-                                                    echo "<td style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</td>";
-                                                } else {
-                                                    echo "<td style='color: red ;'>" . htmlspecialchars($row["status"]) . "</td>";  // You can change 'green' to any other color or style you prefer
-                                                }
-                                                echo "  <td>" . $booking_date . "</td>";
-                                                switch ($row["booking_status"]) {
-                                                    case 4:
-                                                        echo " <td>
-                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        </td>";
-                                                        break;
-                                                    case 5:
-                                                        echo " <td>
-                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
-                                    </td>";
-                                                        break;
-                                                    case 6:
-                                                        echo " <td>
-                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        </td>";
-                                                        break;
-                                                    case 7:
-                                                        echo " <td>
-                                        <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
-                                        </td>";
-                                                        break;
-                                                    default:
-                                                        echo "ไม่ทราบสถานะ";
-                                                }
-                                                echo "</tr>";
-                                            }
 
-                                            echo "</tbody>
-                            </table>";
-                                        } else {
+                                                                                ?>
+                                                                    </strong>
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                <div>
+                                                                    <span>วันที่จอง : <?php echo $row['booking_date']; ?></span>
+                                                                    <br>
+                                                                    <span>วันที่หมดอายุการจอง :<?php if ($row["booking_status"] === '4') {
+                                                                                                    echo "<span>" . htmlspecialchars($row["expiration_date"]) . "</span>";
+                                                                                                } else {
+                                                                                                    echo "<span>คำขอยังไม่สมบูรณ์</span>";
+                                                                                                } ?></span>
+                                                                </div>
+                                                                <div class="mt-1">
+
+                                                                    <?php switch ($row["booking_status"]) {
+                                                                        case 4:
+                                                                            echo " <td>
+                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                </td>";
+                                                                            break;
+                                                                        case 5:
+                                                                            echo " <td>
+                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                <a href='#' class='btn btn-sm btn-danger' onclick=\"confirmCancel('" . addslashes($row['booking_id']) . "'); return false;\">ยกเลิกการจอง</a>
+                                                            </td>";
+                                                                            break;
+                                                                        case 6:
+                                                                            echo " <td>
+                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                </td>";
+                                                                            break;
+                                                                        case 7:
+                                                                            echo " <td>
+                                                                <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
+                                                                </td>";
+                                                                            break;
+                                                                        default:
+                                                                            echo " <td>
+                                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                                </td>";
+                                                                    } ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </li>
+                                                <?php endwhile; ?>
+                                            </ul>
+
+                                        <?php    } else {
                                             echo "<p class='text-center'>ยังไม่ได้มีการจอง</p>";
                                         }
                                         ?>

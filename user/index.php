@@ -285,7 +285,7 @@ if (isset($_GET['category_id'])) {
             <div class="container my-4 px-2 border rounded overflow-auto bgcolor py-4" style="width: 100%; height: 40rem;">
                 <ul class="nav nav-tabs" id="myTab">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>คำขอคืนเงิน</strong></a>
+                        <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>คำขอจองพื้นที่</strong></a>
                     </li>
                 </ul>
 
