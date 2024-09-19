@@ -6,9 +6,6 @@ try {
     // กำหนดตัวแปร current_time
     $current_time = date('Y-m-d H:i:s');
 
-    // แสดง current_time สำหรับการดีบัก
-    echo 'Current Time: ' . $current_time . '<br>';
-
     // เริ่มการทำธุรกรรม
     $conn->begin_transaction();
 
@@ -16,9 +13,8 @@ try {
     $update_status_query = "UPDATE booking 
                             SET booking_status = 10 
                             WHERE (booking_date < DATE_ADD(NOW(), INTERVAL 1 DAY) 
-                            AND booking_type = 'PerDay' AND book_lock_number IS NULL AND slip_img IS NULL)
-                            OR (booking_date < DATE_ADD(NOW(), INTERVAL 1 MONTH) 
-                            AND booking_type = 'PerMonth' AND book_lock_number IS NULL AND slip_img IS NULL)";
+                           AND booking_status = '1' OR booking_status = '2')
+                           ";
     if ($conn->query($update_status_query) === FALSE) {
         throw new Exception("ไม่สามารถอัปเดตสถานะการจองได้: " . $conn->error);
     }

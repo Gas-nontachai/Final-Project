@@ -156,7 +156,7 @@ $start_from = ($page - 1) * $results_per_page;
                         // ถ้ามีหลายหน้า
                         if ($current_page <= ($adjacents * 2)) {
                             // ถ้าอยู่ในหน้าต้น ๆ แสดงหน้าต้น ๆ
-                            for ($i = 1; $i <= (4 + ($adjacents * 2)); $i++) {
+                            for ($i = 1; $i <= (1 + ($adjacents * 2)); $i++) {
                                 if ($i == $current_page) {
                                     echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
                                 } else {
@@ -169,7 +169,7 @@ $start_from = ($page - 1) * $results_per_page;
                             // ถ้าอยู่ในหน้าท้าย ๆ แสดงหน้าท้าย ๆ
                             echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
                             echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
-                            for ($i = ($total_pages - (4 + ($adjacents * 2))); $i <= $total_pages; $i++) {
+                            for ($i = ($total_pages - (1 + ($adjacents * 2))); $i <= $total_pages; $i++) {
                                 if ($i == $current_page) {
                                     echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
                                 } else {

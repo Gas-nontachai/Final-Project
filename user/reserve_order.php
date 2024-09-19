@@ -120,12 +120,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["submit"])) {
             <body>
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-                       Swal.fire({
-                            title: "ส่งคำขอจองพื้นที่การขายเรียบร้อย",
+                        Swal.fire({
+                            title: "ส่งคำขอจองพื้นที่การขายเรียบร้อย \n กรุณาชำระเงิน จากนั้นระบบจะทำการยืนยันการจอง", 
                             icon: "success",
                             showConfirmButton: true
                         }).then(() => {
-                            window.location.href = "./index.php";
+                            window.location.href = "./order.php";
                         });
                     });
                 </script>

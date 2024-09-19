@@ -162,7 +162,7 @@ if ($userrole == 0) {
                         }
                     } else {
                         if ($current_page <= ($adjacents * 2)) {
-                            for ($i = 1; $i <= (4 + ($adjacents * 2)); $i++) {
+                            for ($i = 1; $i <= (1 + ($adjacents * 2)); $i++) {
                                 if ($i == $current_page) {
                                     echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
                                 } else {
@@ -174,7 +174,7 @@ if ($userrole == 0) {
                         } elseif ($current_page > ($total_pages - ($adjacents * 2))) {
                             echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
                             echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
-                            for ($i = ($total_pages - (4 + ($adjacents * 2))); $i <= $total_pages; $i++) {
+                            for ($i = ($total_pages - (1 + ($adjacents * 2))); $i <= $total_pages; $i++) {
                                 if ($i == $current_page) {
                                     echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
                                 } else {

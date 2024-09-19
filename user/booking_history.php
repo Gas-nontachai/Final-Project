@@ -70,7 +70,7 @@ $userrole = $_SESSION["userrole"];
 $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
 // Pagination
-$results_per_page = 10; // จำนวนรายการต่อหน้า
+$results_per_page = 7; // จำนวนรายการต่อหน้า
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $start_from = ($page - 1) * $results_per_page;
 ?>
@@ -104,7 +104,7 @@ $start_from = ($page - 1) * $results_per_page;
     ?>
 
     <!-- แสดงผล -->
-    <div class="container my-4 p-2 border border-dark-subtle rounded  overflow-auto  bgcolor" style="width: 90%; height: 50rem;">
+    <div class="container my-4 p-2 border border-dark-subtle rounded  overflow-auto  bgcolor" style="width: 90%; height: 45rem;">
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active mt-2 mx-2 p-2" id="category">
                 <div>
