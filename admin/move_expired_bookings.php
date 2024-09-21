@@ -9,9 +9,8 @@ try {
     $update_status_query = "UPDATE booking 
                             SET booking_status = 10 
                             WHERE (booking_date < DATE_ADD(NOW(), INTERVAL 1 DAY) 
-                            AND booking_type = 'PerDay' AND book_lock_number IS NULL AND slip_img IS NULL)
-                            OR (booking_date < DATE_ADD(NOW(), INTERVAL 1 MONTH) 
-                            AND booking_type = 'PerMonth' AND book_lock_number IS NULL AND slip_img IS NULL)";
+                        AND booking_status = '1' OR booking_status = '2')
+                        ";
     if ($conn->query($update_status_query) === FALSE) {
         throw new Exception("ไม่สามารถอัปเดตสถานะการจองได้: " . $conn->error);
     }
@@ -80,9 +79,6 @@ try {
 
     // แสดงจำนวนแถวที่ได้รับผลกระทบ
     echo "จำนวนแถวที่ถูกอัปเดตสถานะ: $affected_rows_move<br>";
-    echo "จำนวนแถวที่ถูกย้าย: $affected_rows_move<br>";
-    echo "จำนวนแถวที่ถูกอัปเดต: $affected_rows_update<br>";
-    echo "จำนวนแถวที่ถูกลบ: $affected_rows_delete<br>";
 } catch (Exception $e) {
     // ทำการ rollback ธุรกรรมหากเกิดข้อผิดพลาด
     $conn->rollback();

@@ -3,6 +3,7 @@ session_start();
 require("./condb.php");
 
 $message = ''; // ตัวแปรเก็บข้อความแจ้งเตือน
+$current_time = date('Y-m-d H:i:s');
 
 if (isset($_POST["submit"])) {
     if (isset($_POST['username']) && isset($_POST['pw'])) {
@@ -31,8 +32,7 @@ if (isset($_POST["submit"])) {
                 $_SESSION["userrole"] = $row['userrole'];
                 $_SESSION["token"] = $row['token'];
 
-                // อัปเดตเวลาล็อกอินล่าสุด
-                $updateStmt = $conn->prepare("UPDATE tbl_user SET last_login = NOW() WHERE user_id = ?");
+                $updateStmt = $conn->prepare("UPDATE tbl_user SET last_login = '$current_time' WHERE user_id = ?");
                 $updateStmt->bind_param("i", $row['user_id']);
                 $updateStmt->execute();
 

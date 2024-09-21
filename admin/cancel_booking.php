@@ -1,6 +1,7 @@
 <?php
 session_start();
 require("../condb.php");
+$current_time = date('Y-m-d H:i:s');
 
 // ตรวจสอบการเข้าสู่ระบบ
 if (!isset($_SESSION["username"])) {
@@ -35,7 +36,7 @@ try {
         }
 
         // ดึง lock_name ที่ต้องอัปเดตจากตาราง booking
-        $get_locks_query = "SELECT DISTINCT book_lock_number FROM booking WHERE expiration_date <= NOW()";
+        $get_locks_query = "SELECT DISTINCT book_lock_number FROM booking WHERE expiration_date <= '$current_time'";
         $result = $conn->query($get_locks_query);
         if ($result === FALSE) {
             throw new Exception("ไม่สามารถดึงข้อมูลล็อคได้: " . $conn->error);

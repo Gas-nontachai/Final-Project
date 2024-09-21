@@ -93,7 +93,7 @@ try {
                 <script>
                     Swal.fire({
                         title: "สำเร็จ!",
-                        text: "ดำเนินการสำเร็จ: จำนวนแถวที่ถูกอัปเดตสถานะ: ' . $affected_rows_move . ', จำนวนแถวที่ถูกย้าย: ' . $affected_rows_move . ', จำนวนแถวที่ถูกอัปเดต: ' . $affected_rows_update . ', จำนวนแถวที่ถูกลบ: ' . $affected_rows_delete . '",
+                        text: "ดำเนินการสำเร็จ: จำนวนแถวที่ถูกอัปเดตสถานะ: ' . $affected_rows_move . '",
                         icon: "success",
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then(function() {

@@ -381,7 +381,7 @@ if (isset($_GET['category_id'])) {
                                         $offset = ($page - 1) * $itemsPerPage;
 
                                         // การดึงข้อมูล
-                                        $sql = "SELECT BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
+                                        $sql = "SELECT BK.total_price, BK.expiration_date, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
                         FROM booking AS BK 
                         INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                         INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
@@ -410,21 +410,13 @@ if (isset($_GET['category_id'])) {
                                                                 <span><?php echo $row['fullname']; ?></span>
                                                                 <p>
                                                                     <strong>
-                                                                        ยอดทั้งหมด <?php echo htmlspecialchars($row['total_price']); ?> บาท
+                                                                        ยอดทั้งหมด <?php echo $row['total_price']; ?> บาท
                                                                     </strong>
                                                                 </p>
                                                                 <p>
                                                                     <strong>
                                                                         สถานะ : <?php
-                                                                                if ($row["booking_status"] === '4' || $row["booking_status"] === '8') {
-                                                                                    echo "<span style='color: #06D001;'>" . htmlspecialchars($row["status"]) . "</span>";
-                                                                                } else if ($row["booking_status"] === '1' || $row["booking_status"] === '2' || $row["booking_status"] === '3' || $row["booking_status"] === '9') {
-                                                                                    echo "<span style='color: orange;'>" . htmlspecialchars($row["status"]) . "</span>";
-                                                                                } else {
-                                                                                    echo "<span style='color: red ;'>" . htmlspecialchars($row["status"]) . "</span>";  // You can change 'green' to any other color or style you prefer
-                                                                                }
-
-
+                                                                                echo "<span style='color: green ;'>" . $row["status"] . "</span>";  // You can change 'green' to any other color or style you prefer
 
                                                                                 ?>
                                                                     </strong>
