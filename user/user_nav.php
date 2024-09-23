@@ -198,8 +198,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>UserID:</strong> <?php echo $SQLuser_id; ?></p>
-                        <p><strong>Username:</strong> <?php echo $SQLusername; ?></p>
+                        <p><strong>รหัสสมาชิก:</strong> <?php echo $SQLuser_id; ?></p>
+                        <p><strong>ชื่อผู้ใช้(Username):</strong> <?php echo $SQLusername; ?></p>
                         <p><strong>ชื่อร้าน:</strong> <?php echo $SQLshop_name; ?></p>
                         <p><strong>ชื่อ-นามสกุล:</strong> <?php echo $SQLfullname; ?></p>
                         <p><strong>เบอร์โทรศัพท์:</strong> <?php echo $SQLtel; ?></p>
@@ -229,10 +229,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>UserID:</strong> <?php echo $SQLuser_id; ?></p>
-                        <p><strong>Username:</strong> <?php echo $SQLusername; ?></p>
+                        <p><strong>รหัสสมาชิก:</strong> <?php echo $SQLuser_id; ?></p>
+                        <p><strong>ชื่อผู้ใช้(Username):</strong> <?php echo $SQLusername; ?></p>
                         <div class="mb-3 row">
-                            <label for="shopname" class="col-sm-3 col-form-label"><strong>shop_name:</strong></label>
+                            <label for="shopname" class="col-sm-3 col-form-label"><strong>ชื่อร้านค้า:</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="editshopname" id="editshopname" value="<?php echo $SQLshop_name; ?>">
                             </div>

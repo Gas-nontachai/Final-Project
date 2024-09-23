@@ -297,8 +297,54 @@ if (isset($_GET['category_id'])) {
                         <div class="mt-2">
                             <div class="row overflow-auto">
                                 <?php
-                                $sql = "SELECT BK.expiration_date, BK.total_price, BK.booking_id, CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, BS.status, BK.booking_status, ZD.zone_name, ZD.zone_detail, C.cat_name, SC.sub_cat_name, BK.booking_type, BK.booking_amount, BK.slip_img, BK.booking_date 
-                                FROM booking AS BK 
+                                $sql = "SELECT 
+                                 BK.expiration_date, 
+                                 BK.booking_date, 
+                                 DATE_FORMAT(BK.booking_date, '%d/') AS day,
+                                 CASE MONTH(BK.booking_date) 
+                                     WHEN 1 THEN 'ม.ค.'
+                                     WHEN 2 THEN 'ก.พ.'
+                                     WHEN 3 THEN 'มี.ค.'
+                                     WHEN 4 THEN 'เม.ย.'
+                                     WHEN 5 THEN 'พ.ค.'
+                                     WHEN 6 THEN 'มิ.ย.'
+                                     WHEN 7 THEN 'ก.ค.'
+                                     WHEN 8 THEN 'ส.ค.'
+                                     WHEN 9 THEN 'ก.ย.'
+                                     WHEN 10 THEN 'ต.ค.'
+                                     WHEN 11 THEN 'พ.ย.'
+                                     WHEN 12 THEN 'ธ.ค.'
+                                 END AS month,
+                                 DATE_FORMAT(BK.booking_date, '%Y %H:%i') AS year_time,
+                                 DATE_FORMAT(BK.expiration_date, '%d/') AS exp_day,
+                                 CASE MONTH(BK.expiration_date) 
+                                     WHEN 1 THEN 'ม.ค.'
+                                     WHEN 2 THEN 'ก.พ.'
+                                     WHEN 3 THEN 'มี.ค.'
+                                     WHEN 4 THEN 'เม.ย.'
+                                     WHEN 5 THEN 'พ.ค.'
+                                     WHEN 6 THEN 'มิ.ย.'
+                                     WHEN 7 THEN 'ก.ค.'
+                                     WHEN 8 THEN 'ส.ค.'
+                                     WHEN 9 THEN 'ก.ย.'
+                                     WHEN 10 THEN 'ต.ค.'
+                                     WHEN 11 THEN 'พ.ย.'
+                                     WHEN 12 THEN 'ธ.ค.'
+                                 END AS exp_month,
+                                 DATE_FORMAT(BK.expiration_date, '%Y %H:%i') AS exp_year_time,
+                                 BK.total_price, 
+                                 BK.booking_id, 
+                                 CONCAT(U.prefix, U.firstname , ' ', U.lastname) AS fullname, 
+                                 BS.status, 
+                                 BK.booking_status, 
+                                 ZD.zone_name, 
+                                 ZD.zone_detail, 
+                                 C.cat_name, 
+                                 SC.sub_cat_name, 
+                                 BK.booking_type, 
+                                 BK.booking_amount, 
+                                 BK.slip_img 
+                             FROM booking AS BK 
                                 INNER JOIN booking_status AS BS ON BK.booking_status = BS.id
                                 INNER JOIN tbl_user AS U ON BK.member_id = U.user_id
                                 INNER JOIN category AS C ON BK.product_type = C.id_category
@@ -340,15 +386,26 @@ if (isset($_GET['category_id'])) {
                                                                 </strong>
                                                             </p>
                                                         </div>
-                                                        <div>
-                                                            <div>
-                                                                <span>วันที่จอง : <?php echo $row['booking_date']; ?></span>
-                                                                <br>
-                                                                <span>วันที่หมดอายุการจอง :<?php if ($row["booking_status"] === '4') {
-                                                                                                echo "<span>" . htmlspecialchars($row["expiration_date"]) . "</span>";
-                                                                                            } else {
-                                                                                                echo "<span>คำขอยังไม่สมบูรณ์</span>";
-                                                                                            } ?></span>
+                                                        <div class="d-flex flex-column justify-content-between align-items-end">
+                                                            <div class="d-flex flex-column justify-content-center align-items-end">
+                                                                <span>วันที่จอง : <?php
+                                                                                    $yearTime = intval($row['year_time']); // แปลงให้เป็นตัวเลข
+                                                                                    $formattedBookingDate = $row['day'] . $row['month'] . '/' . ($yearTime + 543) . ' เวลา ' . date('H:i', strtotime($row['booking_date']));
+                                                                                    echo $formattedBookingDate;
+                                                                                    ?></span>
+
+                                                                <span>วันที่หมดอายุการจอง :
+                                                                    <?php
+                                                                    if ($row["booking_status"] === '4') {
+                                                                        // แปลงปีเป็นปีไทย
+                                                                        $expYear = intval(date('Y', strtotime($row['expiration_date']))) + 543;
+                                                                        // แสดงผลในรูปแบบที่ต้องการ
+                                                                        echo $row['exp_day'] . $row['exp_month'] . '/' . $expYear . ' เวลา ' . date('H:i', strtotime($row['expiration_date']));
+                                                                    } else {
+                                                                        echo "<span>คำขอยังไม่สมบูรณ์</span>";
+                                                                    }
+                                                                    ?>
+                                                                </span>
                                                             </div>
                                                             <div class="mt-1">
 
@@ -795,11 +852,11 @@ if (isset($_GET['category_id'])) {
 					</tr>	
 					<tr>
 						<th scope="row">วันที่การจอง</th>
-						<td>${data.booking_date}</td>
+						<td>${data.display_booking_date}</td>
 					</tr>	
 					<tr>
 						<th scope="row">วันที่คำขอหมดอายุ</th>
-						<td> ${data.expiration_date ? data.expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
+						<td> ${data.display_expiration_date ? data.display_expiration_date : 'คำขอยังไม่สมบูรณ์'}</td>
 					</tr>	
 						
 					        `;

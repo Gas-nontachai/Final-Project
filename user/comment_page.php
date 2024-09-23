@@ -170,7 +170,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     $result = mysqli_query($conn, $sql);
     ?>
     <!-- แสดงความคิดเห็นที่เคยแสดงความคิดเห็น -->
-    <div class="mt-4 container-fluid  bgcolor p-4 rounded" style="width: 90%;">
+    <div class="mt-4 container-fluid bgcolor p-4 rounded" style="width: 90%;">
         <h4>ความคิดเห็นของฉัน</h4>
         <?php if (mysqli_num_rows($result) > 0): ?>
             <ul class="list-group">
@@ -178,7 +178,41 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     <li class="list-group-item">
                         <div class="d-flex justify-content-between">
                             <span>คะแนน: <?php echo $row['rating']; ?>/5</span>
-                            <span><?php echo $row['created_at']; ?></span>
+                            <span>
+                                <?php
+                                // ดึงวันที่และฟอร์แมต
+                                $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $row['created_at']);
+                                if ($dateTime) {
+                                    $day = $dateTime->format('d');
+                                    $monthNumber = $dateTime->format('n');
+                                    $year = $dateTime->format('Y') + 543; // เพิ่มปี 543
+
+                                    $monthsTh = [
+                                        1 => 'ม.ค.',
+                                        2 => 'ก.พ.',
+                                        3 => 'มี.ค.',
+                                        4 => 'เม.ย.',
+                                        5 => 'พ.ค.',
+                                        6 => 'มิ.ย.',
+                                        7 => 'ก.ค.',
+                                        8 => 'ส.ค.',
+                                        9 => 'ก.ย.',
+                                        10 => 'ต.ค.',
+                                        11 => 'พ.ย.',
+                                        12 => 'ธ.ค.'
+                                    ];
+
+                                    echo sprintf(
+                                        '%s/%s/%s เวลา %s:%s',
+                                        $day,
+                                        $monthsTh[$monthNumber],
+                                        $year,
+                                        $dateTime->format('H'),
+                                        $dateTime->format('i')
+                                    );
+                                }
+                                ?>
+                            </span>
                         </div>
                         <p><?php echo htmlspecialchars($row['comment']); ?></p>
                         <div class="d-flex justify-content-end">
@@ -191,6 +225,8 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
         <?php else: ?>
             <p>คุณยังไม่ได้แสดงความคิดเห็น</p>
         <?php endif; ?>
+    </div>
+
     </div>
     </div>
 
@@ -237,9 +273,9 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
         const badWords = [
             'ไอ้', 'ควาย', 'งี่เง่า', 'หมา', 'ชิบหาย', 'เลว', 'สถุน', 'สวะ', 'ถุย', 'เฮงซวย', 'แย่',
             'บ้า', 'สัส', 'ห่า', 'หยัง', 'พ่อแม่', 'ปากหมา', 'ดอก', 'สารเลว', 'แสบ', 'เหี้ย', 'แม่ง',
-            'ฉิบ', 'เสือก', 'ซวย', 'ไอ้สัตว์', 'บัก', 'แดก', 'หมาขี้', 'หมาแก่', 'เวร', 'เหี้ยไอ้',
-            'ระยำ', 'ชัง', 'ตีน', 'อี', 'กระหรี่', 'ลามก', 'ควย', 'ปากหมา', 'จังไร', 'ติ่ง', 'น้ำลาย',
-            'พี่เลี้ยง', 'ทน', 'สันดาน', 'ขี้โกง', 'คอร์รัป', 'คม', 'ส้นตีน', 'โง่', 'ผี', 'เห่ย',
+            'ฉิบ', 'เสือก', 'ซวย', 'ไอ้สัตว์', 'บัก', 'แดก', 'หมาแก่', 'เวร', 'เหี้ยไอ้',
+            'ระยำ', 'ชัง', 'ตีน', 'อี', 'กระหรี่', 'ควย', 'ปากหมา', 'จังไร',
+            'พี่เลี้ยง', 'ทน', 'สันดาน', 'ขี้โกง', 'คอร์รัป', 'คม', 'ส้นตีน', 'โง่', 'เห่ย',
             'damn', 'hell', 'stupid', 'idiot', 'moron', 'jerk', 'asshole', 'bastard', 'fuck', 'shit', 'bitch',
             'cunt', 'dick', 'piss', 'slut', 'whore', 'fag', 'nigger', 'motherfucker', 'cock', 'twat', 'douchebag',
             'prick', 'wanker', 'wank', 'fistfuck', 'cocksucker', 'pussy', 'shithead', 'ass', 'butt', 'dumbass',

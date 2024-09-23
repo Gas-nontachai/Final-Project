@@ -392,7 +392,11 @@ $start_from = ($page - 1) * $results_per_page;
 					</tr>
 							<tr>
 						<th scope="row">วันที่จอง</th>
-						<td> ${data.booking_date}</td>
+						<td> ${data.display_booking_date}</td>
+					</tr>	 
+							<tr>
+						<th scope="row">วันหมดอายุการจอง</th>
+						<td>${data.display_expiration_date ? data.display_expiration_date : 'ดำเนินการยังไม่เสร็จสิ้น'}</td>
 					</tr>	 `;
                             if (data.slip_img) {
                                 content += ` <tr>

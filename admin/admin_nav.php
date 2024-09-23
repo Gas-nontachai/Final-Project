@@ -175,9 +175,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>UserID:</strong> <?php echo $user_id; ?></p>
-                        <p><strong>Username:</strong> <?php echo $username; ?></p>
-                        <p><strong>shop_name:</strong> <?php echo $shop_name; ?></p>
+                        <p><strong>รหัสสมาชิก:</strong> <?php echo $user_id; ?></p>
+                        <p><strong>ชื่อผู้ใช้(Username):</strong> <?php echo $username; ?></p>
                         <p><strong>ชื่อ-นามสกุล:</strong> <?php echo $fullname; ?></p>
                         <p><strong>เบอร์โทรศัพท์:</strong> <?php echo $tel; ?></p>
                         <p><strong>อีเมล:</strong> <?php echo $email; ?></p>

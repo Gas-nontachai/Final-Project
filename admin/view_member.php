@@ -374,7 +374,7 @@ if ($userrole == 0) {
                 const passwordField = document.getElementById('edit_password');
                 const isVisible = passwordField.type === 'text';
                 passwordField.type = isVisible ? 'password' : 'text';
-                document.getElementById('togglePassword').textContent = isVisible ? 'Show' : 'Hide';
+                document.getElementById('togglePassword').textContent = isVisible ? 'แสดง' : 'ซ่อน';
             });
 
             // การคลิกปุ่มแก้ไข

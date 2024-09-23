@@ -10,6 +10,7 @@ if (isset($_POST['fetch_booking_details'])) {
                 CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
                 B.booking_amount, 
                 B.total_price, 
+                B.expiration_date, 
                 C.cat_name, 
                 SC.sub_cat_name, 
                 BS.status, 
@@ -28,16 +29,62 @@ if (isset($_POST['fetch_booking_details'])) {
     $stmt->bind_param("i", $booking_id);
     $stmt->execute();
     $result = $stmt->get_result();
+
     if ($result->num_rows > 0) {
         $bookingDetails = $result->fetch_assoc();
 
+        // ฟังก์ชันในการปรับฟอร์แมตวันที่
+        function formatBookingDate($dateString)
+        {
+            if (empty($dateString)) return null; // ตรวจสอบค่าว่าง
+
+            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $dateString);
+            if ($dateTime) {
+                $day = $dateTime->format('d');
+                $month = $dateTime->format('n');
+                $year = $dateTime->format('Y') + 543; // เพิ่มปี 543
+
+                $monthsTh = [
+                    1 => 'ม.ค.',
+                    2 => 'ก.พ.',
+                    3 => 'มี.ค.',
+                    4 => 'เม.ย.',
+                    5 => 'พ.ค.',
+                    6 => 'มิ.ย.',
+                    7 => 'ก.ค.',
+                    8 => 'ส.ค.',
+                    9 => 'ก.ย.',
+                    10 => 'ต.ค.',
+                    11 => 'พ.ย.',
+                    12 => 'ธ.ค.'
+                ];
+
+                return sprintf(
+                    '%s/%s/%s เวลา %s:%s',
+                    $day,
+                    $monthsTh[$month],
+                    $year,
+                    $dateTime->format('H'),
+                    $dateTime->format('i')
+                );
+            }
+            return null;
+        }
+
+        // ปรับฟอร์แมตวันที่
+        $bookingDetails['display_booking_date'] = formatBookingDate($bookingDetails['booking_date']);
+        $bookingDetails['display_expiration_date'] = formatBookingDate($bookingDetails['expiration_date']);
+
         // Determine the booking type display
-        if ($bookingDetails["booking_type"] === 'PerDay') {
-            $bookingDetails['booking_type_display'] = 'รายวัน';
-        } elseif ($bookingDetails["booking_type"] === 'PerMonth') {
-            $bookingDetails['booking_type_display'] = 'รายเดือน';
-        } else {
-            $bookingDetails['booking_type_display'] = 'ไม่ทราบประเภทการจอง';
+        switch ($bookingDetails["booking_type"]) {
+            case 'PerDay':
+                $bookingDetails['booking_type_display'] = 'รายวัน';
+                break;
+            case 'PerMonth':
+                $bookingDetails['booking_type_display'] = 'รายเดือน';
+                break;
+            default:
+                $bookingDetails['booking_type_display'] = 'ไม่ทราบประเภทการจอง';
         }
 
         echo json_encode($bookingDetails);
@@ -47,5 +94,4 @@ if (isset($_POST['fetch_booking_details'])) {
 
     $stmt->close();
     $conn->close();
-    exit;
 }

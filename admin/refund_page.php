@@ -120,24 +120,27 @@ $start_from = ($page - 1) * $results_per_page;
                     <div class="row overflow-auto">
                         <?php
                         $sql = "SELECT 
-                                    B.booking_id, 
-                                    CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
-                                    B.booking_amount, 
-                                    B.booking_status,
-                                    B.total_price, 
-                                    C.cat_name, 
-                                    SC.sub_cat_name, 
-                                    BS.status, 
-                                    B.booking_type, 
-                                    B.slip_img, 
-                                    B.book_lock_number, 
-                                    B.booking_date
-                                FROM market_booking.booking AS B
-                                LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
-                                LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
-                                LEFT JOIN category AS C ON B.product_type = C.id_category
-                                LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
-                                WHERE booking_status = 7 OR booking_status = 5";
+                        BK.expiration_date, 
+                        BK.booking_date,
+                        DATE_FORMAT(BK.booking_date, '%d/%m/%Y เวลา %H:%i') AS formatted_booking_date,
+                        DATE_FORMAT(BK.expiration_date, '%d/%m/%Y เวลา %H:%i') AS formatted_expiration_date,
+                        BK.total_price, 
+                        BK.booking_id, 
+                        CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
+                        BS.status, 
+                        BK.booking_status, 
+                        C.cat_name, 
+                        SC.sub_cat_name, 
+                        BK.booking_type, 
+                        BK.booking_amount, 
+                        BK.slip_img 
+                    FROM booking AS BK 
+                    LEFT JOIN booking_status AS BS ON BK.booking_status = BS.id
+                    LEFT JOIN tbl_user AS U ON BK.member_id = U.user_id
+                    LEFT JOIN category AS C ON BK.product_type = C.id_category
+                    LEFT JOIN sub_category AS SC ON BK.sub_product_type = SC.idsub_category
+                    WHERE booking_status IN (7, 5)";
+
                         $result = mysqli_query($conn, $sql);
                         ?>
                         <div class="container">
@@ -147,17 +150,15 @@ $start_from = ($page - 1) * $results_per_page;
                                         <li class="list-group-item">
                                             <div class="d-flex justify-content-between">
                                                 <div>
-                                                    <span> <strong><?php echo $row['booking_id']; ?></strong> </span>
+                                                    <span><strong><?php echo $row['booking_id']; ?></strong></span>
                                                     <span><?php echo $row['fullname']; ?></span>
                                                     <p>
-                                                        <strong>
-                                                            ยอดทั้งหมด <?php echo htmlspecialchars($row['total_price']); ?> บาท
-                                                        </strong>
+                                                        <strong>ยอดทั้งหมด <?php echo htmlspecialchars($row['total_price']); ?> บาท</strong>
                                                     </p>
                                                 </div>
-                                                <div>
-                                                    <div>
-                                                        <span><?php echo $row['booking_date']; ?></span>
+                                                <div class="d-flex flex-column justify-content-between align-items-end">
+                                                    <div class="d-flex flex-column justify-content-center align-items-end">
+                                                        <span>วันที่จอง : <?php echo $row['formatted_booking_date']; ?></span>
                                                     </div>
                                                     <div class="mt-1">
                                                         <button
@@ -172,12 +173,9 @@ $start_from = ($page - 1) * $results_per_page;
                                                             onclick="confirmRefund('<?php echo $row['booking_id']; ?>', '<?php echo $row['booking_status']; ?>'); return false;">
                                                             ยืนยันการยกเลิกการจอง
                                                         </a>
-
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </li>
                                     <?php endwhile; ?>
                                 </ul>
@@ -186,10 +184,10 @@ $start_from = ($page - 1) * $results_per_page;
                             <?php endif; ?>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
+
 
     </div>
     <!-- View Modal -->
@@ -281,7 +279,7 @@ $start_from = ($page - 1) * $results_per_page;
 					</tr>	
                     <tr>
 						<th scope="row">วันที่จอง</th>
-						<td> ${data.booking_date}</td>
+						<td> ${data.display_booking_date}</td>
 					</tr>	 `;
                             if (data.slip_img) {
                                 content += ` <tr>
