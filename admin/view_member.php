@@ -85,6 +85,7 @@ if ($userrole == 0) {
     <link rel="stylesheet" href="../asset/css/font.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             background-image: url(../asset/img/img.market2.jpg);
@@ -114,164 +115,76 @@ if ($userrole == 0) {
                     <h1>สมาชิกในระบบ</h1>
                 </div>
                 <div class="mt-2">
-                    <form method="GET">
+                    <form id="searchForm" method="GET">
                         <div class="input-group mb-3">
-                            <input class="form-control" type="text" name="search_query" placeholder="ค้นหาด้วยรหัสสมาชิก ชื่อนามสกุล ชื่อผู้ใช้ หรือหมายเลขโทรศัพท์" value="<?php echo isset($_GET['search_query']) ? htmlspecialchars($_GET['search_query']) : ''; ?>">
+                            <input class="form-control" id="search" type="text" name="search_query" placeholder="ค้นหาด้วยรหัสสมาชิก ชื่อนามสกุล ชื่อผู้ใช้ หรือหมายเลขโทรศัพท์" value="<?php echo isset($_GET['search_query']) ? htmlspecialchars($_GET['search_query']) : ''; ?>">
                             <button class="btn btn-outline-secondary" type="submit">ค้นหา</button>
                             <a href="?reset=true" class="btn btn-outline-secondary">รีเซ็ต</a>
                         </div>
                     </form>
 
-                    <?php
-                    // กำหนดค่า $results_per_page
-                    $results_per_page = 5; // จำนวนสมาชิกที่ต้องการแสดงต่อหน้า
+                    <div id="resultsContainer">
+                        <!-- ผลลัพธ์ที่ค้นหาจะแสดงที่นี่ -->
+                    </div>
 
-                    // คำนวณจำนวนหน้าทั้งหมด
-                    $sql_total = "SELECT COUNT(*) FROM tbl_user";
-                    $result_total = $conn->query($sql_total);
-                    $row_total = $result_total->fetch_row();
-                    $total_records = $row_total[0];
-
-                    // ตรวจสอบว่า $results_per_page มากกว่า 0
-                    if ($results_per_page > 0) {
-                        $total_pages = ceil($total_records / $results_per_page);
-                    } else {
-                        echo "Error: Results per page must be greater than 0.";
-                        exit;
-                    }
-
-                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                    $adjacents = 1; // จำนวนหน้าที่จะแสดงข้างหน้าและข้างหลังเลขหน้า
-
-                    echo "<nav>";
-                    echo "<ul class='pagination justify-content-center'>";
-
-                    // ปุ่ม Previous
-                    if ($current_page > 1) {
-                        echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page - 1) . "'>Previous</a></li>";
-                    }
-
-                    // แสดงปุ่มเลขหน้า
-                    if ($total_pages <= (1 + ($adjacents * 2))) {
-                        for ($i = 1; $i <= $total_pages; $i++) {
-                            if ($i == $current_page) {
-                                echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
-                            } else {
-                                echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
-                            }
-                        }
-                    } else {
-                        if ($current_page <= ($adjacents * 2)) {
-                            for ($i = 1; $i <= (1 + ($adjacents * 2)); $i++) {
-                                if ($i == $current_page) {
-                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
-                                } else {
-                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
-                                }
-                            }
-                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
-                            echo "<li class='page-item'><a class='page-link' href='?page=" . $total_pages . "'>" . $total_pages . "</a></li>";
-                        } elseif ($current_page > ($total_pages - ($adjacents * 2))) {
-                            echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
-                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
-                            for ($i = ($total_pages - (1 + ($adjacents * 2))); $i <= $total_pages; $i++) {
-                                if ($i == $current_page) {
-                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
-                                } else {
-                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
-                                }
-                            }
-                        } else {
-                            echo "<li class='page-item'><a class='page-link' href='?page=1'>1</a></li>";
-                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
-                            for ($i = ($current_page - $adjacents); $i <= ($current_page + $adjacents); $i++) {
-                                if ($i == $current_page) {
-                                    echo "<li class='page-item active'><a class='page-link' href='#'>" . $i . "</a></li>";
-                                } else {
-                                    echo "<li class='page-item'><a class='page-link' href='?page=" . $i . "'>" . $i . "</a></li>";
-                                }
-                            }
-                            echo "<li class='page-item'><a class='page-link' href='#'>...</a></li>";
-                            echo "<li class='page-item'><a class='page-link' href='?page=" . $total_pages . "'>" . $total_pages . "</a></li>";
-                        }
-                    }
-
-                    // ปุ่ม Next
-                    if ($current_page < $total_pages) {
-                        echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page + 1) . "'>Next</a></li>";
-                    }
-
-                    echo "</ul>";
-                    echo "</nav>";
-
-                    // ค้นหาข้อมูลตาม search_query
-                    $sql = "SELECT * FROM tbl_user";
-                    if (isset($_GET['search_query']) && !empty($_GET['search_query'])) {
-                        $search_query = $conn->real_escape_string($_GET['search_query']);
-                        $sql .= " WHERE user_id LIKE '%$search_query%' 
-                OR CONCAT_WS(' ', prefix, firstname, lastname) LIKE '%$search_query%' 
-                OR username LIKE '%$search_query%' 
-                OR tel LIKE '%$search_query%'";
-                    }
-
-                    if (isset($_GET['reset'])) {
-                        $sql = "SELECT * FROM tbl_user";
-                    }
-
-                    // การแบ่งหน้า
-                    $start_from = ($current_page - 1) * $results_per_page;
-                    $sql .= " LIMIT $start_from, $results_per_page";
-
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                        echo "<table class='table table-striped'>";
-                        echo "<thead>
-                <tr>
-                    <th>รหัสสมาชิก</th>
-                    <th>ชื่อผู้ใช้</th>
-                    <th>รหัสผ่าน</th>
-                    <th>ชื่อเต็ม</th>
-                    <th>หมายเลขโทรศัพท์</th>
-                    <th>อีเมล</th>
-                    <th>ชื่อร้าน</th>
-                    <th>บทบาทของผู้ใช้</th>
-                    <th>การกระทำ</th>
-                </tr>
-                </thead>";
-                        echo "<tbody>";
-
-                        while ($row = $result->fetch_assoc()) {
-                            $fullmembername = htmlspecialchars($row["prefix"] . " " . $row["firstname"] . " " . $row["lastname"]);
-                            $password = htmlspecialchars($row["password"]);
-                            $canDelete = (strtotime($row['last_login']) < strtotime('-1 year')) ? '' : 'disabled';
-                            echo "<tr data-user-id='" . htmlspecialchars($row["user_id"]) . "'>";
-                            echo "<td><strong>" . htmlspecialchars($row["user_id"]) . "</strong></td>";
-                            echo "<td>" . htmlspecialchars($row["username"]) . "</td>";
-                            echo "<td><span class='password-toggle' data-password='$password'>********</span></td>";
-                            echo "<td>" . $fullmembername . "</td>";
-                            echo "<td>" . htmlspecialchars($row["tel"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["shop_name"]) . "</td>";
-                            echo "<td>" . ($row["userrole"] == 1 ? "แอดมิน" : "ผู้ใช้ทั่วไป") . "</td>";
-                            echo "<td class='d-flex'>
-                        <button class='btn mx-1 btn-sm btn-primary edit-btn' data-bs-toggle='modal' data-bs-target='#editModal' data-user-id='" . htmlspecialchars($row["user_id"]) . "'>แก้ไข</button>
-                        <button class='btn mx-1 btn-sm btn-danger delete-btn' $canDelete data-user-id='" . htmlspecialchars($row["user_id"]) . "'>ลบ</button>
-                    </td>";
-                            echo "</tr>";
-                        }
-                        echo "</tbody>";
-                        echo "</table>";
-                    } else {
-                        echo "ไม่พบข้อมูล";
-                    }
-                    ?>
+                    <nav id="paginationNav" aria-label="Page navigation">
+                        <ul class="pagination justify-content-center" id="paginationLinks"></ul>
+                    </nav>
                 </div>
             </div>
-
         </div>
-
     </div>
+
+    <script>
+        $(document).ready(function() {
+            loadData(); // โหลดข้อมูลเมื่อเริ่มต้น
+            $(document).on('click', '#paginationLinks .page-link', function(e) {
+                e.preventDefault(); // ป้องกันการโหลดหน้าใหม่
+                var page = $(this).attr('data-page'); // ดึงหมายเลขหน้าจาก data attribute
+                loadData(page); // โหลดข้อมูลด้วยหมายเลขหน้า
+            });
+
+            // เมื่อมีการพิมพ์ในฟิลด์ค้นหา
+            $('#search').on('input', function() {
+                loadData(); // โหลดข้อมูลใหม่เมื่อมีการค้นหา
+            });
+
+            function loadData(page = 1) {
+                var searchQuery = $('#search').val(); // รับค่าการค้นหา
+
+                $.ajax({
+                    url: 'fetch_jquery_user.php', // URL ของ PHP ที่จัดการกับการค้นหา
+                    method: 'GET',
+                    data: {
+                        search_query: searchQuery,
+                        page: page // ส่งหมายเลขหน้าไปด้วย
+                    },
+                    success: function(data) {
+                        // ตรวจสอบว่าข้อมูลที่ได้รับคือ JSON หรือไม่
+                        try {
+                            var jsonData = JSON.parse(data); // แปลง JSON string เป็น object
+
+                            // แสดงผลลัพธ์ใน #resultsContainer
+                            $('#resultsContainer').html(jsonData.results);
+
+                            // แสดงผลลัพธ์ของ pagination
+                            $('#paginationLinks').html(jsonData.pagination);
+                        } catch (e) {
+                            console.error('Error parsing JSON:', e);
+                            $('#resultsContainer').html('ไม่สามารถแสดงผลลัพธ์ได้');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        $('#resultsContainer').html('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                    }
+                });
+            }
+
+        });
+    </script>
+
+
 
     <!-- Modal แก้ไข -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">

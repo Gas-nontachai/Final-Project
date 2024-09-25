@@ -146,15 +146,6 @@ if (isset($_GET['category_id'])) {
             <div class="container mt-4 bgcolor py-4 rounded">
                 <div class="container-fluid ">
                     <div class="row d-flex justify-content-center align-item-center">
-                        <!-- BTN -->
-                        <div class="row d-flex justify-content-center align-item-center">
-                            <div class="col-12 d-flex justify-content-evenly px-3 pb-4">
-                                <button class="btn btn-lg btn-success m-2 mt-3" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#step1Modal">
-                                    จองพื้นที่การขาย
-                                </button>
-                            </div>
-
-                        </div>
                         <div class="d-flex flex-column border border-dark rounded p-4 mb-3">
                             <div style="text-align: center;">
                                 <strong>
@@ -216,13 +207,15 @@ if (isset($_GET['category_id'])) {
                                                         echo '<p>';
                                                         if ($row2["available"] == 0) {
                                                             echo '
-                                                     <div class="border rounded " style="text-align: center;">
-                                                        <div class="bg-lightt rounded d-flex justify-content-center align-items-center" style="width: 30px; height:30px;">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
-                                                                <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
-                                                            </svg>
-                                                        </div>
-                                                    </div>';
+                                                            <div class="border rounded" style="text-align: center;">
+                                                                <div class="bg-light rounded d-flex justify-content-center align-items-center" style="width: 30px; height:30px;">
+                                                                    <button class="reserveButton rounded border-0" type="button" data-bs-toggle="modal" data-bs-target="#step1Modal">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+                                                                            <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.37 2.37 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                            </div>';
                                                         } else if ($row2["available"] == 1) {
                                                             echo '
                                                 <div class="border rounded d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
@@ -476,7 +469,7 @@ if (isset($_GET['category_id'])) {
                                         </ul>
                                     <?php else: ?>
                                         <p>ยังไม่มีคำขอจองพื้นที่ในตอนนี้</p>
-                                        <button class="btn btn-sm btn-success mx-2" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#step1Modal">
+                                        <button class="reserveButton btn btn-sm btn-success mx-2" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#step1Modal">
                                             จองพื้นที่การขาย
                                         </button> <?php endif; ?>
                                 </div>
@@ -721,6 +714,38 @@ if (isset($_GET['category_id'])) {
             return new Date(today.getFullYear(), today.getMonth(), today.getDate(), timeParts[0], timeParts[1], timeParts[2]);
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            // เรียกใช้ฟังก์ชันตรวจสอบเวลาเมื่อโหลดหน้า
+            checkTime();
+            // อัปเดตสถานะทุกๆ 1 นาที
+            setInterval(checkTime, 60000);
+        });
+
+        function disableReserveButtons() {
+            var buttons = document.getElementsByClassName('reserveButton');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = true;
+                buttons[i].classList.add('disabled');
+                buttons[i].setAttribute('title', 'ระบบยังไม่เปิดหรือปิดการจองแล้ว');
+                if (!buttons[i]._tooltip) {
+                    buttons[i]._tooltip = new bootstrap.Tooltip(buttons[i]);
+                }
+            }
+        }
+
+        function enableReserveButtons() {
+            var buttons = document.getElementsByClassName('reserveButton');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = false;
+                buttons[i].classList.remove('disabled');
+                buttons[i].removeAttribute('title');
+                if (buttons[i]._tooltip) {
+                    buttons[i]._tooltip.dispose();
+                    buttons[i]._tooltip = null;
+                }
+            }
+        }
+
         // ฟังก์ชันตรวจสอบเวลา
         function checkTime() {
             var now = new Date();
@@ -731,53 +756,21 @@ if (isset($_GET['category_id'])) {
             if (closingDate <= openingDate) {
                 // ช่วงเวลาเปิด-ปิดข้ามวัน เช่น 23:00:00 ถึง 05:00:00
                 if (now >= openingDate || now <= closingDate) {
-                    enableReserveButton(); // เปิดใช้งานปุ่มถ้าอยู่ในช่วงเวลาเปิด-ปิด
+                    enableReserveButtons();
                 } else {
-                    disableReserveButton(); // ปิดใช้งานปุ่มถ้าอยู่นอกช่วงเวลาเปิด-ปิด
+                    disableReserveButtons();
                 }
             } else {
                 // ช่วงเวลาเปิด-ปิดในวันเดียวกัน เช่น 09:00:00 ถึง 18:00:00
                 if (now >= openingDate && now <= closingDate) {
-                    enableReserveButton(); // เปิดใช้งานปุ่มถ้าอยู่ในช่วงเวลาเปิด-ปิด
+                    enableReserveButtons();
                 } else {
-                    disableReserveButton(); // ปิดใช้งานปุ่มถ้าอยู่นอกช่วงเวลาเปิด-ปิด
+                    disableReserveButtons();
                 }
             }
         }
-
-        // ปิดใช้งานปุ่มพร้อม tooltip
-        function disableReserveButton() {
-            var button = document.getElementById('reserveButton');
-            if (button) {
-                button.disabled = true;
-                button.classList.add('disabled');
-                button.setAttribute('title', 'ระบบยังไม่เปิดหรือปิดการจองแล้ว');
-                if (!button._tooltip) { // ตรวจสอบว่ามี Tooltip อยู่หรือไม่
-                    button._tooltip = new bootstrap.Tooltip(button); // ใช้ tooltip ของ Bootstrap
-                }
-            }
-        }
-
-        // เปิดใช้งานปุ่ม
-        function enableReserveButton() {
-            var button = document.getElementById('reserveButton');
-            if (button) {
-                button.disabled = false;
-                button.classList.remove('disabled');
-                button.removeAttribute('title');
-                if (button._tooltip) {
-                    button._tooltip.dispose(); // ลบ tooltip ที่ใช้งานอยู่
-                    button._tooltip = null;
-                }
-            }
-        }
-
-        // เรียกใช้ฟังก์ชันตรวจสอบเวลาเมื่อโหลดหน้า
-        checkTime();
-
-        // อัปเดตสถานะทุกๆ 1 นาที (เพียงพอสำหรับการตรวจสอบเวลา)
-        setInterval(checkTime, 60000);
     </script>
+
 
 
     <script>
@@ -900,7 +893,12 @@ if (isset($_GET['category_id'])) {
                     <!-- Progress Bar -->
                     <div class="progress mb-4">
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 1</div>
+
                     </div>
+                    <strong style="font-size: 14px; color: red; display: block; text-align: center;">
+                        *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
+                    </strong>
+
 
                     <form action="./reserve_order.php" method="post">
                         <table class="table table-borderless">
@@ -1041,7 +1039,9 @@ if (isset($_GET['category_id'])) {
                     <!-- Progress Bar -->
                     <div class="progress mb-4">
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 3</div>
-                    </div>
+                    </div> <strong style="font-size: 14px; color: red; display: block; text-align: center;">
+                        *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
+                    </strong>
                     <table class="table table-borderless">
                         <tbody>
                             <tr>
