@@ -88,7 +88,7 @@ if ($userrole == 0) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            background-image: url(../asset/img/img.market2.jpg);
+            background-image: url(../asset/img/img.market2blur.png);
             width: 100%;
             height: 100%;
             background-repeat: repeat;
@@ -289,104 +289,6 @@ if ($userrole == 0) {
                 passwordField.type = isVisible ? 'password' : 'text';
                 document.getElementById('togglePassword').textContent = isVisible ? 'แสดง' : 'ซ่อน';
             });
-
-            // การคลิกปุ่มแก้ไข
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id');
-                    fetch(`./get_user.php?user_id=${userId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('edit_user_id').value = data.user_id;
-                            document.getElementById('edit_username').value = data.username;
-                            document.getElementById('edit_password').value = data.password; // จัดการนี้อย่างปลอดภัย
-                            document.getElementById('edit_tel').value = data.tel;
-                            document.getElementById('edit_email').value = data.email;
-                            document.getElementById('edit_token').value = data.token;
-                            document.getElementById('edit_shop_name').value = data.shop_name;
-                        });
-                });
-            });
-
-            document.getElementById('editForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-
-                // แสดงค่าของ FormData ในคอนโซล
-                for (const [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
-
-                fetch('update_user.php', {
-                        method: 'POST',
-                        body: formData
-                    }).then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            Swal.fire({
-                                title: 'สำเร็จ',
-                                text: 'ข้อมูลผู้ใช้ถูกอัปเดตเรียบร้อยแล้ว',
-                                icon: 'success',
-                                confirmButtonText: 'ตกลง'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'ข้อผิดพลาด',
-                                text: result.message || 'ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้',
-                                icon: 'error',
-                                confirmButtonText: 'ตกลง'
-                            });
-                        }
-                    }).catch(error => {
-                        Swal.fire({
-                            title: 'ข้อผิดพลาด',
-                            text: 'เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่อีกครั้งในภายหลัง',
-                            icon: 'error',
-                            confirmButtonText: 'ตกลง'
-                        });
-                    });
-            });
-
-
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id');
-                    const canDelete = !this.hasAttribute('disabled');
-                    if (canDelete) {
-                        Swal.fire({
-                            title: 'คุณแน่ใจไหม?',
-                            text: "คุณจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'ใช่, ลบเลย!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                fetch(`delete_user.php?user_id=${userId}`)
-                                    .then(response => response.json())
-                                    .then(result => {
-                                        if (result.success) {
-                                            Swal.fire('ลบแล้ว!', 'ผู้ใช้ถูกลบเรียบร้อยแล้ว', 'success').then(() => {
-                                                location.reload();
-                                            });
-                                        } else {
-                                            Swal.fire('ข้อผิดพลาด', result.message || 'ไม่สามารถลบผู้ใช้ได้', 'error');
-                                        }
-                                    })
-                                    .catch(error => {
-                                        Swal.fire('ข้อผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
-                                    });
-                            }
-                        });
-                    } else {
-                        Swal.fire('ไม่อนุญาต', 'ไม่สามารถลบผู้ใช้นี้ได้', 'info');
-                    }
-                });
-            });
-
         });
     </script>
 

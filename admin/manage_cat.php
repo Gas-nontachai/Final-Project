@@ -84,7 +84,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            background-image: url(../asset/img/img.market2.jpg);
+            background-image: url(../asset/img/img.market2blur.png);
             width: 100%;
             height: 100%;
             background-repeat: repeat;

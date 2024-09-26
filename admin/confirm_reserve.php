@@ -122,7 +122,7 @@ if (isset($_GET['category_id'])) {
     <link rel="stylesheet" href="../asset/css/font.css">
     <style>
         body {
-            background-image: url(../asset/img/img.market2.jpg);
+            background-image: url(../asset/img/img.market2blur.png);
             width: 100%;
             height: 100%;
             background-repeat: repeat;

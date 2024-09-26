@@ -125,7 +125,7 @@ if (isset($_GET['category_id'])) {
     <link rel="stylesheet" href="../asset/css/font.css">
     <style>
         body {
-            background-image: url(../asset/img/img.market2.jpg);
+            background-image: url(../asset/img/img.market2blur.png);
             width: 100%;
             height: 100%;
             background-repeat: repeat;
@@ -896,8 +896,10 @@ if (isset($_GET['category_id'])) {
 
                     </div>
                     <strong style="font-size: 14px; color: red; display: block; text-align: center;">
-                    *ล็อคที่ได้รับมอบโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถเลือกจองล็อคใดล็อคนึงได้*
+                        *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
                     </strong>
+
+
                     <form action="./reserve_order.php" method="post">
                         <table class="table table-borderless">
                             <tbody>

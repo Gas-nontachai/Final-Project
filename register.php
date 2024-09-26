@@ -157,7 +157,7 @@ if (isset($_POST["submit"])) {
             padding: 10px;
             display: flex;
             justify-content: center;
-            background-image: url(./asset/img/img.market.jpg);
+            background-image: url(./asset/img/img.market.blur.jpg);
             width: 100%;
             height: 100%;
             background-repeat: repeat;

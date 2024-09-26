@@ -105,7 +105,7 @@ if (isset($_POST["submit"])) {
     </style>
 </head>
 
-<body style="background-image: url(./asset/img/img.market2.jpg); width: 100%; height: 100vh; background-repeat: repeat; background-size: cover;">
+<body style="background-image: url(./asset/img/img.market2blur.png); width: 100%; height: 100vh; background-repeat: repeat; background-size: cover;">
     <div class="p-4 rounded " style="background-color:rgba(255, 255, 255, 0.7);">
         <div class="login-form">
             <h1>เข้าสู่ระบบ</h1>

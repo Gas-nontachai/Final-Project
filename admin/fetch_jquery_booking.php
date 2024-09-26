@@ -2,7 +2,7 @@
 session_start();
 require("../condb.php");
 
-$results_per_page = 10; // กำหนดจำนวนผลลัพธ์ต่อหน้า
+$results_per_page = 7; // กำหนดจำนวนผลลัพธ์ต่อหน้า
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $start_from = ($current_page - 1) * $results_per_page;
 
@@ -65,7 +65,6 @@ if ($result->num_rows > 0) {
                 $booking_type_display = 'ไม่ทราบประเภทการจอง';
                 break;
         }
-
         // ปรับรูปแบบของข้อมูลที่แสดง
         $output .= '<tr>';
         $output .= '<td><strong>' . (is_null($row["booking_id"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($row["booking_id"])) . '</strong></td>';
@@ -76,7 +75,16 @@ if ($result->num_rows > 0) {
             "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" :
             "<span class='badge " . getBadgeClass($row['booking_status']) . "'>" . htmlspecialchars($row['status']) . "</span>") . '</td>';
         $output .= '<td>' . (is_null($booking_type_display) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($booking_type_display)) . '</td>';
-        $output .= '<td><button class="btn btn-primary">ดู</button></td>';
+        $output .= '<td> 
+        <button class="btn btn-primary m-2 btnviewmodal" type="button" 
+                data-bs-toggle="modal" 
+                data-bs-target="#viewBookingModal" 
+                data-id="' . htmlspecialchars($row['booking_id']) . '">
+                ดู
+        </button>
+    </td>';
+
+
         $output .= '</tr>';
     }
 } else {

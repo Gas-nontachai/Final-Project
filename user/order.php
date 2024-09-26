@@ -125,7 +125,7 @@ if (isset($_GET['category_id'])) {
     <link rel="stylesheet" href="../asset/css/font.css">
     <style>
         body {
-            background-image: url(../asset/img/img.market2.jpg);
+            background-image: url(../asset/img/img.market2blur.png);
             width: 100%;
             height: 100%;
             background-repeat: repeat;
@@ -141,7 +141,7 @@ if (isset($_GET['category_id'])) {
     ?>
 
     <div class="row ">
-        <div class="col bgcolor">
+        <div class="col">
             <!--Dispaly-->
             <div class="container my-4 px-2 border rounded overflow-auto bgcolor py-4" style="width: 100%; height: 40rem;">
                 <ul class="nav nav-tabs" id="myTab">
