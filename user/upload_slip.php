@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     icon: "success",
                                     showConfirmButton: true
                                 }).then((result) => {
-                                    window.location.href = "./index.php";
+                                    window.location.href = "./order.php";
                                 });
                             });
                         </script>
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 icon: "error",
                                 confirmButtonText: "ตกลง"
                             }).then((result) => {
-                                    window.location.href = "./index.php";
+                                    window.location.href = "./order.php";
                                 });
                         </script>
                     </body>
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             icon: "error",
                             confirmButtonText: "ตกลง"
                         }).then((result) => {
-                                    window.location.href = "./index.php";
+                                    window.location.href = "./order.php";
                                 });
                     </script>
                 </body>
@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         icon: "error",
                         confirmButtonText: "ตกลง"
                     }).then((result) => {
-                                    window.location.href = "./index.php";
+                                    window.location.href = "./order.php";
                                 });
                 </script>
             </body>
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     icon: "error",
                     confirmButtonText: "ตกลง"
                 }).then((result) => {
-                                    window.location.href = "./index.php";
+                                    window.location.href = "./order.php";
                                 });
             </script>
         </body>

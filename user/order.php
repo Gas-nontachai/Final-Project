@@ -218,6 +218,9 @@ if (isset($_GET['category_id'])) {
                                 ?>
                                 <div class="container">
                                     <?php if (mysqli_num_rows($result) > 0): ?>
+                                        <button class="btn btn-sm btn-success mx-2" type="button" id="reserveButton" data-bs-toggle="modal" data-bs-target="#step1Modal">
+                                            จองพื้นที่การขาย
+                                        </button>
                                         <ul class="list-group">
                                             <?php while ($row = mysqli_fetch_assoc($result)): ?>
                                                 <li class="list-group-item">
@@ -335,6 +338,7 @@ if (isset($_GET['category_id'])) {
                                                 </li>
                                             <?php endwhile; ?>
                                         </ul>
+
                                     <?php else: ?>
                                         <p>ยังไม่มีคำขอจองพื้นที่ในตอนนี้</p>
                                         <p>จองพื้นที่การขาย คลิ๊ก : </p>
@@ -763,7 +767,9 @@ if (isset($_GET['category_id'])) {
                     <div class="progress mb-4">
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 1</div>
                     </div>
-
+                    <strong style="font-size: 14px; color: red; display: block; text-align: center;">
+                        *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
+                    </strong>
                     <form action="./reserve_order.php" method="post">
                         <table class="table table-borderless">
                             <tbody>
@@ -904,6 +910,9 @@ if (isset($_GET['category_id'])) {
                     <div class="progress mb-4">
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 3</div>
                     </div>
+                    <strong style="font-size: 14px; color: red; display: block; text-align: center;">
+                        *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
+                    </strong>
                     <table class="table table-borderless">
                         <tbody>
                             <tr>

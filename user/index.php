@@ -958,8 +958,8 @@ if (isset($_GET['category_id'])) {
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
                 </div>
             </div>
         </div>
@@ -1019,8 +1019,8 @@ if (isset($_GET['category_id'])) {
                         <strong style="color: red;">*กรุณาเลือกประเภทสินค้าให้สอดคล้องกับโซน*</strong>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step3Modal" data-bs-dismiss="modal" onclick="updateProgressBar(100, 'ขั้นตอนที่ 3')">ถัดไป</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#step3Modal" data-bs-dismiss="modal" onclick="updateProgressBar(100, 'ขั้นตอนที่ 3')">ถัดไป</button>
                     </div>
                 </div>
             </div>
@@ -1075,7 +1075,7 @@ if (isset($_GET['category_id'])) {
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
                     <input class="btn btn-success" type="submit" name="submit" value="ยืนยันการจอง">
                     </form>
                 </div>

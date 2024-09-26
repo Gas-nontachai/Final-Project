@@ -82,15 +82,29 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <meta name="author" content="">
 
     <title>Dashboard</title>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
     <!-- Custom styles for this template-->
     <link href="../asset/css/sb-admin-2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .bg {
+            background-color: #F0EBE3;
+        }
 
+        .chart-container {
+            position: relative;
+            width: 60%;
+            height: 100%;
+            /* Set height to a smaller percentage */
+            margin: auto;
+            /* Center the chart */
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -99,21 +113,21 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     include('./admin_nav.php');
     ?>
     <!-- Page Wrapper -->
-    <div id="wrapper" class="mt-3">
+    <div class="bg" id="wrapper" class="mt-3">
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="bg content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content">
+            <div id=" content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid mt-4">
+                <div class=" container-fluid mt-4">
 
-                    <div class="container-fluid d-flex justify-content-around align-items-start">
-                        <div style="width: 50%;">
+                    <div class=" container-fluid d-flex justify-content-around align-items-start">
+                        <div style="width: 50%; height:30rem;" class=" shadow bg-light p-3 m-2 rounded">
                             <!-- Content Row -->
-                            <div class="row">
+                            <div class="row ">
 
                                 <!-- สมาชิกปัจจุบัน Card -->
                                 <div class="col-xl-3 col-md-6 mb-4">
@@ -272,8 +286,8 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </div>
                         </div>
 
-                        <div style="width: 40%;">
-                            <div class="row overflow-auto" style="height: 25rem;">
+                        <div style="width: 40%; height: 30rem;" class="shadow bg-light  p-3 m-2 rounded">
+                            <div class="row overflow-auto" style="height: 28rem;">
                                 <?php
                                 $sql = "SELECT id, comment, rating, created_at, firstname FROM market_booking.comments AS C
                                 LEFT JOIN tbl_user AS U ON C.user_id = U.user_id 
@@ -304,291 +318,382 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                     <?php endif; ?>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                    <div class="container-fluid d-flex justify-content-around align-items-start">
-                        <div class="row ms-5" style="width: 50%;">
-                            <?php
-                            // ดึงข้อมูลการจองต่อเดือน
-                            $sql_month = "SELECT DATE_FORMAT(booking_date, '%Y-%m') AS month, COUNT(*) AS total_bookings FROM booked GROUP BY month";
-                            $result_month = $conn->query($sql_month);
-
-                            $data_month = array();
-                            if ($result_month->num_rows > 0) {
-                                while ($row = $result_month->fetch_assoc()) {
-                                    $data_month[] = $row;
-                                }
-                            }
-
-                            // ดึงข้อมูลการจองต่อวัน
-                            $sql_day = "SELECT DATE(booking_date) AS day, COUNT(*) AS total_bookings FROM booked GROUP BY day";
-                            $result_day = $conn->query($sql_day);
-
-                            $data_day = array();
-                            if ($result_day->num_rows > 0) {
-                                while ($row = $result_day->fetch_assoc()) {
-                                    $data_day[] = $row;
-                                }
-                            }
-                            ?>
-                            <div class="container mt-5">
-                                <h1 class="mb-4"> <strong>ยอดการจองต่อวัน</strong> </h1>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <canvas id="dailyBookingsChart"></canvas>
-                                    </div>
+                    <div class="mt-3 border-top border-bottom border-dark py-2 mb-3">
+                        <div class="container rounded bg-light ">
+                            <h2>สถิติการจอง</h2>
+                            <div class="form-group">
+                                <label for="timeFrame">เลือกช่วงเวลา:</label>
+                                <select id="timeFrame" class="form-control">
+                                    <option value="monthly">รายเดือน</option>
+                                    <option value="weekly">รายสัปดาห์</option>
+                                    <option value="daily">รายวัน</option>
+                                </select>
+                            </div>
+                            <div class="d-flex">
+                                <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
+                                    <canvas id="bookingChart" width="250" height="300"></canvas>
+                                </div>
+                                <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
+                                    <canvas id="revenueChart" width="250" height="300" class="mt-4"></canvas>
                                 </div>
                             </div>
-                            <div class="container mt-5">
-                                <h1 class="mb-4"> <strong>ยอดการจองต่อเดือน</strong> </h1>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <canvas id="monthlyBookingsChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <script>
-                                // กราฟยอดการจองต่อเดือน
-                                var dataFromPHP_month = <?php echo json_encode($data_month); ?>;
-
-                                var labels_month = dataFromPHP_month.map(function(e) {
-                                    return e.month;
-                                });
-                                var values_month = dataFromPHP_month.map(function(e) {
-                                    return e.total_bookings;
-                                });
-
-                                var ctx_month = document.getElementById('monthlyBookingsChart').getContext('2d');
-                                var myChart_month = new Chart(ctx_month, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: labels_month,
-                                        datasets: [{
-                                            label: 'ยอดการจอง',
-                                            data: values_month,
-                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                            borderColor: 'rgba(75, 192, 192, 1)',
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        plugins: {
-                                            legend: {
-                                                position: 'top',
-                                            },
-                                            tooltip: {
-                                                callbacks: {
-                                                    label: function(context) {
-                                                        return context.label + ': ' + context.raw;
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        scales: {
-                                            x: {
-                                                beginAtZero: true,
-                                                title: {
-                                                    display: true,
-                                                    text: 'เดือน'
-                                                }
-                                            },
-                                            y: {
-                                                beginAtZero: true,
-                                                title: {
-                                                    display: true,
-                                                    text: 'ยอดการจองทั้งหมด'
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-
-                                // กราฟยอดการจองต่อวัน
-                                var dataFromPHP_day = <?php echo json_encode($data_day); ?>;
-
-                                var labels_day = dataFromPHP_day.map(function(e) {
-                                    return e.day;
-                                });
-                                var values_day = dataFromPHP_day.map(function(e) {
-                                    return e.total_bookings;
-                                });
-
-                                var ctx_day = document.getElementById('dailyBookingsChart').getContext('2d');
-                                var myChart_day = new Chart(ctx_day, {
-                                    type: 'line', // เปลี่ยนเป็น line เพื่อดูแนวโน้มการจองต่อวัน
-                                    data: {
-                                        labels: labels_day,
-                                        datasets: [{
-                                            label: 'ยอดการจอง',
-                                            data: values_day,
-                                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                            borderColor: 'rgba(153, 102, 255, 1)',
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        plugins: {
-                                            legend: {
-                                                position: 'top',
-                                            },
-                                            tooltip: {
-                                                callbacks: {
-                                                    label: function(context) {
-                                                        return context.label + ': ' + context.raw;
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        scales: {
-                                            x: {
-                                                beginAtZero: true,
-                                                title: {
-                                                    display: true,
-                                                    text: 'วัน'
-                                                }
-                                            },
-                                            y: {
-                                                beginAtZero: true,
-                                                title: {
-                                                    display: true,
-                                                    text: 'ยอดการจองทั้งหมด'
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            </script>
                         </div>
+                        <script>
+                            $(document).ready(function() {
+                                const bookingCtx = document.getElementById('bookingChart').getContext('2d');
+                                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                                let bookingChart;
+                                let revenueChart;
 
-                        <div class="row" style="width: 50%; ">
-                            <style>
-                                .chart-container {
-                                    position: relative;
-                                    width: 100%;
-                                    height: 400px;
-                                    /* ปรับความสูงของกราฟตามต้องการ */
+                                function formatNumber(num) {
+                                    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                 }
 
-                                #bookingStatusChart {
-                                    width: 100% !important;
-                                    height: auto !important;
-                                }
-                            </style>
-                            <?php
-                            $sql = "SELECT status, COUNT(*) AS count FROM booked AS B
-                                    LEFT JOIN booking_status AS BS ON B.booking_status = BS.id
-                                    GROUP BY booking_status";
-                            $result = $conn->query($sql);
+                                function fetchData(timeFrame) {
+                                    $.ajax({
+                                        url: 'fetch_stat_booking_total.php',
+                                        type: 'GET',
+                                        data: {
+                                            timeFrame: timeFrame
+                                        },
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            let labels = [];
+                                            const totalBookings = data.map(item => item.total_bookings);
+                                            const totalRevenue = data.map(item => item.total_revenue);
 
-                            $data = array();
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $data[] = $row;
-                                }
-                            }
-                            $conn->close();
-                            ?>
-                            <div class="container">
-                                <div class="row ">
-                                    <div class="col-md-12">
-                                        <div class="chart-container p-3 mb-4">
-                                            <h1 class="mb-4 text-center"> <strong>กราฟสถานะการจอง</strong> </h1>
-                                            <canvas id="bookingStatusChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            if (timeFrame === 'daily') {
+                                                labels = data.map(item => {
+                                                    const date = new Date(item.booking_date);
+                                                    return date.toLocaleDateString('th-TH', {
+                                                        day: 'numeric',
+                                                        month: 'long',
+                                                        year: 'numeric'
+                                                    });
+                                                });
+                                            } else if (timeFrame === 'weekly') {
+                                                labels = data.map(item => {
+                                                    const yearWeek = item.booking_week.split('-');
+                                                    const year = yearWeek[0];
+                                                    const week = yearWeek[1];
+                                                    const firstDayOfWeek = new Date(year, 0, (week - 1) * 7 + 1);
+                                                    return firstDayOfWeek.toLocaleDateString('th-TH', {
+                                                        month: 'long',
+                                                        year: 'numeric'
+                                                    }) + ` (สัปดาห์ที่ ${week})`;
+                                                });
+                                            } else {
+                                                labels = data.map(item => {
+                                                    const monthDate = new Date(item.booking_month + '-01');
+                                                    return monthDate.toLocaleDateString('th-TH', {
+                                                        month: 'long',
+                                                        year: 'numeric'
+                                                    });
+                                                });
+                                            }
 
-                            <script>
-                                var dataFromPHP = <?php echo json_encode($data); ?>;
+                                            if (bookingChart) {
+                                                bookingChart.destroy();
+                                            }
 
-                                var labels = dataFromPHP.map(function(e) {
-                                    return e.status;
-                                });
-                                var values = dataFromPHP.map(function(e) {
-                                    return e.count;
-                                });
+                                            if (revenueChart) {
+                                                revenueChart.destroy();
+                                            }
 
-                                var ctx = document.getElementById('bookingStatusChart').getContext('2d');
-                                var bookingStatusChart = new Chart(ctx, {
-                                    type: 'pie',
-                                    data: {
-                                        labels: labels,
-                                        datasets: [{
-                                            label: 'กราฟสถานะการจอง',
-                                            data: values,
-                                            backgroundColor: [
-                                                'rgba(54, 162, 235, 0.2)',
-                                                'rgba(255, 99, 132, 0.2)',
-                                                'rgba(255, 206, 86, 0.2)',
-                                                'rgba(75, 192, 192, 0.2)',
-                                                'rgba(153, 102, 255, 0.2)',
-                                                'rgba(255, 159, 64, 0.2)'
-                                            ],
-                                            borderColor: [
-                                                'rgba(54, 162, 235, 1)',
-                                                'rgba(255, 99, 132, 1)',
-                                                'rgba(255, 206, 86, 1)',
-                                                'rgba(75, 192, 192, 1)',
-                                                'rgba(153, 102, 255, 1)',
-                                                'rgba(255, 159, 64, 1)'
-                                            ],
-                                            borderWidth: 1
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false, // ปิดการรักษาสัดส่วน
-                                        plugins: {
-                                            legend: {
-                                                position: 'top',
-                                            },
-                                            tooltip: {
-                                                callbacks: {
-                                                    label: function(context) {
-                                                        return context.label + ': ' + context.raw;
+                                            // Booking Chart
+                                            bookingChart = new Chart(bookingCtx, {
+                                                type: 'bar',
+                                                data: {
+                                                    labels: labels,
+                                                    datasets: [{
+                                                        label: 'จำนวนการจอง',
+                                                        data: totalBookings,
+                                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: true,
+                                                            title: {
+                                                                display: true,
+                                                                text: 'จำนวนการจอง'
+                                                            }
+                                                        },
+                                                        x: {
+                                                            title: {
+                                                                display: true,
+                                                                text: 'วัน/สัปดาห์/เดือน'
+                                                            }
+                                                        }
                                                     }
                                                 }
-                                            }
+                                            });
+
+                                            // Revenue Chart
+                                            revenueChart = new Chart(revenueCtx, {
+                                                type: 'bar',
+                                                data: {
+                                                    labels: labels,
+                                                    datasets: [{
+                                                        label: 'รายได้รวม',
+                                                        data: totalRevenue,
+                                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: true,
+                                                            title: {
+                                                                display: true,
+                                                                text: 'รายได้ (บาท)'
+                                                            }
+                                                        },
+                                                        x: {
+                                                            title: {
+                                                                display: true,
+                                                                text: 'วัน/สัปดาห์/เดือน'
+                                                            }
+                                                        }
+                                                    },
+                                                    plugins: {
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function(context) {
+                                                                    return context.dataset.label + ': ' + formatNumber(context.raw) + ' ฿'; // Format revenue with commas
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) {
+                                            alert('เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง');
+                                            console.error('AJAX Error:', textStatus, errorThrown);
                                         }
-                                    }
+                                    });
+                                }
+
+
+                                $('#timeFrame').change(function() {
+                                    const selectedValue = $(this).val();
+                                    fetchData(selectedValue);
                                 });
-                            </script>
-                        </div>
+
+                                // เรียกใช้ฟังก์ชันเริ่มต้นเมื่อโหลดหน้า
+                                fetchData('monthly');
+                            });
+                        </script>
                     </div>
+                    <div class="mb-5 container py-3 pb-2 mb-3 shadow bg-light rounded">
+                        <h2>วิเคราะห์โซนและการวิเคราะห์การจองตามประเภทสินค้า</h2>
+
+                        <div class="form-group mb-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="startDate" class="form-label">วันเริ่มต้น</label>
+                                    <input type="date" id="startDate" class="form-control" value="<?= date('Y-m-d', strtotime('-7 days')); ?>">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="endDate" class="form-label">วันสิ้นสุด</label>
+                                    <input type="date" id="endDate" class="form-control" value="<?= date('Y-m-d'); ?>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="w-50 m-2 shadow bg-light p-3 rounded">
+                                <h2>วิเคราะห์โซน</h2>
+                                <div class="chart-container">
+                                    <canvas id="zoneChart"></canvas> <!-- No height and width set inline -->
+                                    <div class="legend-container" id="legendZone"></div>
+
+                                </div>
+                            </div>
+                            <div class="w-50 m-2 shadow bg-light p-3 rounded">
+                                <h2>การวิเคราะห์การจองตามประเภทสินค้า</h2>
+                                <div class="chart-container">
+                                    <canvas id="productTypeChart"></canvas> <!-- No height and width set inline -->
+                                    <div class="legend-container" id="legendProduct"></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            // ฟังก์ชันในการโหลดข้อมูลการจองสำหรับโซน
+                            function loadZoneData(startDate, endDate) {
+                                fetch('fetch_zone_data_analysis.php?start_date=' + startDate + '&end_date=' + endDate)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        updateZoneChart(data.labels, data.booking_amounts);
+                                    });
+                            }
+
+                            // โหลดข้อมูลครั้งแรกเมื่อเปิดหน้า
+                            loadZoneData('<?= date('Y-m-d', strtotime('-7 days')); ?>', '<?= date('Y-m-d'); ?>');
+
+                            // สร้างกราฟด้วย Chart.js สำหรับโซน
+                            var ctxZone = document.getElementById('zoneChart').getContext('2d');
+                            var zoneChart = new Chart(ctxZone, {
+                                type: 'pie',
+                                data: {
+                                    labels: [],
+                                    datasets: [{
+                                        label: 'จำนวนการจอง',
+                                        data: [],
+                                        backgroundColor: [
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(255, 206, 86, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                        ],
+                                        borderColor: [
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                }
+                            });
+
+                            function updateZoneChart(labels, data) {
+                                zoneChart.data.labels = labels;
+                                zoneChart.data.datasets[0].data = data;
+                                zoneChart.update();
+
+                                // สร้างลิสต์ชื่อด้านขวา
+                                var legendHtml = '';
+                                labels.forEach((label, index) => {
+                                    legendHtml += '<div style="display: flex; align-items: center;">' +
+                                        '<div style="width: 15px; height: 15px; background-color:' + zoneChart.data.datasets[0].backgroundColor[index] + '; margin-right: 10px;"></div>' +
+                                        '<span>' + label + ' (' + data[index] + ')</span>' +
+                                        '</div>';
+                                });
+                                document.getElementById('legendZone').innerHTML = legendHtml;
+                            }
+
+                            document.getElementById('startDate').addEventListener('change', function() {
+                                var startDate = this.value;
+                                var endDate = document.getElementById('endDate').value;
+                                loadZoneData(startDate, endDate);
+                            });
+
+                            document.getElementById('endDate').addEventListener('change', function() {
+                                var startDate = document.getElementById('startDate').value;
+                                var endDate = this.value;
+                                loadZoneData(startDate, endDate);
+                            });
+                        </script>
+
+                        <script>
+                            // ฟังก์ชันในการโหลดข้อมูลการจองสำหรับประเภทสินค้า
+                            function loadProductTypeData(startDate, endDate) {
+                                fetch('fetch_product_type_analysis.php?start_date=' + startDate + '&end_date=' + endDate)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        updateProductTypeChart(data.labels, data.booking_amounts);
+                                    });
+                            }
+
+                            // โหลดข้อมูลครั้งแรกเมื่อเปิดหน้า
+                            loadProductTypeData('<?= date('Y-m-d', strtotime('-7 days')); ?>', '<?= date('Y-m-d'); ?>');
+
+                            // สร้างกราฟด้วย Chart.js สำหรับประเภทสินค้า
+                            var ctxProduct = document.getElementById('productTypeChart').getContext('2d');
+                            var productTypeChart = new Chart(ctxProduct, {
+                                type: 'pie',
+                                data: {
+                                    labels: [],
+                                    datasets: [{
+                                        label: 'จำนวนการจอง',
+                                        data: [],
+                                        backgroundColor: [
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(255, 206, 86, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                        ],
+                                        borderColor: [
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                }
+                            });
+
+                            function updateProductTypeChart(labels, data) {
+                                productTypeChart.data.labels = labels;
+                                productTypeChart.data.datasets[0].data = data;
+                                productTypeChart.update();
+
+                                // สร้างลิสต์ชื่อด้านขวา
+                                var legendHtml = '';
+                                labels.forEach((label, index) => {
+                                    legendHtml += '<div style="display: flex; align-items: center;">' +
+                                        '<div style="width: 15px; height: 15px; background-color:' + productTypeChart.data.datasets[0].backgroundColor[index] + '; margin-right: 10px;"></div>' +
+                                        '<span>' + label + ' (' + data[index] + ')</span>' +
+                                        '</div>';
+                                });
+                                document.getElementById('legendProduct').innerHTML = legendHtml;
+                            }
+
+                            document.getElementById('startDate').addEventListener('change', function() {
+                                var startDate = this.value;
+                                var endDate = document.getElementById('endDate').value;
+                                loadProductTypeData(startDate, endDate);
+                            });
+
+                            document.getElementById('endDate').addEventListener('change', function() {
+                                var startDate = document.getElementById('startDate').value;
+                                var endDate = this.value;
+                                loadProductTypeData(startDate, endDate);
+                            });
+                        </script>
+                    </div>
+
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Bootstrap core JavaScript-->
-    <script src="../asset/vendor/jquery/jquery.min.js"></script>
-    <script src="../asset/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="../asset/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="../asset/js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="../asset/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="../asset/js/demo/chart-area-demo.js"></script>
-    <script src="../asset/js/demo/chart-pie-demo.js"></script>
 
 </body>
 

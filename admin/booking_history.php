@@ -112,8 +112,7 @@ $start_from = ($page - 1) * $results_per_page;
                     <form id="searchForm" method="GET">
                         <div class="input-group mb-3">
                             <input class="form-control" id="search" type="text" name="search_query" placeholder="ค้นหาด้วยรหัสการจอง,ชื่อ-สกุล" value="<?php echo isset($_GET['search_query']) ? htmlspecialchars($_GET['search_query']) : ''; ?>">
-                            <button class="btn btn-outline-secondary" type="submit">ค้นหา</button>
-                            <a href="?reset=true" class="btn btn-outline-secondary">รีเซ็ต</a>
+                            <a href="?reset=true" class="btn btn-outline-danger">รีเซ็ต</a>
                         </div>
                     </form>
 

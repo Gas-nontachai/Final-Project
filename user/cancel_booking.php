@@ -66,7 +66,7 @@ try {
                       icon: "success",
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                 }).then((result) => {
-                        window.location.href = "./index.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
+                        window.location.href = "./order.php"; // เปลี่ยนเส้นทางไปยังหน้าล็อกอิน
                     
                 });
             });

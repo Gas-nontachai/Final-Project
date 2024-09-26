@@ -2,7 +2,7 @@
 session_start();
 require("../condb.php");
 
-$results_per_page = 7; // กำหนดจำนวนผลลัพธ์ต่อหน้า
+$results_per_page = 5; // กำหนดจำนวนผลลัพธ์ต่อหน้า
 $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $start_from = ($current_page - 1) * $results_per_page;
 
@@ -41,9 +41,9 @@ function getBadgeClass($status)
         case '4':
             return 'bg-success text-white'; // สีเขียว
         case '6':
-            return 'bg-danger text-dark'; // สีเหลือง
+            return 'bg-danger text-white'; // สีเหลือง
         case '10':
-            return 'bg-danger text-dark'; // สีแดง
+            return 'bg-danger text-white'; // สีแดง
         case '11':
             return 'bg-danger text-white'; // สีน้ำเงิน
         default:
@@ -67,7 +67,7 @@ if ($result->num_rows > 0) {
         }
         // ปรับรูปแบบของข้อมูลที่แสดง
         $output .= '<tr>';
-        $output .= '<td><strong>' . (is_null($row["booking_id"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($row["booking_id"])) . '</strong></td>';
+        $output .= '<td style="text-align:center;"><strong>' . (is_null($row["booking_id"]) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($row["booking_id"])) . '</strong></td>';
         $output .= '<td>' . (is_null($row['fullname']) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($row['fullname'])) . '</td>';
         $output .= '<td>' . (is_null($row['booking_amount']) || is_null($row['total_price']) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($row['booking_amount']) . ' ล็อค รวม: ' . htmlspecialchars($row['total_price']) . ' ฿') . '</td>';
         $output .= '<td>' . (is_null($row['cat_name']) || is_null($row['sub_cat_name']) ? "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" : htmlspecialchars($row['cat_name']) . ' (' . htmlspecialchars($row['sub_cat_name']) . ')') . '</td>';

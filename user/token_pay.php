@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                              icon: "success",
                                 showConfirmButton: true // ซ่อนปุ่ม "OK"
                         }).then((result) => {
-                                window.location.href = "./index.php";
+                                window.location.href = "./order.php";
                         });
                     });
                 </script>
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         icon: "error",
                         showConfirmButton: true // ซ่อนปุ่ม "OK"
                     }).then(() => {
-                        window.location.href = "./index.php"; 
+                        window.location.href = "./order.php"; 
                     });
                 });
             </script>

@@ -187,6 +187,7 @@ $start_from = ($page - 1) * $results_per_page;
                     echo "</ul>";
                     echo "</nav>";
                     $sql = "SELECT 
+                    B.booking_status,
                                 B.booking_id, 
                                 CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
                                 B.booking_amount, 
@@ -224,13 +225,29 @@ $start_from = ($page - 1) * $results_per_page;
                             </tr>
                         </thead>";
                         echo "<tbody>";
-
+                        function getBadgeClass($status)
+                        {
+                            switch ($status) {
+                                case '4':
+                                    return 'bg-success text-white'; // สีเขียว
+                                case '6':
+                                    return 'bg-danger text-white'; // สีเหลือง
+                                case '10':
+                                    return 'bg-danger text-white'; // สีแดง
+                                case '11':
+                                    return 'bg-success text-white'; // สีน้ำเงิน
+                                default:
+                                    return 'bg-primary text-white'; // สีเทา สำหรับสถานะอื่น ๆ
+                            }
+                        }
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td><strong>" . $row["booking_id"] . "</strong></td>";
-                            echo "<td><strong>" . $row["booking_amount"] . "ล็อค รวม:" . $row["total_price"] . "฿</strong></td>";
-                            echo "<td><strong>" . $row["cat_name"] . "(" . $row["sub_cat_name"] . ")</strong></td>";
-                            echo "<td><strong>" . $row["status"] . "</strong></td>";
+                            echo "<td style='text-align:center;'><strong>" . $row["booking_id"] . "</strong></td>";
+                            echo "<td><strong>" . $row["booking_amount"] . " ล็อค รวม: " . $row["total_price"] . " ฿</strong></td>";
+                            echo "<td><strong>" . $row["cat_name"] . " (" . $row["sub_cat_name"] . ")</strong></td>";
+                            echo "<td>" . (is_null($row['status']) ?
+                                "<span class='text-danger'>ข้อมูลถูกลบไปแล้ว</span>" :
+                                "<span class='badge " . getBadgeClass($row['booking_status']) . "'>" . htmlspecialchars($row['status']) . "</span>") . "</td>";
                             echo "<td>
                                     <button 
                                         class='btn btn-primary m-2' type='button' 
@@ -239,7 +256,7 @@ $start_from = ($page - 1) * $results_per_page;
                                         data-id='" . $row["booking_id"] . "'>
                                         ดู
                                     </button>
-                                </td>";
+                                  </td>";
                             echo "</tr>";
                         }
 

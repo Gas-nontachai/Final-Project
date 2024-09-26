@@ -353,14 +353,13 @@ if (isset($_GET['category_id'])) {
                                                                             break;
                                                                         case 7:
                                                                             echo " <td>
-                                    <a href='./refund_page.php'><button class='btn btn-sm btn-primary m-2' type='button' >ไปหน้าคืนเงิน</button></a>
-                                    </td>";
+                                                                                    <a href='./refund_page.php'><button class='btn btn-sm btn-danger m-2' type='button' >ไปหน้าคืนเงิน</button></a>
+                                                                                    </td>";
                                                                             break;
                                                                         case 9:
                                                                             echo " <td>
-                                        <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                        <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
-                                        </td>";
+                                                                                    <button class='btn btn-sm btn-success m-2' type='button' data-bs-toggle='modal' data-bs-target='#ConfirmModal' data-id='" . $row["booking_id"] . "'  data-name='" . $row["zone_name"] . "'  data-amount='" . $row["booking_amount"] . "'>ปรับเปลี่ยนสถานะ/ให้เลขล็อค</button>
+                                                                                    </td>";
                                                                         case 10:
                                                                             echo " <td>
                                                                                 <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
@@ -749,11 +748,11 @@ if (isset($_GET['category_id'])) {
                                             // Add cancel button to modal footer
                                             footer.innerHTML = `
                                                                 <button id="cancelOrderBtn" class="btn btn-danger">ยกเลิกการจอง</button>
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
                                                             `;
                                         } else {
                                             footer.innerHTML = `
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
                                                             `;
                                         }
 

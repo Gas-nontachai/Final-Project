@@ -27,7 +27,7 @@
 </head>
 <nav style="width: 100%;" class="navbar navbar-expand-lg navbar-light bg-light">
     <div style="width: 100%;" class=" d-flex flex-column ">
-        <div class="container-fluid">
+        <div class="container-fluid border-bottom border-dark">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
