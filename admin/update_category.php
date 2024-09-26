@@ -43,7 +43,7 @@ if ($conn->query($sql_update_category) === TRUE) {
     $sql_delete_subcategories = "DELETE FROM sub_category WHERE id_category = '$category_id'";
     if ($conn->query($sql_delete_subcategories)) {
         // เพิ่มหมวดหมู่ย่อยใหม่
-        $subcategories = explode(' ', $sub_cat_names);
+        $subcategories = explode(',', $sub_cat_names);
         foreach ($subcategories as $sub_category) {
             $sql_insert_subcategory = "INSERT INTO sub_category (id_category, sub_cat_name) VALUES ('$category_id', '$sub_category')";
             if (!$conn->query($sql_insert_subcategory)) {

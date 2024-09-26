@@ -5,7 +5,7 @@ require("../condb.php");
 if (isset($_POST['fetch_booking_details'])) {
     $booking_id = intval($_POST['booking_id']);
 
-    $sql = "SELECT 
+    $sql = "SELECT  ZD.zone_name,ZD.zone_detail,
                 B.booking_id, 
                 CONCAT(U.prefix, ' ', U.firstname, ' ', U.lastname) AS fullname, 
                 B.booking_amount, 
@@ -23,6 +23,7 @@ if (isset($_POST['fetch_booking_details'])) {
             LEFT JOIN tbl_user AS U ON B.member_id = U.user_id
             LEFT JOIN category AS C ON B.product_type = C.id_category
             LEFT JOIN sub_category AS SC ON B.sub_product_type = SC.idsub_category
+            LEFT JOIN zone_detail AS ZD ON B.zone_id = ZD.zone_id
             WHERE B.booking_id = ?";
 
     if ($stmt = $conn->prepare($sql)) {

@@ -149,7 +149,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 echo "No subcategories found for this category.";
                             }
 
-                            $subcategories_str = implode(' ', $subcategories);
+                            $subcategories_str = implode(',', $subcategories);
                             echo "</td>";
                             echo "<td>";
                             echo "<button class='btn btn-sm mx-2 btn-warning edit-btn' 
@@ -331,8 +331,8 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>ประเภทย่อย (แยกคำด้วยการเว้นวรรค):</strong></label>
-                            <p>ตัวอย่างการกรอก : *ของหวาน ของคาว*</p>
+                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>ประเภทย่อย (แยกคำด้วย,):</strong></label>
+                            <p>ตัวอย่างการกรอก : *ของหวาน,ของคาว*</p>
                             <div class="col-sm-9">
                                 <textarea style="height: 200px;" class="form-control" type="text" name="sub_cat_name" id="zone_detail" required></textarea>
                             </div>

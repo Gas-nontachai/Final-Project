@@ -32,7 +32,7 @@ if (!isset($_SESSION["username"])) {
 
 if (isset($_POST['category']) && isset($_POST['sub_category'])) {
     $category = mysqli_real_escape_string($conn, $_POST['category']);
-    $subcategories = explode(' ', $_POST['sub_category']);
+    $subcategories = explode(',', $_POST['sub_category']);
 
     foreach ($subcategories as $sub_category) {
         // ตรวจสอบว่าหมวดหมู่ย่อยมีอยู่แล้วหรือไม่
