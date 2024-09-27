@@ -234,6 +234,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="category" id="category" required>
+                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -243,6 +244,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </label>
                             <div class="col-sm-9">
                                 <textarea style="height: 200px;" class="form-control" type="text" name="sub_category" id="sub_category" required></textarea>
+                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
                             </div>
                         </div>
 
@@ -298,6 +300,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </label>
                             <div class="col-sm-9">
                                 <textarea style="height: 200px;" class="form-control" type="text" name="sub_category" id="sub_category" required></textarea>
+                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
                             </div>
                         </div>
 
@@ -335,6 +338,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             <p>ตัวอย่างการกรอก : *ของหวาน,ของคาว*</p>
                             <div class="col-sm-9">
                                 <textarea style="height: 200px;" class="form-control" type="text" name="sub_cat_name" id="zone_detail" required></textarea>
+                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
                             </div>
                         </div>
                     </div>

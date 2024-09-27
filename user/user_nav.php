@@ -209,10 +209,11 @@
                 <div class="modal-body">
                     <p><strong>รหัสสมาชิก:</strong> <?php echo $SQLuser_id; ?></p>
                     <p><strong>ชื่อผู้ใช้(Username):</strong> <?php echo $SQLusername; ?></p>
+
                     <div class="mb-3 row">
-                        <label for="shopname" class="col-sm-3 col-form-label"><strong>ชื่อร้านค้า:</strong></label>
+                        <label for="shopname" class="col-sm-3 col-form-label"><strong>ชื่อร้านค้า:</strong> <span class="text-danger req" id="req_editshopname">*จำเป็น</span></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="editshopname" id="editshopname" value="<?php echo $SQLshop_name; ?>">
+                            <input oninput="toggleRequiredMessage('editshopname', 'req_editshopname')" type="text" class="form-control" name="editshopname" id="editshopname" value="<?php echo $SQLshop_name; ?>" required>
                         </div>
                     </div>
 
@@ -226,23 +227,25 @@
                             </select>
                         </div>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="editfirstname" value="<?php echo $SQLfirstname; ?>">
+                            <input oninput="toggleRequiredMessage('editfirstname', 'req_editfirstname')" type="text" class="form-control" name="editfirstname" id="editfirstname" value="<?php echo $SQLfirstname; ?>" required>
+                            <span class="text-danger req" id="req_editfirstname">*จำเป็น</span>
                         </div>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="editlastname" value="<?php echo $SQLlastname; ?>">
+                            <input oninput="toggleRequiredMessage('editlastname', 'req_editlastname')" type="text" class="form-control" name="editlastname" id="editlastname" value="<?php echo $SQLlastname; ?>" required>
+                            <span class="text-danger req" id="req_editlastname">*จำเป็น</span>
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="tel" class="col-sm-3 col-form-label"><strong>เบอร์โทรศัพท์:</strong></label>
+                        <label for="tel" class="col-sm-3 col-form-label"><strong>เบอร์โทรศัพท์:</strong> <span class="text-danger req" id="req_edittel">*จำเป็น</span></label>
                         <div class="col-sm-9">
-                            <input oninput="check_tel()" type="tel" class="form-control" name="edittel" id="edittel" value="<?php echo $SQLtel; ?>">
+                            <input oninput="check_tel()" oninput="toggleRequiredMessage('edittel', 'req_edittel')" type="tel" class="form-control" name="edittel" id="edittel" value="<?php echo $SQLtel; ?>" required>
                             <span id="span_tel" class=""></span>
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="email" class="col-sm-3 col-form-label"><strong>อีเมล:</strong></label>
+                        <label for="email" class="col-sm-3 col-form-label"><strong>อีเมล:</strong> <span class="text-danger req" id="req_editemail">*จำเป็น</span></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="editemail" id="editemail" value="<?php echo $SQLemail; ?>">
+                            <input oninput="toggleRequiredMessage('editemail', 'req_editemail')" type="text" class="form-control" name="editemail" id="editemail" value="<?php echo $SQLemail; ?>" required>
                         </div>
                     </div>
 
@@ -252,6 +255,25 @@
                     <button type="submit" class="btn btn-success">อัพเดตโปรไฟล์</button>
                 </div>
             </form>
+
+            <script>
+                function toggleRequiredMessage(inputId, reqId) {
+                    const input = document.getElementById(inputId);
+                    const reqMessage = document.getElementById(reqId);
+
+                    if (input.value.trim() === ' ') {
+                        reqMessage.style.display = 'inline'; // แสดงข้อความ "*จำเป็น"
+                    } else {
+                        reqMessage.style.display = 'none'; // ซ่อนข้อความ "*จำเป็น"
+                    }
+                }
+
+                // เชื่อมโยงฟังก์ชันกับ input fields
+                document.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('input', () => toggleRequiredMessage(input.id, 'req_' + input.name));
+                });
+            </script>
+
         </div>
     </div>
 </div>

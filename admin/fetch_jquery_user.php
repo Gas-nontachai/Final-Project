@@ -2,7 +2,7 @@
 session_start();
 require("../condb.php");
 
-$results_per_page = 7; // Number of users per page
+$results_per_page = 6; // Number of users per page
 $adjacents = 2; // Number of adjacent pages to show
 
 // Calculate total pages

@@ -326,9 +326,9 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             <div class="form-group">
                                 <label for="timeFrame">เลือกช่วงเวลา:</label>
                                 <select id="timeFrame" class="form-control">
-                                    <option value="monthly">รายเดือน</option>
-                                    <option value="weekly">รายสัปดาห์</option>
-                                    <option value="daily">รายวัน</option>
+                                    <option value="monthly">รายเดือน(ย้อนหลัง 4 เดือน)</option>
+                                    <option value="weekly">รายสัปดาห์(ย้อนหลัง 4 สัปดาห์)</option>
+                                    <option value="daily">รายวัน(ย้อนหลัง 7 วัน)</option>
                                 </select>
                             </div>
                             <div class="d-flex">
@@ -336,19 +336,42 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                     <canvas id="bookingChart" width="250" height="300"></canvas>
                                 </div>
                                 <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
-                                    <canvas id="revenueChart" width="250" height="300" class="mt-4"></canvas>
+                                    <div style="height: 50%;" class="border">
+                                        <canvas id="revenueDayChart" width="150" height="80" class="mt-4"></canvas>
+                                    </div>
+                                    <div style="height: 50%;" class="border">
+                                        <canvas id="revenueMonthChart" width="150" height="80" class="mt-4"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <script>
                             $(document).ready(function() {
                                 const bookingCtx = document.getElementById('bookingChart').getContext('2d');
-                                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                                const revenueMonthCtx = document.getElementById('revenueMonthChart').getContext('2d');
+                                const revenueDayCtx = document.getElementById('revenueDayChart').getContext('2d');
                                 let bookingChart;
-                                let revenueChart;
+                                let revenueMonthChart;
+                                let revenueDayChart;
 
                                 function formatNumber(num) {
                                     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                }
+
+                                function formatDateThaiShort(date) {
+                                    const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+                                    const year = date.getFullYear() % 100; // ปี 2 หลัก
+                                    const month = monthNames[date.getMonth()]; // ชื่อเดือน
+                                    return `${month} ${year}`;
+                                }
+
+                                function formatDateForDay(date) {
+                                    return `${date.getDate()} ${formatDateThaiShort(date)}`; // วัน + เดือนปี
+                                }
+
+                                function formatDateForWeek(year, week) {
+                                    const firstDayOfWeek = new Date(year, 0, (week - 1) * 7 + 1);
+                                    return `${formatDateThaiShort(firstDayOfWeek)} (สัปดาห์ที่ ${week})`; // เดือนปี + สัปดาห์ที่ n
                                 }
 
                                 function fetchData(timeFrame) {
@@ -361,46 +384,35 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                         dataType: 'json',
                                         success: function(data) {
                                             let labels = [];
-                                            const totalBookings = data.map(item => item.total_bookings);
-                                            const totalRevenue = data.map(item => item.total_revenue);
+                                            const total_bookings_day = data.map(item => item.total_bookings_day);
+                                            const total_bookings_month = data.map(item => item.total_bookings_month);
+                                            const totalRevenueMonth = data.map(item => item.total_revenue_month);
+                                            const totalRevenueDay = data.map(item => item.total_revenue_day);
 
+                                            // กำหนด labels ตามประเภทของ timeFrame
                                             if (timeFrame === 'daily') {
                                                 labels = data.map(item => {
                                                     const date = new Date(item.booking_date);
-                                                    return date.toLocaleDateString('th-TH', {
-                                                        day: 'numeric',
-                                                        month: 'long',
-                                                        year: 'numeric'
-                                                    });
+                                                    return formatDateForDay(date); // ใช้ฟังก์ชัน formatDateForDay
                                                 });
                                             } else if (timeFrame === 'weekly') {
                                                 labels = data.map(item => {
                                                     const yearWeek = item.booking_week.split('-');
                                                     const year = yearWeek[0];
                                                     const week = yearWeek[1];
-                                                    const firstDayOfWeek = new Date(year, 0, (week - 1) * 7 + 1);
-                                                    return firstDayOfWeek.toLocaleDateString('th-TH', {
-                                                        month: 'long',
-                                                        year: 'numeric'
-                                                    }) + ` (สัปดาห์ที่ ${week})`;
+                                                    return formatDateForWeek(year, week); // ใช้ฟังก์ชัน formatDateForWeek
                                                 });
                                             } else {
                                                 labels = data.map(item => {
                                                     const monthDate = new Date(item.booking_month + '-01');
-                                                    return monthDate.toLocaleDateString('th-TH', {
-                                                        month: 'long',
-                                                        year: 'numeric'
-                                                    });
+                                                    return formatDateThaiShort(monthDate); // ใช้ฟังก์ชัน formatDateThaiShort
                                                 });
                                             }
 
-                                            if (bookingChart) {
-                                                bookingChart.destroy();
-                                            }
-
-                                            if (revenueChart) {
-                                                revenueChart.destroy();
-                                            }
+                                            // ลบกราฟก่อนหน้าถ้ามี
+                                            if (bookingChart) bookingChart.destroy();
+                                            if (revenueMonthChart) revenueMonthChart.destroy();
+                                            if (revenueDayChart) revenueDayChart.destroy();
 
                                             // Booking Chart
                                             bookingChart = new Chart(bookingCtx, {
@@ -408,12 +420,20 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                 data: {
                                                     labels: labels,
                                                     datasets: [{
-                                                        label: 'จำนวนการจอง',
-                                                        data: totalBookings,
-                                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                                        borderWidth: 1
-                                                    }]
+                                                            label: 'จำนวนการจองประเภทรายวัน',
+                                                            data: total_bookings_day,
+                                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                                            borderWidth: 1
+                                                        },
+                                                        {
+                                                            label: 'จำนวนการจองประเภทรายเดือน',
+                                                            data: total_bookings_month,
+                                                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                                            borderColor: 'rgba(255, 159, 64, 1)',
+                                                            borderWidth: 1
+                                                        }
+                                                    ]
                                                 },
                                                 options: {
                                                     scales: {
@@ -434,14 +454,15 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                 }
                                             });
 
-                                            // Revenue Chart
-                                            revenueChart = new Chart(revenueCtx, {
+                                            // Revenue Chart - รายได้รวมต่อเดือน
+                                            const revenueDataMonth = totalRevenueMonth.map(value => value === 0 ? null : value);
+                                            revenueMonthChart = new Chart(revenueMonthCtx, {
                                                 type: 'bar',
                                                 data: {
                                                     labels: labels,
                                                     datasets: [{
-                                                        label: 'รายได้รวม',
-                                                        data: totalRevenue,
+                                                        label: 'รายได้รวมต่อเดือน',
+                                                        data: revenueDataMonth,
                                                         backgroundColor: 'rgba(153, 102, 255, 0.2)',
                                                         borderColor: 'rgba(153, 102, 255, 1)',
                                                         borderWidth: 1
@@ -454,6 +475,11 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                             title: {
                                                                 display: true,
                                                                 text: 'รายได้ (บาท)'
+                                                            },
+                                                            ticks: {
+                                                                callback: function(value) {
+                                                                    return value === 0 ? 'ไม่มี' : formatNumber(value);
+                                                                }
                                                             }
                                                         },
                                                         x: {
@@ -467,7 +493,54 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                                         tooltip: {
                                                             callbacks: {
                                                                 label: function(context) {
-                                                                    return context.dataset.label + ': ' + formatNumber(context.raw) + ' ฿'; // Format revenue with commas
+                                                                    return context.dataset.label + ': ' + (context.raw === null ? 'ไม่มี' : formatNumber(context.raw) + ' ฿');
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+                                            // Revenue Chart - รายได้รวมต่อวัน
+                                            const revenueDataDay = totalRevenueDay.map(value => value === 0 ? null : value);
+                                            revenueDayChart = new Chart(revenueDayCtx, {
+                                                type: 'bar',
+                                                data: {
+                                                    labels: labels,
+                                                    datasets: [{
+                                                        label: 'รายได้รวมต่อวัน',
+                                                        data: revenueDataDay,
+                                                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                                        borderColor: 'rgba(255, 159, 64, 1)',
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: true,
+                                                            title: {
+                                                                display: true,
+                                                                text: 'รายได้ (บาท)'
+                                                            },
+                                                            ticks: {
+                                                                callback: function(value) {
+                                                                    return value === 0 ? 'ไม่มี' : formatNumber(value);
+                                                                }
+                                                            }
+                                                        },
+                                                        x: {
+                                                            title: {
+                                                                display: true,
+                                                                text: 'วัน/สัปดาห์/เดือน'
+                                                            }
+                                                        }
+                                                    },
+                                                    plugins: {
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function(context) {
+                                                                    return context.dataset.label + ': ' + (context.raw === null ? 'ไม่มี' : formatNumber(context.raw) + ' ฿');
                                                                 }
                                                             }
                                                         }
@@ -482,7 +555,6 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                     });
                                 }
 
-
                                 $('#timeFrame').change(function() {
                                     const selectedValue = $(this).val();
                                     fetchData(selectedValue);
@@ -492,6 +564,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 fetchData('monthly');
                             });
                         </script>
+
                     </div>
                     <div class="mb-5 container py-3 pb-2 mb-3 shadow bg-light rounded">
                         <h2>วิเคราะห์โซนและการวิเคราะห์การจองตามประเภทสินค้า</h2>

@@ -222,14 +222,13 @@ if (isset($_POST["submit"])) {
             <h1>สมัครสมาชิก</h1>
             <form action="register.php" method="POST" onsubmit="return validateForm()">
                 <div class="form-group">
-                    <label for="username">Username (ใช้ในการล็อกอิน)</label>
-                    <input oninput="check_username()" type="text" class="form-control" name="username" id="username" placeholder="Username ไว้เพื่อใช้ในการ Login">
+                    <label for="username">Username (ใช้ในการล็อกอิน) <span class="text-danger req" id="req_username">*จำเป็น</span></label>
+                    <input oninput="toggleRequiredMessage('username', 'req_username')" type="text" class="form-control" name="username" id="username" placeholder="Username ไว้เพื่อใช้ในการ Login" required>
                     <span id="span_id" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="shopname">ชื่อร้านค้า</label>
-                    <input type="text" class="form-control" name="shopname" id="shopname" placeholder="ชื่อร้านค้า">
-                    <span id="span_id" class="text-danger"></span>
+                    <label for="shopname">ชื่อร้านค้า <span class="text-danger req" id="req_shopname">*จำเป็น</span></label>
+                    <input oninput="toggleRequiredMessage('shopname', 'req_shopname')" type="text" class="form-control" name="shopname" id="shopname" placeholder="ชื่อร้านค้า" required>
                 </div>
                 <div class="form-group">
                     <label for="prefixSelect">คำนำหน้า:</label>
@@ -240,33 +239,32 @@ if (isset($_POST["submit"])) {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="firstname">ชื่อ</label>
-                    <input type="text" class="form-control" name="firstname" placeholder="ชื่อ">
+                    <label for="firstname">ชื่อ <span class="text-danger req" id="req_firstname">*จำเป็น</span></label>
+                    <input oninput="toggleRequiredMessage('firstname', 'req_firstname')" type="text" class="form-control" name="firstname" id="firstname" placeholder="ชื่อ" required>
                 </div>
                 <div class="form-group">
-                    <label for="lastname">นามสกุล</label>
-                    <input type="text" class="form-control" name="lastname" placeholder="นามสกุล">
+                    <label for="lastname">นามสกุล <span class="text-danger req" id="req_lastname">*จำเป็น</span></label>
+                    <input oninput="toggleRequiredMessage('lastname', 'req_lastname')" type="text" class="form-control" name="lastname" id="lastname" placeholder="นามสกุล" required>
                 </div>
                 <div class="form-group">
-                    <label for="tel">เบอร์โทรศัพท์</label>
-                    <input oninput="check_tel()" type="tel" class="form-control" name="tel" id="tel" placeholder="088xxxxxxx">
+                    <label for="tel">เบอร์โทรศัพท์ <span class="text-danger req" id="req_tel">*จำเป็น</span></label>
+                    <input oninput="check_tel()" oninput="toggleRequiredMessage('tel', 'req_tel')" type="tel" class="form-control" name="tel" id="tel" placeholder="088xxxxxxx" required>
                     <span id="span_tel" class=""></span>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="สมบูรณ์@gmail.com">
+                    <label for="email">Email <span class="text-danger req" id="req_email">*จำเป็น</span></label>
+                    <input oninput="toggleRequiredMessage('email', 'req_email')" type="text" class="form-control" name="email" id="email" placeholder="สมบูรณ์@gmail.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">รหัสผ่าน</label>
+                    <label for="password">รหัสผ่าน <span class="text-danger req" id="req_pw">*จำเป็น</span></label>
                     <div class="input-group">
-                        <input oninput="checkPassword()" type="password" class="form-control" name="pw" id="pw" placeholder="กรุณาตั้งให้รัดกุม">
+                        <input oninput="toggleRequiredMessage('pw', 'req_pw')" type="password" class="form-control" name="pw" id="pw" placeholder="กรุณาตั้งให้รัดกุม" required>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label for="re-password">ยืนยันรหัสผ่าน</label>
+                    <label for="re-password">ยืนยันรหัสผ่าน <span class="text-danger req" id="req_re_pw">*จำเป็น</span></label>
                     <div class="input-group">
-                        <input oninput="recheck_pass()" type="password" class="form-control" name="re-pw" id="re-pw" placeholder="ยืนยันรหัสผ่าน">
+                        <input oninput="toggleRequiredMessage('re-pw', 'req_re_pw')" type="password" class="form-control" name="re-pw" id="re-pw" placeholder="ยืนยันรหัสผ่าน" required>
                     </div>
                 </div>
 
@@ -274,12 +272,6 @@ if (isset($_POST["submit"])) {
                     <input type="checkbox" name="showPassword" id="showPassword" onchange="showpw()" class="form-check-input">
                     <label for="showPassword" class="form-check-label mx-2">แสดงรหัสผ่าน</label>
                 </div>
-                <ul>
-                    <li id="length">ความยาวอย่างน้อย 8 หลัก</li>
-                    <li id="char">มีตัวอักษรภาษาอังกฤษ</li>
-                    <li id="num">มีตัวเลข</li>
-                    <li id="rech_pw">กรอกรหัสผ่านให้ตรงกัน</li>
-                </ul>
                 <div class="form-group checkbox-group d-flex align-items-start">
                     <input type="checkbox" id="term" onchange="termofser()" class="form-check-input ">
                     <label for="term" class="form-check-label">คุณได้อ่านและยอมรับ <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">เงื่อนไขข้อกำหนดการใช้งาน</a>
@@ -289,6 +281,23 @@ if (isset($_POST["submit"])) {
             </form>
         </div>
 
+        <script>
+            function toggleRequiredMessage(inputId, reqId) {
+                const input = document.getElementById(inputId);
+                const reqMessage = document.getElementById(reqId);
+
+                if (input.value.trim() === '') {
+                    reqMessage.style.display = 'inline'; // แสดงข้อความ "*จำเป็น"
+                } else {
+                    reqMessage.style.display = 'none'; // ซ่อนข้อความ "*จำเป็น"
+                }
+            }
+
+            // เชื่อมโยงฟังก์ชันกับ input fields
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', () => toggleRequiredMessage(input.id, 'req_' + input.name));
+            });
+        </script>
     </div>
 
     <!-- Modal -->
@@ -434,6 +443,7 @@ if (isset($_POST["submit"])) {
             }
         }
     </script>
+
 </body>
 
 </html>

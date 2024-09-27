@@ -309,7 +309,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <div class="modal fade" id="AddZoneModal" tabindex="-1" aria-labelledby="AddZoneModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="Add_zone.php" method="POST">
+                <form action="Add_zone.php" method="POST" id="addZoneForm">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="AddZoneModalLabel"><strong>เพิ่มโซน(พื้นที่การขาย)</strong></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -319,30 +319,35 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             <label for="zone_name" class="col-sm-3 col-form-label"><strong>ชื่อโซน :</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="zone_name" id="zone_name">
+                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="zone_detail" class="col-sm-3 col-form-label"><strong>รายละเอียด :</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="zone_detail" id="zone_detail">
+                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneDetail">*จำเป็น</span>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="pricePerDate" class="col-sm-3 col-form-label"><strong>ราคาต่อวัน :</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="pricePerDate" id="pricePerDate">
+                                <span class="text-danger req" style="font-size: 14px;" id="reqPricePerDate">*จำเป็น</span>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="pricePerMonth" class="col-sm-3 col-form-label"><strong>ราคาต่อเดือน :</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="pricePerMonth" id="pricePerMonth">
+                                <span class="text-danger req" style="font-size: 14px;" id="reqPricePerMonth">*จำเป็น</span>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="amount" class="col-sm-3 col-form-label"><strong>จำนวนล็อคในโซน :</strong></label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="amount" id="amount">
+                                <span class="text-danger req" style="font-size: 14px;" id="reqAmount">*จำเป็น</span>
                             </div>
                         </div>
                     </div>
