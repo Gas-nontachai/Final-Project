@@ -422,7 +422,7 @@ if (isset($_GET['category_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p style="color: red;"><strong>*กรุณาตรวจสอบให้แน่ใจว่าข้อมูลถูกต้อง*</strong></p>
+                    <p style="color: red;"><strong>*กรุณาตรวจสอบให้แน่ใจว่าข้อมูลถูกต้องก่อนชำระเงิน*</strong></p>
                     <h3><strong>ช่องทางการชำระเงินสำหรับ booking id: <span id="payModalBookingId"></span></strong></h3>
 
                     <!-- ตัวเลือกช่องทางการชำระเงิน -->
@@ -451,6 +451,8 @@ if (isset($_GET['category_id'])) {
                                 <label for="formFile" class="form-label">อัปโหลดรูปภาพหลักฐานการชำระเงิน</label>
                                 <input class="form-control" type="file" id="formFile" name="receipt" required>
                             </div>
+                            <p style="color: red;"><strong>*กรุณาอัพโหลดสลิป*</strong></p>
+
                         </div>
 
                         <!-- ส่วน Token Payment -->
@@ -914,7 +916,7 @@ if (isset($_GET['category_id'])) {
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 3</div>
                     </div>
                     <strong style="font-size: 14px; color: red; display: block; text-align: center;">
-                        *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
+                        *หลังจากส่งคำของจองแล้ว กรุณาชำระเงินเพื่อดำเนินการให้เสร็จสิ้น*
                     </strong>
                     <table class="table table-borderless">
                         <tbody>
