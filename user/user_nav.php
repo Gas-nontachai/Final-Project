@@ -8,6 +8,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* Modal Styles */
+        .unique-modal-dialog {
+            max-width: 100%;
+            width: auto;
+        }
+
+        .unique-modal-content {
+            background-color: transparent;
+            border: none;
+        }
+
+        .unique-modal-body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Image Styling */
+        .unique-modal-body img {
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+        }
+
+        /* Close Button */
+        .unique-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .unique-close-btn:hover {
+            background-color: red;
+        }
+
         .swal2-container {
             z-index: 9999 !important;
             /* ปรับค่าให้เหมาะสมตามที่ต้องการ */
@@ -25,39 +67,63 @@
         }
     </style>
 </head>
+<?php
+// กำหนดตัวแปรเพื่อเก็บชื่อไฟล์หน้าเปิดอยู่
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <nav style="width: 100%;" class="navbar navbar-expand-lg navbar-light bg-light">
     <div style="width: 100%;" class=" d-flex flex-column ">
         <div class="container-fluid border-bottom border-dark">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a href="./index.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                    <li class="nav-item ">
+                        <a href="./index.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'index.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'index.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: #black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-house-door"></i> หน้าแรก
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./order.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./order.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'order.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'order.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-pencil-square"></i> จองพื้นที่การขาย
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./booking_history.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./booking_history.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'booking_history.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'booking_history.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-clock-history"></i> ประวัติการจอง
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./comment_page.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./comment_page.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'comment_page.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'comment_page.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-chat-dots"></i> แสดงความคิดเห็นตลาด
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="./contactus.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'contactus.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'contactus.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
+                            <i class="bi bi-envelope"></i> ช่องทางการติดต่อ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'contactus.php') ? 'active rounded-top' : ''; ?>"
+                            data-bs-toggle="modal" data-bs-target="#uniqueImageModal"
+                            style="<?php echo ($current_page == 'modal') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
+                            <i class="bi bi-geo-alt"></i> แผนผังตลาด
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="../asset/pdf/คู่มือการใช้งานสำหรับผู้ใช้งาน.pdf" target="_blank" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
                             <i class="bi bi-file-earmark-text"></i> คู่มือการใช้งาน
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="./contactus.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
-                            <i class="bi bi-envelope"></i> ช่องทางการติดต่อ
                         </a>
                     </li>
                 </ul>
@@ -129,6 +195,19 @@
     </div>
 </nav>
 <!-- Modal -->
+<div class="modal fade" id="uniqueImageModal" tabindex="-1" aria-labelledby="uniqueImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog unique-modal-dialog modal-dialog-centered">
+        <div class="modal-content unique-modal-content">
+            <div class="modal-body unique-modal-body">
+                <div style="background-color: aliceblue;" class="p-3 rounded">
+                    <img src="../asset./img./maps.market.png.png" alt="Unique Large Image"> <!-- ตรวจสอบชื่อไฟล์ให้ถูกต้อง -->
+                </div>
+                <button class="unique-close-btn rounded" data-bs-dismiss="modal">&times;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
 <div class="modal fade" id="ProfileModal" tabindex="-1" aria-labelledby="ProfileModalLabel" aria-hidden="true">
     <?php
     $user_id = $_SESSION["user_id"];
@@ -194,8 +273,6 @@
             </div>
         </div>
     </div>
-</div>
-
 </div>
 <!-- Edit Profile Modal -->
 <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
@@ -279,7 +356,6 @@
 </div>
 <?php
 require("../condb.php");
-
 $currentTime = date('H:i:s'); // เวลาปัจจุบัน
 // ดึงข้อมูลจาก database
 $sql_time = "SELECT opening_time, closing_time FROM operating_hours LIMIT 1";

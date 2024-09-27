@@ -25,6 +25,10 @@
         }
     </style>
 </head>
+<?php
+// กำหนดตัวแปรเพื่อเก็บชื่อไฟล์หน้าเปิดอยู่
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
 
 <nav style="width: 100%;" class="navbar navbar-expand-lg navbar-light bg-light">
     <div style="width: 100%;" class="d-flex flex-column ">
@@ -32,45 +36,62 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a href="./index.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./index.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'index.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'index.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-house-door"></i> หน้าแรก
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./confirm_reserve.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./confirm_reserve.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'confirm_reserve.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'confirm_reserve.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-pencil-square"></i> ปรับเปลี่ยนสถานะการจอง
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./refund_page.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./refund_page.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'refund_page.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'refund_page.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-x-circle"></i> คำขอยกเลิก/คืนเงิน
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./crud_page.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./crud_page.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'crud_page.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'crud_page.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-geo-alt"></i> จัดการพื้นที่การขาย
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./manage_cat.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./manage_cat.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'manage_cat.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'manage_cat.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-box"></i> จัดการประเภทสินค้า
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./view_member.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./view_member.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'view_member.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'view_member.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-people"></i> ดูข้อมูลสมาชิก
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./booking_history.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./booking_history.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'booking_history.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'booking_history.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-calendar-check"></i> ประวัติการจอง
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./stat_booking.php" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                        <a href="./stat_booking.php"
+                            class="icon-link icon-link-hover nav-link <?php echo ($current_page == 'stat_booking.php') ? 'active rounded-top' : ''; ?>"
+                            style="<?php echo ($current_page == 'stat_booking.php') ? 'background-color: #4A4947; color: white; --bs-icon-link-transform: translate3d(0, -.125rem, 0);' : 'color: black; --bs-icon-link-transform: translate3d(0, -.125rem, 0);'; ?>">
                             <i class="bi bi-bar-chart"></i> สถิติการจอง
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a href="../asset/pdf/คู่มือการใช้งานระบบสำหรับผู้ดูแลระบบ.pdf" target="_blank" class="icon-link icon-link-hover nav-link active" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
                             <i class="bi bi-book"></i> คู่มือการใช้งาน

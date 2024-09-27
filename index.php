@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>จองล็อค.คอม</title>
+    <link rel="icon" type="image/x-icon" href="./asset/img/icon.market.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
@@ -59,6 +60,48 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Modal Styles */
+        .unique-modal-dialog {
+            max-width: 100%;
+            width: auto;
+        }
+
+        .unique-modal-content {
+            background-color: transparent;
+            border: none;
+        }
+
+        .unique-modal-body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Image Styling */
+        .unique-modal-body img {
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+        }
+
+        /* Close Button */
+        .unique-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .unique-close-btn:hover {
+            background-color: red;
+        }
     </style>
 </head>
 
@@ -74,6 +117,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">หน้าหลัก</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#uniqueImageModal">แผนผังตลาด</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             ล็อคอิน/สมัครสมาชิก
@@ -162,7 +206,19 @@
             </div>
         </div>
     </div>
-
+    <!-- Maps Modal -->
+    <div class="modal fade" id="uniqueImageModal" tabindex="-1" aria-labelledby="uniqueImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog unique-modal-dialog modal-dialog-centered">
+            <div class="modal-content unique-modal-content">
+                <div class="modal-body unique-modal-body">
+                    <div style="background-color: aliceblue;" class="p-3 rounded">
+                        <img src="./asset./img./maps.market.png.png" alt="Unique Large Image"> <!-- ตรวจสอบชื่อไฟล์ให้ถูกต้อง -->
+                    </div>
+                    <button class="unique-close-btn rounded" data-bs-dismiss="modal">&times;</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Footer with Contact Icons -->
     <footer class="footer">
         <div class="container text-center">
