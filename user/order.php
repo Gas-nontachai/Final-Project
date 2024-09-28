@@ -152,6 +152,9 @@ if (isset($_GET['category_id'])) {
                         <a class="nav-link active" data-bs-toggle="tab" href="#categort"><strong>คำขอจองพื้นที่</strong></a>
                     </li>
                 </ul>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#uniqueImageModal">
+                    <i class="bi bi-map"></i>คลิ๊กที่นี่เพื่อเปิดแผนผังตลาด </a>
+
 
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active mt-2 mx-2 p-2" id="categort">

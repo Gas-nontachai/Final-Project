@@ -322,268 +322,43 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3 border-top border-bottom border-dark py-2 mb-3">
-                        <div class="container rounded bg-light ">
-                            <h2>สถิติการจอง</h2>
-                            <div class="form-group">
-                                <label for="timeFrame">เลือกช่วงเวลา:</label>
-                                <select id="timeFrame" class="form-control">
-                                    <option value="monthly">รายเดือน(ย้อนหลัง 4 เดือน)</option>
-                                    <option value="weekly">รายสัปดาห์(ย้อนหลัง 4 สัปดาห์)</option>
-                                    <option value="daily">รายวัน(ย้อนหลัง 7 วัน)</option>
-                                </select>
-                            </div>
-                            <div class="d-flex">
-                                <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
-                                    <canvas id="bookingChart" width="250" height="300"></canvas>
-                                </div>
-                                <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
-                                    <div style="height: 50%;" class="border">
-                                        <canvas id="revenueDayChart" width="150" height="80" class="mt-4"></canvas>
+                    <div>
+
+
+                        <div class="mt-3 border-top border-bottom border-dark py-2 mb-3">
+                            <div class="form-group mb-4">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="startDate" class="form-label">วันเริ่มต้น</label>
+                                        <input type="date" id="startDate" class="form-control" value="<?= date('Y-m-d', strtotime('-7 days')); ?>">
                                     </div>
-                                    <div style="height: 50%;" class="border">
-                                        <canvas id="revenueMonthChart" width="150" height="80" class="mt-4"></canvas>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="endDate" class="form-label">วันสิ้นสุด</label>
+                                        <input type="date" id="endDate" class="form-control" value="<?= date('Y-m-d'); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container rounded bg-light">
+                                <h2>สถิติการจอง</h2>
+                                <div class="d-flex">
+                                    <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
+                                        <canvas id="bookingChart" width="250" height="300"></canvas>
+                                    </div>
+                                    <div style="height: 30rem;" class="w-50 m-2 shadow bg-light p-3 rounded">
+                                        <div style="height: 50%;" class="border">
+                                            <canvas id="revenueDayChart" width="150" height="80" class="mt-4"></canvas>
+                                        </div>
+                                        <div style="height: 50%;" class="border">
+                                            <canvas id="revenueMonthChart" width="150" height="80" class="mt-4"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <script>
-                            $(document).ready(function() {
-                                const bookingCtx = document.getElementById('bookingChart').getContext('2d');
-                                const revenueMonthCtx = document.getElementById('revenueMonthChart').getContext('2d');
-                                const revenueDayCtx = document.getElementById('revenueDayChart').getContext('2d');
-                                let bookingChart;
-                                let revenueMonthChart;
-                                let revenueDayChart;
-
-                                function formatNumber(num) {
-                                    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                }
-
-                                function formatDateThaiShort(date) {
-                                    const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-                                    const year = date.getFullYear() % 100; // ปี 2 หลัก
-                                    const month = monthNames[date.getMonth()]; // ชื่อเดือน
-                                    return `${month} ${year}`;
-                                }
-
-                                function formatDateForDay(date) {
-                                    return `${date.getDate()} ${formatDateThaiShort(date)}`; // วัน + เดือนปี
-                                }
-
-                                function formatDateForWeek(year, week) {
-                                    const firstDayOfWeek = new Date(year, 0, (week - 1) * 7 + 1);
-                                    return `${formatDateThaiShort(firstDayOfWeek)} (สัปดาห์ที่ ${week})`; // เดือนปี + สัปดาห์ที่ n
-                                }
-
-                                function fetchData(timeFrame) {
-                                    $.ajax({
-                                        url: 'fetch_stat_booking_total.php',
-                                        type: 'GET',
-                                        data: {
-                                            timeFrame: timeFrame
-                                        },
-                                        dataType: 'json',
-                                        success: function(data) {
-                                            let labels = [];
-                                            const total_bookings_day = data.map(item => item.total_bookings_day);
-                                            const total_bookings_month = data.map(item => item.total_bookings_month);
-                                            const totalRevenueMonth = data.map(item => item.total_revenue_month);
-                                            const totalRevenueDay = data.map(item => item.total_revenue_day);
-
-                                            // กำหนด labels ตามประเภทของ timeFrame
-                                            if (timeFrame === 'daily') {
-                                                labels = data.map(item => {
-                                                    const date = new Date(item.booking_date);
-                                                    return formatDateForDay(date); // ใช้ฟังก์ชัน formatDateForDay
-                                                });
-                                            } else if (timeFrame === 'weekly') {
-                                                labels = data.map(item => {
-                                                    const yearWeek = item.booking_week.split('-');
-                                                    const year = yearWeek[0];
-                                                    const week = yearWeek[1];
-                                                    return formatDateForWeek(year, week); // ใช้ฟังก์ชัน formatDateForWeek
-                                                });
-                                            } else {
-                                                labels = data.map(item => {
-                                                    const monthDate = new Date(item.booking_month + '-01');
-                                                    return formatDateThaiShort(monthDate); // ใช้ฟังก์ชัน formatDateThaiShort
-                                                });
-                                            }
-
-                                            // ลบกราฟก่อนหน้าถ้ามี
-                                            if (bookingChart) bookingChart.destroy();
-                                            if (revenueMonthChart) revenueMonthChart.destroy();
-                                            if (revenueDayChart) revenueDayChart.destroy();
-
-                                            // Booking Chart
-                                            bookingChart = new Chart(bookingCtx, {
-                                                type: 'bar',
-                                                data: {
-                                                    labels: labels,
-                                                    datasets: [{
-                                                            label: 'จำนวนการจองประเภทรายวัน',
-                                                            data: total_bookings_day,
-                                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                                            borderColor: 'rgba(75, 192, 192, 1)',
-                                                            borderWidth: 1
-                                                        },
-                                                        {
-                                                            label: 'จำนวนการจองประเภทรายเดือน',
-                                                            data: total_bookings_month,
-                                                            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                                                            borderColor: 'rgba(255, 159, 64, 1)',
-                                                            borderWidth: 1
-                                                        }
-                                                    ]
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            beginAtZero: true,
-                                                            title: {
-                                                                display: true,
-                                                                text: 'จำนวนการจอง'
-                                                            }
-                                                        },
-                                                        x: {
-                                                            title: {
-                                                                display: true,
-                                                                text: 'วัน/สัปดาห์/เดือน'
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-
-                                            // Revenue Chart - รายได้รวมต่อเดือน
-                                            const revenueDataMonth = totalRevenueMonth.map(value => value === 0 ? null : value);
-                                            revenueMonthChart = new Chart(revenueMonthCtx, {
-                                                type: 'bar',
-                                                data: {
-                                                    labels: labels,
-                                                    datasets: [{
-                                                        label: 'รายได้รวมต่อเดือน',
-                                                        data: revenueDataMonth,
-                                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                                        borderColor: 'rgba(153, 102, 255, 1)',
-                                                        borderWidth: 1
-                                                    }]
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            beginAtZero: true,
-                                                            title: {
-                                                                display: true,
-                                                                text: 'รายได้ (บาท)'
-                                                            },
-                                                            ticks: {
-                                                                callback: function(value) {
-                                                                    return value === 0 ? 'ไม่มี' : formatNumber(value);
-                                                                }
-                                                            }
-                                                        },
-                                                        x: {
-                                                            title: {
-                                                                display: true,
-                                                                text: 'วัน/สัปดาห์/เดือน'
-                                                            }
-                                                        }
-                                                    },
-                                                    plugins: {
-                                                        tooltip: {
-                                                            callbacks: {
-                                                                label: function(context) {
-                                                                    return context.dataset.label + ': ' + (context.raw === null ? 'ไม่มี' : formatNumber(context.raw) + ' ฿');
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-
-                                            // Revenue Chart - รายได้รวมต่อวัน
-                                            const revenueDataDay = totalRevenueDay.map(value => value === 0 ? null : value);
-                                            revenueDayChart = new Chart(revenueDayCtx, {
-                                                type: 'bar',
-                                                data: {
-                                                    labels: labels,
-                                                    datasets: [{
-                                                        label: 'รายได้รวมต่อวัน',
-                                                        data: revenueDataDay,
-                                                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                                                        borderColor: 'rgba(255, 159, 64, 1)',
-                                                        borderWidth: 1
-                                                    }]
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            beginAtZero: true,
-                                                            title: {
-                                                                display: true,
-                                                                text: 'รายได้ (บาท)'
-                                                            },
-                                                            ticks: {
-                                                                callback: function(value) {
-                                                                    return value === 0 ? 'ไม่มี' : formatNumber(value);
-                                                                }
-                                                            }
-                                                        },
-                                                        x: {
-                                                            title: {
-                                                                display: true,
-                                                                text: 'วัน/สัปดาห์/เดือน'
-                                                            }
-                                                        }
-                                                    },
-                                                    plugins: {
-                                                        tooltip: {
-                                                            callbacks: {
-                                                                label: function(context) {
-                                                                    return context.dataset.label + ': ' + (context.raw === null ? 'ไม่มี' : formatNumber(context.raw) + ' ฿');
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        },
-                                        error: function(jqXHR, textStatus, errorThrown) {
-                                            alert('เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง');
-                                            console.error('AJAX Error:', textStatus, errorThrown);
-                                        }
-                                    });
-                                }
-
-                                $('#timeFrame').change(function() {
-                                    const selectedValue = $(this).val();
-                                    fetchData(selectedValue);
-                                });
-
-                                // เรียกใช้ฟังก์ชันเริ่มต้นเมื่อโหลดหน้า
-                                fetchData('monthly');
-                            });
-                        </script>
 
                     </div>
                     <div class="mb-5 container py-3 pb-2 mb-3 shadow bg-light rounded">
                         <h2>วิเคราะห์โซนและการวิเคราะห์การจองตามประเภทสินค้า</h2>
-
-                        <div class="form-group mb-4">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="startDate" class="form-label">วันเริ่มต้น</label>
-                                    <input type="date" id="startDate" class="form-control" value="<?= date('Y-m-d', strtotime('-7 days')); ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="endDate" class="form-label">วันสิ้นสุด</label>
-                                    <input type="date" id="endDate" class="form-control" value="<?= date('Y-m-d'); ?>">
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="d-flex">
                             <div class="w-50 m-2 shadow bg-light p-3 rounded">
                                 <h2>วิเคราะห์โซน</h2>
@@ -602,171 +377,371 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 </div>
                             </div>
                         </div>
-
-                        <script>
-                            // ฟังก์ชันในการโหลดข้อมูลการจองสำหรับโซน
-                            function loadZoneData(startDate, endDate) {
-                                fetch('fetch_zone_data_analysis.php?start_date=' + startDate + '&end_date=' + endDate)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        updateZoneChart(data.labels, data.booking_amounts);
-                                    });
-                            }
-
-                            // โหลดข้อมูลครั้งแรกเมื่อเปิดหน้า
-                            loadZoneData('<?= date('Y-m-d', strtotime('-7 days')); ?>', '<?= date('Y-m-d'); ?>');
-
-                            // สร้างกราฟด้วย Chart.js สำหรับโซน
-                            var ctxZone = document.getElementById('zoneChart').getContext('2d');
-                            var zoneChart = new Chart(ctxZone, {
-                                type: 'pie',
-                                data: {
-                                    labels: [],
-                                    datasets: [{
-                                        label: 'จำนวนการจอง',
-                                        data: [],
-                                        backgroundColor: [
-                                            'rgba(75, 192, 192, 0.2)',
-                                            'rgba(255, 99, 132, 0.2)',
-                                            'rgba(255, 206, 86, 0.2)',
-                                            'rgba(54, 162, 235, 0.2)',
-                                            'rgba(153, 102, 255, 0.2)',
-                                            'rgba(255, 159, 64, 0.2)',
-                                        ],
-                                        borderColor: [
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                            'rgba(54, 162, 235, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 159, 64, 1)',
-                                        ],
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        }
-                                    }
-                                }
-                            });
-
-                            function updateZoneChart(labels, data) {
-                                zoneChart.data.labels = labels;
-                                zoneChart.data.datasets[0].data = data;
-                                zoneChart.update();
-
-                                // สร้างลิสต์ชื่อด้านขวา
-                                var legendHtml = '';
-                                labels.forEach((label, index) => {
-                                    legendHtml += '<div style="display: flex; align-items: center;">' +
-                                        '<div style="width: 15px; height: 15px; background-color:' + zoneChart.data.datasets[0].backgroundColor[index] + '; margin-right: 10px;"></div>' +
-                                        '<span>' + label + ' (' + data[index] + ')</span>' +
-                                        '</div>';
-                                });
-                                document.getElementById('legendZone').innerHTML = legendHtml;
-                            }
-
-                            document.getElementById('startDate').addEventListener('change', function() {
-                                var startDate = this.value;
-                                var endDate = document.getElementById('endDate').value;
-                                loadZoneData(startDate, endDate);
-                            });
-
-                            document.getElementById('endDate').addEventListener('change', function() {
-                                var startDate = document.getElementById('startDate').value;
-                                var endDate = this.value;
-                                loadZoneData(startDate, endDate);
-                            });
-                        </script>
-
-                        <script>
-                            // ฟังก์ชันในการโหลดข้อมูลการจองสำหรับประเภทสินค้า
-                            function loadProductTypeData(startDate, endDate) {
-                                fetch('fetch_product_type_analysis.php?start_date=' + startDate + '&end_date=' + endDate)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        updateProductTypeChart(data.labels, data.booking_amounts);
-                                    });
-                            }
-
-                            // โหลดข้อมูลครั้งแรกเมื่อเปิดหน้า
-                            loadProductTypeData('<?= date('Y-m-d', strtotime('-7 days')); ?>', '<?= date('Y-m-d'); ?>');
-
-                            // สร้างกราฟด้วย Chart.js สำหรับประเภทสินค้า
-                            var ctxProduct = document.getElementById('productTypeChart').getContext('2d');
-                            var productTypeChart = new Chart(ctxProduct, {
-                                type: 'pie',
-                                data: {
-                                    labels: [],
-                                    datasets: [{
-                                        label: 'จำนวนการจอง',
-                                        data: [],
-                                        backgroundColor: [
-                                            'rgba(75, 192, 192, 0.2)',
-                                            'rgba(255, 99, 132, 0.2)',
-                                            'rgba(255, 206, 86, 0.2)',
-                                            'rgba(54, 162, 235, 0.2)',
-                                            'rgba(153, 102, 255, 0.2)',
-                                            'rgba(255, 159, 64, 0.2)',
-                                        ],
-                                        borderColor: [
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                            'rgba(54, 162, 235, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 159, 64, 1)',
-                                        ],
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        }
-                                    }
-                                }
-                            });
-
-                            function updateProductTypeChart(labels, data) {
-                                productTypeChart.data.labels = labels;
-                                productTypeChart.data.datasets[0].data = data;
-                                productTypeChart.update();
-
-                                // สร้างลิสต์ชื่อด้านขวา
-                                var legendHtml = '';
-                                labels.forEach((label, index) => {
-                                    legendHtml += '<div style="display: flex; align-items: center;">' +
-                                        '<div style="width: 15px; height: 15px; background-color:' + productTypeChart.data.datasets[0].backgroundColor[index] + '; margin-right: 10px;"></div>' +
-                                        '<span>' + label + ' (' + data[index] + ')</span>' +
-                                        '</div>';
-                                });
-                                document.getElementById('legendProduct').innerHTML = legendHtml;
-                            }
-
-                            document.getElementById('startDate').addEventListener('change', function() {
-                                var startDate = this.value;
-                                var endDate = document.getElementById('endDate').value;
-                                loadProductTypeData(startDate, endDate);
-                            });
-
-                            document.getElementById('endDate').addEventListener('change', function() {
-                                var startDate = document.getElementById('startDate').value;
-                                var endDate = this.value;
-                                loadProductTypeData(startDate, endDate);
-                            });
-                        </script>
                     </div>
-
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
                 </div>
+
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        const bookingCtx = document.getElementById('bookingChart').getContext('2d');
+                        const revenueDayCtx = document.getElementById('revenueDayChart').getContext('2d');
+                        const revenueMonthCtx = document.getElementById('revenueMonthChart').getContext('2d');
+
+                        let bookingChart, revenueDayChart, revenueMonthChart;
+
+                        // Function to format the date as "1 ก.ย. 67"
+                        function formatDate(dateStr) {
+                            const date = new Date(dateStr);
+                            const options = {
+                                day: 'numeric',
+                                month: 'short',
+                                year: '2-digit',
+                                locale: 'th-TH'
+                            };
+                            return new Intl.DateTimeFormat('th-TH', options).format(date);
+                        }
+
+                        function fetchData() {
+                            const startDate = $('#startDate').val();
+                            const endDate = $('#endDate').val();
+
+                            $.ajax({
+                                url: 'fetch_stat_booking_total.php?start_date=' + startDate + '&end_date=' + endDate,
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(data) {
+                                    let labels = [];
+                                    const total_bookings_day = [];
+                                    const total_bookings_month = [];
+                                    const totalRevenueDay = [];
+                                    const totalRevenueMonth = [];
+
+                                    // Check if data is returned
+                                    if (data.length) {
+                                        const combinedData = {};
+
+                                        data.forEach(item => {
+                                            const formattedDate = formatDate(item.booking_date); // Format the booking date
+
+                                            if (!combinedData[formattedDate]) {
+                                                combinedData[formattedDate] = {
+                                                    total_bookings_day: item.total_bookings_day,
+                                                    total_bookings_month: item.total_bookings_month,
+                                                    total_revenue_day: item.total_revenue_day,
+                                                    total_revenue_month: item.total_revenue_month,
+                                                };
+                                            } else {
+                                                combinedData[formattedDate].total_bookings_day += item.total_bookings_day;
+                                                combinedData[formattedDate].total_bookings_month += item.total_bookings_month;
+                                                combinedData[formattedDate].total_revenue_day += item.total_revenue_day;
+                                                combinedData[formattedDate].total_revenue_month += item.total_revenue_month;
+                                            }
+                                        });
+
+                                        // Extract the combined data into labels and values
+                                        for (const date in combinedData) {
+                                            labels.push(date);
+                                            total_bookings_day.push(combinedData[date].total_bookings_day);
+                                            total_bookings_month.push(combinedData[date].total_bookings_month);
+                                            totalRevenueDay.push(combinedData[date].total_revenue_day);
+                                            totalRevenueMonth.push(combinedData[date].total_revenue_month);
+                                        }
+                                    }
+
+                                    // Destroy previous charts if they exist
+                                    if (bookingChart) {
+                                        bookingChart.destroy();
+                                    }
+                                    if (revenueDayChart) {
+                                        revenueDayChart.destroy();
+                                    }
+                                    if (revenueMonthChart) {
+                                        revenueMonthChart.destroy();
+                                    }
+
+                                    // Create Booking Chart
+                                    bookingChart = new Chart(bookingCtx, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: labels,
+                                            datasets: [{
+                                                    label: 'จำนวนการจองประเภทรายวัน',
+                                                    data: total_bookings_day,
+                                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                                    borderWidth: 1
+                                                },
+                                                {
+                                                    label: 'จำนวนการจองประเภทรายเดือน',
+                                                    data: total_bookings_month,
+                                                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                                    borderColor: 'rgba(255, 159, 64, 1)',
+                                                    borderWidth: 1
+                                                }
+                                            ]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    title: {
+                                                        display: true,
+                                                        text: 'จำนวนการจอง'
+                                                    }
+                                                },
+                                                x: {
+                                                    title: {
+                                                        display: true,
+                                                        text: 'วันที่'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    // Create Revenue Day Chart (Bar Chart)
+                                    revenueDayChart = new Chart(revenueDayCtx, {
+                                        type: 'bar', // Change to bar
+                                        data: {
+                                            labels: labels,
+                                            datasets: [{
+                                                label: 'รายได้ประจำวัน',
+                                                data: totalRevenueDay,
+                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    title: {
+                                                        display: true,
+                                                        text: 'รายได้'
+                                                    }
+                                                },
+                                                x: {
+                                                    title: {
+                                                        display: true,
+                                                        text: 'วันที่'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    // Create Revenue Month Chart (Bar Chart)
+                                    revenueMonthChart = new Chart(revenueMonthCtx, {
+                                        type: 'bar', // Change to bar
+                                        data: {
+                                            labels: labels,
+                                            datasets: [{
+                                                label: 'รายได้ประจำเดือน',
+                                                data: totalRevenueMonth,
+                                                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                                borderColor: 'rgba(255, 159, 64, 1)',
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    title: {
+                                                        display: true,
+                                                        text: 'รายได้'
+                                                    }
+                                                },
+                                                x: {
+                                                    title: {
+                                                        display: true,
+                                                        text: 'วันที่'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    alert('เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาลองใหม่อีกครั้ง');
+                                    console.error('AJAX Error:', textStatus, errorThrown);
+                                }
+                            });
+                        }
+
+                        // Fetch data when the date inputs change
+                        $('#startDate, #endDate').on('change', function() {
+                            fetchData();
+                        });
+
+                        // Fetch data on page load
+                        fetchData();
+                    });
+                </script>
+
+
+                <script>
+                    // ฟังก์ชันในการโหลดข้อมูลการจองสำหรับโซน
+                    function loadZoneData(startDate, endDate) {
+                        fetch('fetch_zone_data_analysis.php?start_date=' + startDate + '&end_date=' + endDate)
+                            .then(response => response.json())
+                            .then(data => {
+                                updateZoneChart(data.labels, data.booking_amounts);
+                            });
+                    }
+
+                    // โหลดข้อมูลครั้งแรกเมื่อเปิดหน้า
+                    loadZoneData('<?= date('Y-m-d', strtotime('-7 days')); ?>', '<?= date('Y-m-d'); ?>');
+
+                    // สร้างกราฟด้วย Chart.js สำหรับโซน
+                    var ctxZone = document.getElementById('zoneChart').getContext('2d');
+                    var zoneChart = new Chart(ctxZone, {
+                        type: 'pie',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                label: 'จำนวนการจอง',
+                                data: [],
+                                backgroundColor: [
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+
+                    function updateZoneChart(labels, data) {
+                        zoneChart.data.labels = labels;
+                        zoneChart.data.datasets[0].data = data;
+                        zoneChart.update();
+
+                        // สร้างลิสต์ชื่อด้านขวา
+                        var legendHtml = '';
+                        labels.forEach((label, index) => {
+                            legendHtml += '<div style="display: flex; align-items: center;">' +
+                                '<div style="width: 15px; height: 15px; background-color:' + zoneChart.data.datasets[0].backgroundColor[index] + '; margin-right: 10px;"></div>' +
+                                '<span>' + label + ' (' + data[index] + ')</span>' +
+                                '</div>';
+                        });
+                        document.getElementById('legendZone').innerHTML = legendHtml;
+                    }
+
+                    document.getElementById('startDate').addEventListener('change', function() {
+                        var startDate = this.value;
+                        var endDate = document.getElementById('endDate').value;
+                        loadZoneData(startDate, endDate);
+                    });
+
+                    document.getElementById('endDate').addEventListener('change', function() {
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = this.value;
+                        loadZoneData(startDate, endDate);
+                    });
+                </script>
+
+                <script>
+                    // ฟังก์ชันในการโหลดข้อมูลการจองสำหรับประเภทสินค้า
+                    function loadProductTypeData(startDate, endDate) {
+                        fetch('fetch_product_type_analysis.php?start_date=' + startDate + '&end_date=' + endDate)
+                            .then(response => response.json())
+                            .then(data => {
+                                updateProductTypeChart(data.labels, data.booking_amounts);
+                            });
+                    }
+
+                    // โหลดข้อมูลครั้งแรกเมื่อเปิดหน้า
+                    loadProductTypeData('<?= date('Y-m-d', strtotime('-7 days')); ?>', '<?= date('Y-m-d'); ?>');
+
+                    // สร้างกราฟด้วย Chart.js สำหรับประเภทสินค้า
+                    var ctxProduct = document.getElementById('productTypeChart').getContext('2d');
+                    var productTypeChart = new Chart(ctxProduct, {
+                        type: 'pie',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                label: 'จำนวนการจอง',
+                                data: [],
+                                backgroundColor: [
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+
+                    function updateProductTypeChart(labels, data) {
+                        productTypeChart.data.labels = labels;
+                        productTypeChart.data.datasets[0].data = data;
+                        productTypeChart.update();
+
+                        // สร้างลิสต์ชื่อด้านขวา
+                        var legendHtml = '';
+                        labels.forEach((label, index) => {
+                            legendHtml += '<div style="display: flex; align-items: center;">' +
+                                '<div style="width: 15px; height: 15px; background-color:' + productTypeChart.data.datasets[0].backgroundColor[index] + '; margin-right: 10px;"></div>' +
+                                '<span>' + label + ' (' + data[index] + ')</span>' +
+                                '</div>';
+                        });
+                        document.getElementById('legendProduct').innerHTML = legendHtml;
+                    }
+
+                    document.getElementById('startDate').addEventListener('change', function() {
+                        var startDate = this.value;
+                        var endDate = document.getElementById('endDate').value;
+                        loadProductTypeData(startDate, endDate);
+                    });
+
+                    document.getElementById('endDate').addEventListener('change', function() {
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = this.value;
+                        loadProductTypeData(startDate, endDate);
+                    });
+                </script>
             </div>
         </div>
+    </div>
     </div>
 
 

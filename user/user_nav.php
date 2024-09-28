@@ -194,19 +194,84 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 </nav>
-<!-- Modal -->
+<!-- maps Modal -->
 <div class="modal fade" id="uniqueImageModal" tabindex="-1" aria-labelledby="uniqueImageModalLabel" aria-hidden="true">
-    <div class="modal-dialog unique-modal-dialog modal-dialog-centered">
-        <div class="modal-content unique-modal-content">
-            <div class="modal-body unique-modal-body">
-                <div style="background-color: aliceblue;" class="p-3 rounded">
-                    <img src="../asset./img./maps.market.png.png" alt="Unique Large Image"> <!-- ตรวจสอบชื่อไฟล์ให้ถูกต้อง -->
+        <div class="modal-dialog unique-modal-dialog modal-dialog-centered">
+            <div class="modal-content unique-modal-content">
+                <div class="modal-body unique-modal-body">
+                    <div style="background-color: aliceblue;" class="p-3 rounded">
+                        <?php
+                        $sql = "SELECT map_image FROM market_maps WHERE idmarket_maps = 1"; // Adjust the WHERE clause as necessary
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+                        $currentMap = isset($row['map_image']) ? $row['map_image'] : 'default_map.jpg'; // Fallback image if none found
+                        ?>
+                        <img src="../asset/maps/<?php echo $currentMap; ?>" alt="Unique Large Image"> <!-- ตรวจสอบชื่อไฟล์ให้ถูกต้อง -->
+                    </div>
+                    <button class="unique-close-btn rounded" data-bs-dismiss="modal">&times;</button>
                 </div>
-                <button class="unique-close-btn rounded" data-bs-dismiss="modal">&times;</button>
             </div>
         </div>
+        <style>
+            /* Modal Styles */
+            .unique-modal-dialog {
+                max-width: 100%;
+                width: auto;
+            }
+
+            .unique-modal-content {
+                background-color: transparent;
+                border: none;
+            }
+
+            .unique-modal-body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+            }
+
+            /* Image Styling */
+            .unique-modal-body img {
+                width: 100%;
+                max-width: 1000px;
+                height: auto;
+            }
+
+            /* Close Button */
+            .unique-close-btn {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                color: white;
+                background: rgba(0, 0, 0, 0.5);
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 5px 10px;
+            }
+
+            .unique-close-btn:hover {
+                background-color: red;
+            }
+
+            .swal2-container {
+                z-index: 9999 !important;
+                /* ปรับค่าให้เหมาะสมตามที่ต้องการ */
+            }
+
+            .bgcolor {
+                background-color: rgba(255, 255, 255, 0.9);
+                padding-bottom: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .modal-backdrop {
+                z-index: 1040 !important;
+                /* ให้ backdrop อยู่ต่ำกว่า navbar */
+            }
+        </style>
     </div>
-</div>
 <!-- Modal -->
 <div class="modal fade" id="ProfileModal" tabindex="-1" aria-labelledby="ProfileModalLabel" aria-hidden="true">
     <?php
