@@ -9,6 +9,12 @@ if (isset($_POST['zone_id'])) {
     // Query ข้อมูล
     $sql = "SELECT * FROM locks WHERE zone_id = ?";
     $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        echo json_encode(['error' => 'ไม่สามารถเตรียมคำสั่ง SQL ได้: ' . $conn->error]);
+        exit;
+    }
+
     $stmt->bind_param('i', $zone_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -16,7 +22,7 @@ if (isset($_POST['zone_id'])) {
     if ($result->num_rows > 0) {
         echo '<div class="d-flex flex-wrap gap-2">';
         while ($row = $result->fetch_assoc()) {
-            $isAvailable = $row['available']; // Assume available is 1 or 0
+            $isAvailable = $row['available'];
 
             // เพิ่ม class และ disabled attribute ตามสถานะของล็อก
             $btnClass = $isAvailable ? 'btn-secondary' : 'btn-outline-primary';
@@ -32,9 +38,12 @@ if (isset($_POST['zone_id'])) {
         }
         echo '</div>';
     } else {
-        echo '<p>ไม่มีข้อมูลสำหรับโซนที่เลือก</p>';
+        echo json_encode(['message' => 'ไม่มีข้อมูลสำหรับโซนที่เลือก']);
     }
 
     $stmt->close();
-    $conn->close();
+} else {
+    echo json_encode(['error' => 'ไม่มี zone_id ที่ส่งมา']);
 }
+
+$conn->close();

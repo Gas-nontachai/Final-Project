@@ -761,7 +761,6 @@ if (isset($_GET['category_id'])) {
 
 
     <!-- Reserve Modal -->
-
     <!-- Step 1 Modal -->
     <div class="modal fade" id="step1Modal" tabindex="-1" aria-labelledby="ReserveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -799,11 +798,11 @@ if (isset($_GET['category_id'])) {
                                             <option value="#">กรุณาเลือกโซน</option>
                                             <?php
                                             $sql = "SELECT z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth,
-                SUM(CASE WHEN l.available = 0 THEN 1 ELSE 0 END) AS available_locks
-            FROM zone_detail z
-            INNER JOIN locks l ON z.zone_id = l.zone_id
-            GROUP BY z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth
-            ORDER BY z.zone_name;";
+                                                    SUM(CASE WHEN l.available = 0 THEN 1 ELSE 0 END) AS available_locks
+                                                FROM zone_detail z
+                                                INNER JOIN locks l ON z.zone_id = l.zone_id
+                                                GROUP BY z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth
+                                                ORDER BY z.zone_name;";
 
                                             $result = $conn->query($sql);
                                             if ($result->num_rows > 0) {
@@ -817,7 +816,7 @@ if (isset($_GET['category_id'])) {
 
                                                     // Echo the option, conditionally adding the disabled attribute, style, and dynamic text
                                                     echo '<option style="' . $redStyle . '" value="' . $row['zone_id'] . '" ' . $disabled . ' data-zone-name="' . $row['zone_name'] . '">'
-                                                        . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . $text
+                                                        . htmlspecialchars($row['zone_name']) . ' (' . htmlspecialchars($row['zone_detail']) . ')' . $text
                                                         . '</option>';
                                                 }
                                             } else {
@@ -825,6 +824,99 @@ if (isset($_GET['category_id'])) {
                                             }
                                             ?>
                                         </select>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                function handleZoneChange() {
+                                                    var selectedOption = document.getElementById('zone').options[document.getElementById('zone').selectedIndex];
+                                                    var zoneName = selectedOption.getAttribute('data-zone-name');
+
+                                                    console.log("Selected Zone Name: " + zoneName); // Log the zone name
+
+                                                    fetch('fetch_categories.php?zoneName=' + encodeURIComponent(zoneName))
+                                                        .then(response => {
+                                                            if (!response.ok) {
+                                                                throw new Error('Network response was not ok: ' + response.statusText);
+                                                            }
+                                                            return response.json();
+                                                        })
+                                                        .then(data => {
+                                                            var categorySelect = document.getElementById('category');
+                                                            categorySelect.innerHTML = ''; // Clear previous options
+
+                                                            // Add the first option to prompt the user to select a category
+                                                            var firstOption = document.createElement('option');
+                                                            firstOption.value = '';
+                                                            firstOption.textContent = 'กรุณาเลือกประเภทสินค้า'; // Please select a product category
+                                                            categorySelect.appendChild(firstOption);
+
+                                                            // Populate the category dropdown with new options
+                                                            if (data.length > 0) {
+                                                                data.forEach(function(category) {
+                                                                    var option = document.createElement('option');
+                                                                    option.value = category.id_category;
+                                                                    option.textContent = category.cat_name;
+                                                                    categorySelect.appendChild(option);
+                                                                });
+                                                            } else {
+                                                                var noOption = document.createElement('option');
+                                                                noOption.value = '';
+                                                                noOption.textContent = 'No categories found';
+                                                                categorySelect.appendChild(noOption);
+                                                            }
+                                                        })
+                                                        .catch(error => console.error('Error fetching categories:', error));
+                                                }
+
+                                                // Add event listener to the zone select dropdown
+                                                var zoneSelect = document.getElementById('zone');
+                                                if (zoneSelect) {
+                                                    zoneSelect.addEventListener('change', handleZoneChange);
+                                                } else {
+                                                    console.warn("Zone select element not found!");
+                                                }
+
+                                                // Handle category change for subcategories
+                                                var categorySelect = document.getElementById('category');
+                                                if (categorySelect) {
+                                                    categorySelect.addEventListener('change', function() {
+                                                        var categoryId = this.value;
+                                                        var subCategoryDropdown = document.getElementById('subcategory');
+
+                                                        // Clear the subcategory dropdown
+                                                        subCategoryDropdown.innerHTML = '<option value="#">กรุณาเลือกสินค้าที่จะขาย</option>';
+
+                                                        if (categoryId) {
+                                                            fetch(window.location.href + '?category_id=' + categoryId)
+                                                                .then(response => {
+                                                                    if (!response.ok) {
+                                                                        throw new Error('Network response was not ok: ' + response.statusText);
+                                                                    }
+                                                                    return response.json();
+                                                                })
+                                                                .then(data => {
+                                                                    if (data.length > 0) {
+                                                                        data.forEach(subcategory => {
+                                                                            var option = document.createElement('option');
+                                                                            option.value = subcategory.idsub_category;
+                                                                            option.text = subcategory.sub_cat_name;
+                                                                            subCategoryDropdown.add(option);
+                                                                        });
+                                                                    } else {
+                                                                        var option = document.createElement('option');
+                                                                        option.value = '';
+                                                                        option.text = 'No sub-categories found';
+                                                                        subCategoryDropdown.add(option);
+                                                                    }
+                                                                })
+                                                                .catch(error => console.error('Error fetching subcategories:', error));
+                                                        }
+                                                    });
+                                                } else {
+                                                    console.warn("Category select element not found!");
+                                                }
+                                            });
+                                        </script>
+
 
                                         <script>
                                             var pricePerDay = 0;
@@ -923,18 +1015,7 @@ if (isset($_GET['category_id'])) {
                         <div class="col-sm-4">
                             <select name="category" id="category" class="form-select">
                                 <option value="#">กรุณาเลือกประเภทสินค้า</option>
-                                <?php
-                                $sql = "SELECT * FROM category";
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<option value="' . $row['id_category'] . '">' . $row['cat_name'] . '</option>';
-                                    }
-                                } else {
-                                    echo '<option value="">No categories found</option>';
-                                }
-                                ?>
+                                <!-- Options will be populated by JavaScript -->
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -948,36 +1029,6 @@ if (isset($_GET['category_id'])) {
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#step3Modal" data-bs-dismiss="modal" onclick="updateProgressBar(100, 'ขั้นตอนที่ 3')">ถัดไป</button>
                     </div>
-                    <script>
-                        document.getElementById('category').addEventListener('change', function() {
-                            var categoryId = this.value;
-                            var subCategoryDropdown = document.getElementById('subcategory');
-
-                            // Clear the subcategory dropdown
-                            subCategoryDropdown.innerHTML = '<option value="#">กรุณาเลือกสินค้าที่จะขาย</option>';
-
-                            if (categoryId) {
-                                fetch(window.location.href + '?category_id=' + categoryId)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.length > 0) {
-                                            data.forEach(subcategory => {
-                                                var option = document.createElement('option');
-                                                option.value = subcategory.idsub_category;
-                                                option.text = subcategory.sub_cat_name;
-                                                subCategoryDropdown.add(option);
-                                            });
-                                        } else {
-                                            var option = document.createElement('option');
-                                            option.value = '';
-                                            option.text = 'No sub-categories found';
-                                            subCategoryDropdown.add(option);
-                                        }
-                                    })
-                                    .catch(error => console.error('Error fetching subcategories:', error));
-                            }
-                        });
-                    </script>
                 </div>
             </div>
         </div>
