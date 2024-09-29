@@ -774,10 +774,13 @@ if (isset($_GET['category_id'])) {
                     <!-- Progress Bar -->
                     <div class="progress mb-4">
                         <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">ขั้นตอนที่ 1</div>
+
                     </div>
                     <strong style="font-size: 14px; color: red; display: block; text-align: center;">
                         *ล็อคที่ได้รับมอบหมายโดยผู้ดูแลระบบ ผู้ใช้ไม่สามารถจองล็อคใดๆ ได้*
                     </strong>
+
+
                     <form action="./reserve_order.php" method="post">
                         <table class="table table-borderless">
                             <tbody>
@@ -792,15 +795,15 @@ if (isset($_GET['category_id'])) {
                                 <tr>
                                     <td><strong>โซน:</strong></td>
                                     <td>
-                                        <select name="zone" id="zone" class="form-select" onchange="updatePrices()">
+                                        <select name="zone" id="zone" class="form-select" onchange="avaliablelockcheck(); updatePrices();">
                                             <option value="#">กรุณาเลือกโซน</option>
                                             <?php
                                             $sql = "SELECT z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth,
-                                                        SUM(CASE WHEN l.available = 0 THEN 1 ELSE 0 END) AS available_locks
-                                                    FROM zone_detail z
-                                                    INNER JOIN locks l ON z.zone_id = l.zone_id
-                                                    GROUP BY z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth
-                                                    ORDER BY z.zone_name;";
+                SUM(CASE WHEN l.available = 0 THEN 1 ELSE 0 END) AS available_locks
+            FROM zone_detail z
+            INNER JOIN locks l ON z.zone_id = l.zone_id
+            GROUP BY z.zone_id, z.zone_name, z.zone_detail, z.pricePerDate, z.pricePerMonth
+            ORDER BY z.zone_name;";
 
                                             $result = $conn->query($sql);
                                             if ($result->num_rows > 0) {
@@ -813,7 +816,7 @@ if (isset($_GET['category_id'])) {
                                                     $text = ($row['available_locks'] == 0) ? ' - โซนเต็ม' : '';
 
                                                     // Echo the option, conditionally adding the disabled attribute, style, and dynamic text
-                                                    echo '<option style="' . $redStyle . '" value="' . $row['zone_id'] . '" ' . $disabled . '>'
+                                                    echo '<option style="' . $redStyle . '" value="' . $row['zone_id'] . '" ' . $disabled . ' data-zone-name="' . $row['zone_name'] . '">'
                                                         . $row['zone_name'] . ' (' . $row['zone_detail'] . ')' . $text
                                                         . '</option>';
                                                 }
@@ -822,6 +825,52 @@ if (isset($_GET['category_id'])) {
                                             }
                                             ?>
                                         </select>
+
+                                        <script>
+                                            var pricePerDay = 0;
+                                            var pricePerMonth = 0;
+
+                                            function updatePrices() {
+                                                var zoneId = document.getElementById("zone").value;
+
+                                                var xhr = new XMLHttpRequest();
+                                                xhr.open("POST", "", true);
+                                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState == 4 && xhr.status == 200) {
+                                                        var prices = JSON.parse(xhr.responseText);
+                                                        pricePerDay = prices.pricePerDate;
+                                                        pricePerMonth = prices.pricePerMonth;
+                                                        document.getElementById("priceDisplay").innerHTML =
+                                                            'ราคาต่อวัน: ' + pricePerDay + '฿ ราคาต่อเดือน: ' + pricePerMonth + '฿';
+                                                        updateTotalPrice(); // Update total price whenever prices are updated
+                                                    }
+                                                };
+                                                xhr.send("zone_id=" + zoneId);
+                                            }
+
+                                            function avaliablelockcheck() {
+                                                var zoneSelect = document.getElementById("zone");
+                                                var selectedOption = zoneSelect.options[zoneSelect.selectedIndex];
+                                                var zoneName = selectedOption.getAttribute('data-zone-name'); // เก็บ zone name
+
+                                                var xhr = new XMLHttpRequest();
+                                                xhr.open("POST", "fetch_lock_count.php", true); // ชื่อไฟล์ที่จัดการการประมวลผล
+                                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState == 4 && xhr.status == 200) {
+                                                        var availableLocks = parseInt(xhr.responseText, 10) || 0; // แปลงค่าที่ส่งกลับจาก PHP เป็นจำนวนเต็ม
+                                                        console.log("Available Locks: " + availableLocks);
+
+                                                        // อัปเดต UI โดยแสดงจำนวนล็อคที่ว่าง
+                                                        document.getElementById("availableLocksDisplay").innerText = "ล็อคที่ว่าง: " + availableLocks;
+
+                                                    }
+                                                };
+                                                xhr.send("zone_name=" + encodeURIComponent(zoneName)); // ส่ง zone name
+                                            }
+                                        </script>
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -836,12 +885,11 @@ if (isset($_GET['category_id'])) {
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">ถัดไป</button>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Step 2 Modal -->
@@ -897,9 +945,39 @@ if (isset($_GET['category_id'])) {
                         <strong style="color: red;">*กรุณาเลือกประเภทสินค้าให้สอดคล้องกับโซน*</strong>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#step3Modal" data-bs-dismiss="modal" onclick="updateProgressBar(100, 'ขั้นตอนที่ 3')">ถัดไป</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#step1Modal" data-bs-dismiss="modal" onclick="updateProgressBar(33, 'ขั้นตอนที่ 1')">กลับ</button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#step3Modal" data-bs-dismiss="modal" onclick="updateProgressBar(100, 'ขั้นตอนที่ 3')">ถัดไป</button>
                     </div>
+                    <script>
+                        document.getElementById('category').addEventListener('change', function() {
+                            var categoryId = this.value;
+                            var subCategoryDropdown = document.getElementById('subcategory');
+
+                            // Clear the subcategory dropdown
+                            subCategoryDropdown.innerHTML = '<option value="#">กรุณาเลือกสินค้าที่จะขาย</option>';
+
+                            if (categoryId) {
+                                fetch(window.location.href + '?category_id=' + categoryId)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.length > 0) {
+                                            data.forEach(subcategory => {
+                                                var option = document.createElement('option');
+                                                option.value = subcategory.idsub_category;
+                                                option.text = subcategory.sub_cat_name;
+                                                subCategoryDropdown.add(option);
+                                            });
+                                        } else {
+                                            var option = document.createElement('option');
+                                            option.value = '';
+                                            option.text = 'No sub-categories found';
+                                            subCategoryDropdown.add(option);
+                                        }
+                                    })
+                                    .catch(error => console.error('Error fetching subcategories:', error));
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -925,6 +1003,11 @@ if (isset($_GET['category_id'])) {
                         <tbody>
                             <tr>
                                 <td class="col-sm-3">
+                                    <strong style="font-size: 14px; color: red;" id="availableLocksDisplay">ล็อคที่ว่าง: 0</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-3">
                                     <strong>ประเภท:</strong>
                                 </td>
                                 <td class="col-sm-9">
@@ -944,25 +1027,54 @@ if (isset($_GET['category_id'])) {
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <strong id="TotalPrice">
-                                        ราคาสุทธิ : ฿
-                                    </strong>
+                                    <strong id="TotalPrice">ราคาสุทธิ : ฿</strong>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <script>
+                        function updateTotalPrice() {
+                            var amount = parseInt(document.getElementById("amount").value) || 0; // แปลงค่าจำนวนล็อคเป็นจำนวนเต็ม
+                            var availableLocks = parseInt(document.getElementById("availableLocksDisplay").innerText.replace("ล็อคที่ว่าง: ", "")) || 0; // จำนวนล็อคที่ว่าง
+                            var totalPrice = 0;
 
+                            // ตรวจสอบว่า amount ไม่เกิน availableLocks
+                            if (amount > availableLocks) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'คำเตือน',
+                                    text: 'จำนวนล็อคที่กรอกเกินจำนวนที่ว่าง กรุณาลองอีกครั้ง',
+                                    confirmButtonText: 'ตกลง'
+                                });
+
+                                document.getElementById("amount").value = availableLocks; // ปรับค่ากลับไปที่จำนวนล็อคที่ว่าง
+                                amount = availableLocks; // ปรับ amount ให้เท่ากับ availableLocks
+                            }
+
+                            // คำนวณราคาสุทธิ
+                            var typeReserve = document.getElementById("typeReserve").value;
+                            if (typeReserve === "PerDay") {
+                                totalPrice = amount * pricePerDay;
+                            } else if (typeReserve === "PerMonth") {
+                                totalPrice = amount * pricePerMonth;
+                            }
+
+                            // แสดงราคาสุทธิ
+                            document.getElementById("TotalPrice").innerHTML = 'ราคาสุทธิ : ฿ ' + totalPrice.toFixed(2); // ใช้ toFixed(2) เพื่อแสดงราคาสองตำแหน่งทศนิยม
+                        }
+
+                        // เรียกใช้ updatePrices เมื่อต้องการอัปเดตจำนวนล็อค
+                        document.getElementById("zone").addEventListener("change", updatePrices);
+                    </script>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#step2Modal" data-bs-dismiss="modal" onclick="updateProgressBar(66, 'ขั้นตอนที่ 2')">กลับ</button>
                     <input class="btn btn-success" type="submit" name="submit" value="ยืนยันการจอง">
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-
     <!-- JavaScript -->
     <script>
         function updateProgressBar(value, stepText) {
@@ -973,86 +1085,6 @@ if (isset($_GET['category_id'])) {
     </script>
 </body>
 
-<script>
-    document.getElementById('category').addEventListener('change', function() {
-        var categoryId = this.value;
-        var subCategoryDropdown = document.getElementById('subcategory');
 
-        // Clear the subcategory dropdown
-        subCategoryDropdown.innerHTML = '<option value="#">กรุณาเลือกสินค้าที่จะขาย</option>';
-
-        if (categoryId) {
-            fetch(window.location.href + '?category_id=' + categoryId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        data.forEach(subcategory => {
-                            var option = document.createElement('option');
-                            option.value = subcategory.idsub_category;
-                            option.text = subcategory.sub_cat_name;
-                            subCategoryDropdown.add(option);
-                        });
-                    } else {
-                        var option = document.createElement('option');
-                        option.value = '';
-                        option.text = 'No sub-categories found';
-                        subCategoryDropdown.add(option);
-                    }
-                })
-                .catch(error => console.error('Error fetching subcategories:', error));
-        }
-    });
-</script>
-<script>
-    var pricePerDay = 0;
-    var pricePerMonth = 0;
-
-    function updatePrices() {
-        var zoneId = document.getElementById("zone").value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var prices = JSON.parse(xhr.responseText);
-                pricePerDay = prices.pricePerDate;
-                pricePerMonth = prices.pricePerMonth;
-                document.getElementById("priceDisplay").innerHTML =
-                    'ราคาต่อวัน: ' + pricePerDay + '฿ ราคาต่อเดือน: ' + pricePerMonth + '฿';
-                updateTotalPrice(); // Update total price whenever prices are updated
-            }
-        };
-        xhr.send("zone_id=" + zoneId);
-    }
-
-    function updateTotalPrice() {
-        var amount = document.getElementById("amount").value;
-        var typeReserve = document.getElementById("typeReserve").value;
-        var totalPrice = 0;
-
-        if (typeReserve === "PerDay") {
-            totalPrice = amount * pricePerDay;
-        } else if (typeReserve === "PerMonth") {
-            totalPrice = amount * pricePerMonth;
-        }
-
-        document.getElementById("TotalPrice").innerHTML = 'ราคาสุทธิ : ' + totalPrice + '฿';
-    }
-
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('.question-icon'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            html: true
-        });
-    });
-
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('.zone_detail'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            html: true
-        });
-    });
-</script>
 
 </html>
