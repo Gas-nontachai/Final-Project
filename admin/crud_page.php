@@ -103,7 +103,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
     <!-- Display -->
     <div class="container mt-4 bgcolor py-4 rounded">
-        <div class="">
+        <div class="d-flex justify-content-around">
             <a href="#" data-bs-toggle="modal" data-bs-target="#uniqueImageModal">
                 <i class="bi bi-map"></i>คลิ๊กที่นี่เพื่อเปิดแผนผังตลาด
             </a> <a href="#" data-bs-toggle="modal" data-bs-target="#changeMapsModal">

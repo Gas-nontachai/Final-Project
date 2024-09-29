@@ -84,6 +84,8 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../asset/css/font.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
@@ -122,12 +124,14 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                 </div>
                 <div class="mt-2">
                     <?php
-                    $sql = "SELECT * FROM category";
+                    $sql = "SELECT id_category, cat_name, zone_name,zone_detail
+                            FROM category AS C
+                            LEFT JOIN zone_detail AS Z ON C.zone_allow = Z.zone_id";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         echo "<table class='table table-striped'>";
-                        echo "<thead><tr><th>หมวดหมู่</th><th>หมวดหมู่ย่อย</th><th>การกระทำ</th></tr></thead>";
+                        echo "<thead><tr><th>หมวดหมู่</th><th>หมวดหมู่ย่อย</th><th>โซนที่ใช้งาน</th><th>การกระทำ</th></tr></thead>";
                         echo "<tbody>";
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr class='category-item' data-category-id='" . $row["id_category"] . "'>";
@@ -154,15 +158,17 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
                             $subcategories_str = implode(',', $subcategories);
                             echo "</td>";
+                            echo "<td><strong>" . $row["zone_name"] . "(" . $row["zone_detail"] . ")</strong></td>";
                             echo "<td>";
                             echo "<button class='btn btn-sm mx-2 btn-warning edit-btn' 
-                        type='button' 
-                        data-bs-toggle='modal' 
-                        data-bs-target='#EditModal' 
-                        data-bs-id='" . $id_category . "' 
-                        data-bs-cat_name='" . $cat_name . "'
-                        data-bs-sub_cat_name='" . $subcategories_str . "'>แก้ไข</button>";
-
+                            type='button' 
+                            data-bs-toggle='modal' 
+                            data-bs-target='#EditModal' 
+                            data-bs-id='" . htmlspecialchars($id_category) . "' 
+                            data-bs-cat_name='" . htmlspecialchars($cat_name) . "' 
+                            data-bs-sub_cat_name='" . htmlspecialchars($subcategories_str) . "'>
+                            แก้ไข
+                      </button>";
                             echo "<a href='#' class='btn btn-sm btn-danger' onclick='confirmDeleteCat(" . $id_category . ", \"" . $cat_name . "\"); return false;'>ลบ</a>";
                             echo "</td>";
                             echo "</tr>";
@@ -233,11 +239,12 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     <form action="./add_cat.php" method="post">
                         <div class="mb-3 row">
                             <label for="category" class="col-sm-3 col-form-label">
-                                <strong>Category:</strong>
+                                <strong>ประเภทหลัก:</strong>
                             </label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="category" id="category" required>
-                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
+                                <input type="text" class="form-control" name="category" id="category" required oninput="checkRequired(this)">
+                                <span class="text-danger req" style="font-size: 14px; display:none;" id="reqCategory">*จำเป็น</span>
+                                <span style="color: red;">*จำเป็น</span> <!-- Added requirement text -->
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -246,19 +253,50 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                 <p>ตัวอย่างการกรอก : *ของหวาน,ของคาว*</p>
                             </label>
                             <div class="col-sm-9">
-                                <textarea style="height: 200px;" class="form-control" type="text" name="sub_category" id="sub_category" required></textarea>
-                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
+                                <textarea style="height: 200px;" class="form-control" type="text" name="sub_category" id="sub_category" required oninput="checkRequired(this)"></textarea>
+                                <span class="text-danger req" style="font-size: 14px; display:none;" id="reqSubCategory">*จำเป็น</span>
+                                <span style="color: red;">*จำเป็น</span> <!-- Added requirement text -->
                             </div>
                         </div>
+                        <div class="mb-3 row">
+                            <label for="zone" class="col-sm-3 col-form-label">
+                                <strong>โซนที่ใช้ได้:</strong>
+                            </label>
+                            <div class="col-sm-9">
+                                <select name="zone" id="zone" class="form-select" required>
+                                    <option value="#">กรุณาเลือกโซน</option>
+                                    <?php
+                                    // Correct SQL query to fetch zone details
+                                    $sql = "SELECT z.zone_id, z.zone_name, z.zone_detail FROM zone_detail z ORDER BY z.zone_name;";
 
+                                    $result = $conn->query($sql);
+
+                                    // Check if there are any results
+                                    if ($result->num_rows > 0) {
+                                        // Loop through each zone and create an option
+                                        while ($row = $result->fetch_assoc()) {
+                                            // Create the option element
+                                            echo '<option value="' . htmlspecialchars($row['zone_id']) . '">'
+                                                . htmlspecialchars($row['zone_name']) . ' (' . htmlspecialchars($row['zone_detail']) . ')'
+                                                . '</option>';
+                                        }
+                                    } else {
+                                        // If no zones are found, show a default option
+                                        echo '<option value="">ไม่มีโซน</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <span style="color: red;">*จำเป็น</span> <!-- Added requirement text -->
+
+
+                            </div>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                     <input class="btn btn-success" type="submit" value="เพิ่มประเภทสินค้า">
-
                 </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -291,7 +329,7 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                                     } else {
                                         echo '<option value="">ยังไม่มีการสร้างระเภทสินค้า</option>';
                                     }
-                                    $conn->close();
+
                                     ?>
                                 </select>
                             </div>
@@ -329,19 +367,49 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
                     </div>
                     <div class="modal-body">
                         <h1>แก้ไข ประเภทหลัก และ ประเภทย่อย</h1>
-                        <input type="hidden" name="cat_id" id="zone_id">
+                        <input type="hidden" name="cat_id" id="cat_id">
                         <div class="mb-3 row">
-                            <label for="zone_name" class="col-sm-3 col-form-label"><strong>ประเภทหลัก:</strong></label>
+                            <label for="cat_name_data" class="col-sm-3 col-form-label"><strong>ประเภทหลัก:</strong></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="cat_name" id="zone_name" required>
+                                <input type="text" class="form-control" name="cat_name" id="cat_name_data" required>
+                                <span style="color: red;">*จำเป็น</span> <!-- Added requirement text -->
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>ประเภทย่อย (แยกคำด้วย,):</strong></label>
+                            <label for="zone_detail" class="col-sm-3 col-form-label"><strong>ประเภทย่อย (แยกคำด้วย ,):</strong></label>
                             <p>ตัวอย่างการกรอก : *ของหวาน,ของคาว*</p>
                             <div class="col-sm-9">
-                                <textarea style="height: 200px;" class="form-control" type="text" name="sub_cat_name" id="zone_detail" required></textarea>
-                                <span class="text-danger req" style="font-size: 14px;" id="reqZoneName">*จำเป็น</span>
+                                <textarea style="height: 200px;" class="form-control" name="sub_cat_name" id="zone_detail" required></textarea>
+                                <span style="color: red;">*จำเป็น</span> <!-- Added requirement text -->
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="zone" class="col-sm-3 col-form-label"><strong>โซนที่ใช้ได้:</strong></label>
+                            <div class="col-sm-9">
+                                <select name="zone" id="zone" class="form-select" required>
+                                    <option value="#">กรุณาเลือกโซน</option>
+                                    <?php
+                                    // Correct SQL query to fetch zone details
+                                    $sql = "SELECT z.zone_id, z.zone_name, z.zone_detail FROM zone_detail z ORDER BY z.zone_name;";
+
+                                    $result = $conn->query($sql);
+
+                                    // Check if there are any results
+                                    if ($result->num_rows > 0) {
+                                        // Loop through each zone and create an option
+                                        while ($row = $result->fetch_assoc()) {
+                                            // Create the option element
+                                            echo '<option value="' . htmlspecialchars($row['zone_id']) . '">'
+                                                . htmlspecialchars($row['zone_name']) . ' (' . htmlspecialchars($row['zone_detail']) . ')'
+                                                . '</option>';
+                                        }
+                                    } else {
+                                        // If no zones are found, show a default option
+                                        echo '<option value="">ไม่มีโซน</option>';
+                                    }
+                                    ?>
+                                </select>
+                                <span style="color: red;">*จำเป็น</span> <!-- Added requirement text -->
                             </div>
                         </div>
                     </div>
@@ -354,38 +422,29 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var editButtons = document.querySelectorAll('.edit-btn');
-
-            editButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var catId = this.getAttribute('data-bs-id');
-                    var catName = this.getAttribute('data-bs-cat_name');
-                    var subCatName = this.getAttribute('data-bs-sub_cat_name');
-
-                    document.getElementById('zone_id').value = catId;
-                    document.getElementById('zone_name').value = catName;
-                    document.getElementById('zone_detail').value = subCatName;
-                });
-            });
-        });
-    </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var editButtons = document.querySelectorAll('.edit-btn');
+        var editButtons = document.querySelectorAll('.edit-btn');
 
-            editButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var catId = this.getAttribute('data-bs-id');
-                    var catName = this.getAttribute('data-bs-cat_name');
-                    var subCatName = this.getAttribute('data-bs-sub_cat_name');
+        editButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var catId = this.getAttribute('data-bs-id');
+                var catName = this.getAttribute('data-bs-cat_name');
+                var subCatName = this.getAttribute('data-bs-sub_cat_name');
 
-                    document.getElementById('zone_id').value = catId;
-                    document.getElementById('zone_name').value = catName;
-                    document.getElementById('zone_detail').value = subCatName;
-                });
+                // Log the values to the console
+                console.log("catId:", catId);
+                console.log("catName:", catName);
+                console.log("subCatName:", subCatName);
+
+                // Set the old values in the input fields
+                document.getElementById('cat_id').value = catId; // Hidden field for category ID
+                document.getElementById('cat_name_data').value = catName; // Main category name
+                document.getElementById('zone_detail').value = subCatName; // Subcategory names (textarea)
+
+                // Show the modal
+                var editModal = new bootstrap.Modal(document.getElementById('EditModal'));
+                editModal.show();
             });
         });
     </script>
