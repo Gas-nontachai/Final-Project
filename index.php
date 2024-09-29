@@ -77,7 +77,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="index.php">
                             หน้าหลัก
-
                         </a>
                     </li>
                     <li class="nav-item">
@@ -106,42 +105,42 @@
     <!-- Image Slider (Hero Section) -->
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="./asset/img/img.soisin1.jpg" class="d-block w-100" alt="..." style="height: 40rem;">
-                <div class="carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded">
-                    <h5>ภาพบรรยากาศภายในงาน</h5>
-                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนร้านอาหาร">ดูเพิ่มเติม</button>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="./asset/img/img.soisin2.jpg" class="d-block w-100" alt="..." style="height: 40rem;">
-                <div class="carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded">
-                    <h5>ภาพบรรยากาศภายในงาน</h5>
-                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนร้านอาหาร">ดูเพิ่มเติม</button>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="./asset/img/img.soisin3.jpg" class="d-block w-100" alt="..." style="height: 40rem;">
-                <div class="carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded">
-                    <h5>ภาพบรรยากาศภายในงาน</h5>
-                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนร้านอาหาร">ดูเพิ่มเติม</button>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="./asset/img/img.soisin5.jpg" class="d-block w-100" alt="..." style="height: 40rem;">
-                <div class="carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded">
-                    <h5>ภาพบรรยากาศภายในงาน</h5>
-                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนร้านอาหาร">ดูเพิ่มเติม</button>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="./asset/img/img.soisin6.jpg" class="d-block w-100" alt="..." style="height: 40rem;">
-                <div class="carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded">
-                    <h5>ภาพบรรยากาศภายในงาน</h5>
-                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนร้านอาหาร">ดูเพิ่มเติม</button>
-                </div>
-            </div>
+            <?php
+            require("./condb.php");
+
+            // Array to hold banner ids
+            $bannerIds = [1, 2, 3, 4, 5, 6];
+            $isActive = true; // For the first item
+
+            foreach ($bannerIds as $id) {
+                // Fetch the current banner image from the database
+                $sql = "SELECT file_name FROM banners WHERE id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                $bannerImage = isset($row['file_name']) ? $row['file_name'] : 'default_map.jpg'; // Fallback image if none found
+
+                // Set active class for the first item
+                $activeClass = $isActive ? 'active' : '';
+                $isActive = false; // Only the first one should be active
+
+                // Carousel item
+                echo "
+                <div class='carousel-item $activeClass'>
+                    <img src='./asset/img/banner/$bannerImage' class='d-block w-100' alt='Banner $id' style='height: 40rem;'>
+                    <div class='carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded'>
+                        <h5>ภาพบรรยากาศภายในงาน</h5>
+                        <button class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#zoneModal' data-zone='โซนร้านอาหาร'>ดูเพิ่มเติม</button>
+                    </div>
+                </div>";
+            }
+
+            $stmt->close();
+            ?>
         </div>
+
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -156,23 +155,34 @@
     <div class="container recommended-section my-5">
         <h2 class="text-center">โซนแนะนำ</h2>
         <div class="row">
-            <div class="col-md-4 text-center">
-                <img src="./asset/img/img.soisin7.jpg" style="height: 15rem;" alt="โซนอาหาร">
-                <h3>โซนอาหาร</h3>
-                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนอาหาร">ดูเพิ่มเติม</button>
-            </div>
-            <div class="col-md-4 text-center">
-                <img src="./asset/img/img.soisin5.jpg" style="height: 15rem;" alt="โซนเดินเล่น">
-                <h3>โซนเดินเล่น</h3>
-                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนเดินเล่น">ดูเพิ่มเติม</button>
-            </div>
-            <div class="col-md-4 text-center">
-                <img src="./asset/img/img.soisin4.jpg" style="height: 15rem;" alt="โซนเดินเล่น">
-                <h3>โซนวาดเขียน</h3>
-                <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#zoneModal" data-zone="โซนวาดเขียน">ดูเพิ่มเติม</button>
-            </div>
+            <?php
+            $zoneRecommendIds = [7, 8, 9];
+            $arrayZoneNames = ['โซนอาหาร', 'โซนเดินเล่น', 'โซนวาดเขียน']; // Correctly formatted array
+
+            // Fetch zone images in a similar way
+            foreach ($zoneRecommendIds as $index => $id) { // Use $index to access zone names
+                $sql = "SELECT file_name FROM banners WHERE id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                $zoneImage = isset($row['file_name']) ? $row['file_name'] : 'default_map.jpg'; // Fallback image if none found
+
+                echo "
+            <div class='col-md-4 text-center'>
+                <img src='./asset/img/banner/$zoneImage' class='d-block w-100' alt='Zone Image $id' style='height: 15rem;'>
+                <h3>{$arrayZoneNames[$index]}</h3> <!-- Use the index to fetch the zone name -->
+                <button class='btn btn-outline-dark' data-bs-toggle='modal' data-bs-target='#zoneModal' data-zone='{$arrayZoneNames[$index]}'>ดูเพิ่มเติม</button>
+            </div>";
+            }
+
+            // Close the statement after usage
+            $stmt->close();
+            ?>
         </div>
     </div>
+
     <!-- contact us Modal -->
     <div class="modal fade" id="contactUsModalUnique" tabindex="-1" aria-labelledby="contactUsModalLabelUnique" aria-hidden="true">
         <div class="modal-dialog">

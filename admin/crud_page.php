@@ -103,11 +103,14 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
 
     <!-- Display -->
     <div class="container mt-4 bgcolor py-4 rounded">
-        <div>
+        <div class="">
             <a href="#" data-bs-toggle="modal" data-bs-target="#uniqueImageModal">
                 <i class="bi bi-map"></i>คลิ๊กที่นี่เพื่อเปิดแผนผังตลาด
             </a> <a href="#" data-bs-toggle="modal" data-bs-target="#changeMapsModal">
                 <i class="bi bi-geo-alt"></i> เปลี่ยนรูปแผนผังตลาด
+            </a>
+            </a> <a href="#" data-bs-toggle="modal" data-bs-target="#changeBannerModal">
+                <i class="bi bi-paint-bucket"></i> เปลี่ยนรูปหน้าเว็บตลาด
             </a>
         </div>
         <div class="container">
@@ -489,6 +492,109 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
             </div>
         </div>
     </div>
+    <!-- Change Banner Modal -->
+    <div class="modal fade" id="changeBannerModal" tabindex="-1" aria-labelledby="changeBannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeBannerModalLabel">เปลี่ยนรูปหน้าเว็บตลาด</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Carousel for Banners -->
+                    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <?php
+                            require("../condb.php");
+
+                            // Array to hold banner ids
+                            $bannerIds = [1, 2, 3, 4, 5, 6];
+                            $isActive = true; // For the first item
+
+                            foreach ($bannerIds as $id) {
+                                // Fetch the current banner image from the database
+                                $sql = "SELECT file_name FROM banners WHERE id = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param("i", $id);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $row = $result->fetch_assoc();
+                                $bannerImage = isset($row['file_name']) ? $row['file_name'] : 'default_map.jpg'; // Fallback image if none found
+
+                                // Set active class for the first item
+                                $activeClass = $isActive ? 'active' : '';
+                                $isActive = false; // Only the first one should be active
+
+                                // Carousel item
+                                echo "
+                            <div class='carousel-item $activeClass'>
+                                <img src='../asset/img/banner/$bannerImage' class='d-block w-100' alt='Banner $id' style='height: 25rem;'>
+                                <div class='carousel-caption d-none d-md-block bg-dark p-4 bg-opacity-50 rounded'>
+                                    <h5>ภาพ $id</h5>
+                                    <form id='uploadForm$id' enctype='multipart/form-data' action='upload_banner.php?id=$id' method='POST' style='max-width: 300px; margin: auto;'>
+                                        <div class='mb-3'>
+                                            <label for='bannerImage$id' class='form-label'>เลือกรูปภาพ:</label>
+                                            <input type='file' class='form-control form-control-sm' id='bannerImage$id' name='bannerImage' accept='image/png, image/jpeg' required>
+                                        </div>
+                                        <button type='submit' class='btn btn-primary btn-sm w-100'>อัปโหลด</button>
+                                    </form>
+                                </div>
+                            </div>";
+                            }
+
+                            $stmt->close();
+                            ?>
+                        </div>
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+                    <!-- Recommended Zones Section -->
+                    <div class="container recommended-section my-5">
+                        <h2 class="text-center">โซนแนะนำ</h2>
+                        <div class="row">
+                            <?php
+                            $zoneRecommendIds = [7, 8, 9];
+                            // Fetch zone images in a similar way
+                            foreach ($zoneRecommendIds as $id) {
+                                $sql = "SELECT file_name FROM banners WHERE id = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param("i", $id);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $row = $result->fetch_assoc();
+                                $zoneImage = isset($row['file_name']) ? $row['file_name'] : 'default_map.jpg'; // Fallback image if none found
+
+                                echo "
+                            <div class='col-md-4 text-center'>
+                                <img src='../asset/img/banner/$zoneImage' class='d-block w-100' alt='Zone Image $id' style='height: 10rem;'>
+                                <form id='uploadFormZone$id' enctype='multipart/form-data' action='upload_banner.php?id=$id' method='POST' style='max-width: 300px; margin: auto;'>
+                                    <div class='mb-3'>
+                                        <label for='zoneImage$id' class='form-label'>เลือกรูปภาพ:</label>
+                                            <input type='file' class='form-control form-control-sm' id='bannerImage$id' name='bannerImage' accept='image/png, image/jpeg' required>
+                                    </div>
+                                    <button type='submit' class='btn btn-primary btn-sm w-100'>อัปโหลด</button>
+                                </form>
+                            </div>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('.question-icon'));
@@ -505,5 +611,6 @@ $fullname = $prefix . ' ' . $firstname . ' ' . $lastname;
         });
     });
 </script>
+
 
 </html>

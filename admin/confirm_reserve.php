@@ -552,10 +552,12 @@ if (isset($_GET['category_id'])) {
 
                                                                     <?php switch ($row["booking_status"]) {
                                                                         case 4:
-                                                                            echo " <td>
-                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                                                </td>";
+                                                                            echo "<td>
+                                                                                <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
+                                                                                <button class='btn btn-warning m-2' type='button' data-bs-toggle='modal' data-bs-target='#EditLockModal' data-id='" . $row["booking_id"] . "' data-name='" . $row["zone_name"] . "' data-amount='" . $row["booking_amount"] . "'>แก้ไขเลขล็อค</button>
+                                                                              </td>";
                                                                             break;
+
                                                                         case 5:
                                                                             echo " <td>
                                                                 <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
