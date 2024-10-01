@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2024 at 08:33 PM
+-- Generation Time: Oct 01, 2024 at 09:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -24,6 +24,32 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `banners`
+--
+
+CREATE TABLE `banners` (
+  `id` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `banners`
+--
+
+INSERT INTO `banners` (`id`, `file_name`) VALUES
+(1, 'img.market.jpg'),
+(2, 'img.market2.jpg'),
+(3, 'img.market3.jpg'),
+(4, 'img.soisin1.jpg'),
+(5, 'img.food.jpg'),
+(6, 'img.soisin4.jpg'),
+(7, 'maps.market.png.png'),
+(8, 'img.soisin7.jpg'),
+(9, 'img.soisin4.jpg');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `booked`
 --
 
@@ -33,7 +59,7 @@ CREATE TABLE `booked` (
   `member_id` int(6) UNSIGNED DEFAULT NULL COMMENT 'รหัสลูกค้า',
   `booking_amount` varchar(45) NOT NULL,
   `total_price` varchar(45) NOT NULL,
-  `product_type` int(11) NOT NULL,
+  `product_type` int(11) DEFAULT NULL,
   `sub_product_type` int(11) NOT NULL,
   `booking_status` int(3) UNSIGNED NOT NULL COMMENT 'สถานะการจอง',
   `booking_type` varchar(20) NOT NULL,
@@ -49,35 +75,35 @@ CREATE TABLE `booked` (
 --
 
 INSERT INTO `booked` (`id_booked`, `booking_id`, `member_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `booking_status`, `booking_type`, `zone_id`, `slip_img`, `booking_date`, `booked_lock_number`, `expiration_date`) VALUES
-(0000000001, 4, NULL, '1', '100', 4, 25, 6, '', 22, '', '2024-06-18 06:10:30', NULL, NULL),
-(0000000009, 7, 6, '2', '100', 4, 23, 4, '', 22, NULL, '2024-07-18 06:10:30', 'C1, C2', '2024-08-07 23:40:58'),
-(0000000013, 3, NULL, '1', '50', 3, 21, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1', '2024-08-07 23:40:58'),
-(0000000014, 5, NULL, '3', '150', 3, 22, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A2, A3, A4', '2024-08-07 23:40:58'),
-(0000000015, 6, 6, '1', '50', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A20', '2024-08-07 23:40:58'),
-(0000000016, 9, 6, '3', '150', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
-(0000000017, 10, 6, '1', '50', 6, 73, 4, '', 21, NULL, '2024-08-18 06:10:30', 'B1', '2024-08-07 23:59:58'),
-(0000000019, 11, 6, '3', '150', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1, A4, A6', '2024-08-07 23:59:58'),
-(0000000020, 12, 6, '3', '150', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
-(0000000021, 13, 6, '3', '150', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
-(0000000022, 14, 6, '5', '250', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A4, A7, A8', '2024-08-07 23:59:58'),
-(0000000023, 8, 6, '3', '3000', 6, 73, 4, '', 21, NULL, '2024-08-18 06:10:30', 'B1, B2, B3', '2024-07-07 23:18:23'),
-(0000000024, 15, 6, '2', '100', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1, A2', '2024-08-07 23:59:58'),
-(0000000026, 16, 6, '3', '150', 3, 20, 4, '', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
-(0000000027, 17, 6, '2', '2000', 3, 21, 4, '', 21, NULL, '2024-08-18 06:10:30', 'B1, B2', '2024-07-07 21:31:15'),
-(0000000028, 18, 6, '2', '80', 3, 20, 6, '', 28, 'slip_20240809_014836', '2024-08-18 06:10:30', NULL, NULL),
-(0000000029, 18, 6, '2', '80', 3, 20, 6, '', 28, 'slip_20240809_014836', '2024-08-18 06:10:30', NULL, NULL),
-(0000000030, 20, 6, '2', '80', 3, 125, 6, '', 33, 'slip_20240809_183925', '2024-08-18 06:10:30', NULL, NULL),
-(0000000031, 21, 6, '1', '40', 3, 125, 6, '', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
-(0000000032, 22, 6, '1', '40', 4, 85, 6, '', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
-(0000000033, 23, 6, '2', '80', 3, 125, 4, '', 33, NULL, '2024-08-18 06:10:30', 'A1, A2', '2024-08-07 23:59:58'),
-(0000000034, 24, 6, '1', '40', 3, 125, 4, '', 33, NULL, '2024-08-18 06:10:30', 'A1', '2024-08-08 23:59:58'),
-(0000000035, 25, 6, '1', '40', 3, 125, 4, '', 33, 'slip_20240809_215258', '2024-08-18 06:10:30', 'A1', '2024-08-08 23:59:58'),
-(0000000036, 26, 6, '2', '80', 3, 125, 4, '', 33, 'slip_20240809_215422_66b62d9e9080e.jpg', '2024-08-18 06:10:30', 'A1, A2', '2024-08-08 23:59:58'),
-(0000000037, 27, 6, '2', '80', 3, 125, 6, '', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
-(0000000038, 29, 6, '3', '120', 3, 125, 6, '', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
-(0000000039, 28, 6, '2', '80', 3, 125, 4, '', 33, 'slip_20240813_200906_66bb5af254f0f.jpg', '2024-08-18 06:10:30', 'A1, A2', '2024-08-13 23:59:58'),
-(0000000040, 30, 6, '1', '40', 3, 125, 4, '', 33, 'slip_20240818_200331_66c1f123a617c.jpg', '2024-08-18 06:10:30', 'A1', '2024-08-17 23:59:58'),
-(0000000041, 31, 6, '2', '80', 3, 130, 4, '', 33, 'slip_20240818_200740_66c1f21cab86e.jpg', '2024-08-18 06:10:30', 'A1', '2024-08-17 23:59:58'),
+(0000000001, 4, NULL, '1', '100', 4, 25, 6, 'PerDay', 22, '', '2024-06-18 06:10:30', NULL, NULL),
+(0000000009, 7, 6, '2', '100', 4, 23, 4, 'PerDay', 22, NULL, '2024-07-18 06:10:30', 'C1, C2', '2024-08-07 23:40:58'),
+(0000000013, 3, NULL, '1', '50', 3, 21, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1', '2024-08-07 23:40:58'),
+(0000000014, 5, NULL, '3', '150', 3, 22, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A2, A3, A4', '2024-08-07 23:40:58'),
+(0000000015, 6, 6, '1', '50', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A20', '2024-08-07 23:40:58'),
+(0000000016, 9, 6, '3', '150', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000017, 10, 6, '1', '50', 6, 73, 4, 'PerDay', 21, NULL, '2024-08-18 06:10:30', 'B1', '2024-08-07 23:59:58'),
+(0000000019, 11, 6, '3', '150', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1, A4, A6', '2024-08-07 23:59:58'),
+(0000000020, 12, 6, '3', '150', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000021, 13, 6, '3', '150', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000022, 14, 6, '5', '250', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A4, A7, A8', '2024-08-07 23:59:58'),
+(0000000023, 8, 6, '3', '3000', 6, 73, 4, 'PerDay', 21, NULL, '2024-08-18 06:10:30', 'B1, B2, B3', '2024-07-07 23:18:23'),
+(0000000024, 15, 6, '2', '100', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1, A2', '2024-08-07 23:59:58'),
+(0000000026, 16, 6, '3', '150', 3, 20, 4, 'PerDay', 16, NULL, '2024-08-18 06:10:30', 'A1, A2, A3', '2024-08-07 23:59:58'),
+(0000000027, 17, 6, '2', '2000', 3, 21, 4, 'PerDay', 21, NULL, '2024-08-18 06:10:30', 'B1, B2', '2024-07-07 21:31:15'),
+(0000000028, 18, 6, '2', '80', 3, 20, 6, 'PerDay', 28, 'slip_20240809_014836', '2024-08-18 06:10:30', NULL, NULL),
+(0000000029, 18, 6, '2', '80', 3, 20, 6, 'PerDay', 28, 'slip_20240809_014836', '2024-08-18 06:10:30', NULL, NULL),
+(0000000030, 20, 6, '2', '80', 3, 125, 6, 'PerDay', 33, 'slip_20240809_183925', '2024-08-18 06:10:30', NULL, NULL),
+(0000000031, 21, 6, '1', '40', 3, 125, 6, 'PerDay', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
+(0000000032, 22, 6, '1', '40', 4, 85, 6, 'PerDay', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
+(0000000033, 23, 6, '2', '80', 3, 125, 4, 'PerDay', 33, NULL, '2024-08-18 06:10:30', 'A1, A2', '2024-08-07 23:59:58'),
+(0000000034, 24, 6, '1', '40', 3, 125, 4, 'PerDay', 33, NULL, '2024-08-18 06:10:30', 'A1', '2024-08-08 23:59:58'),
+(0000000035, 25, 6, '1', '40', 3, 125, 4, 'PerDay', 33, 'slip_20240809_215258', '2024-08-18 06:10:30', 'A1', '2024-08-08 23:59:58'),
+(0000000036, 26, 6, '2', '80', 3, 125, 4, 'PerDay', 33, 'slip_20240809_215422_66b62d9e9080e.jpg', '2024-08-18 06:10:30', 'A1, A2', '2024-08-08 23:59:58'),
+(0000000037, 27, 6, '2', '80', 3, 125, 6, 'PerDay', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
+(0000000038, 29, 6, '3', '120', 3, 125, 6, 'PerDay', 33, NULL, '2024-08-18 06:10:30', NULL, NULL),
+(0000000039, 28, 6, '2', '80', 3, 125, 4, 'PerDay', 33, 'slip_20240813_200906_66bb5af254f0f.jpg', '2024-08-18 06:10:30', 'A1, A2', '2024-08-13 23:59:58'),
+(0000000040, 30, 6, '1', '40', 3, 125, 4, 'PerDay', 33, 'slip_20240818_200331_66c1f123a617c.jpg', '2024-08-18 06:10:30', 'A1', '2024-08-17 23:59:58'),
+(0000000041, 31, 6, '2', '80', 3, 130, 4, 'PerDay', 33, 'slip_20240818_200740_66c1f21cab86e.jpg', '2024-08-18 06:10:30', 'A1', '2024-08-17 23:59:58'),
 (0000000042, 32, 6, '2', '80', 4, 85, 8, 'PerDay', 33, 'slip_20240818_204610_66c1fb22ea87c.jpg', '2024-08-18 07:27:28', NULL, '2024-08-17 21:21:10'),
 (0000000043, 33, 6, '1', '40', 7, 95, 8, 'PerDay', 30, 'slip_20240818_213019_66c2057b13e64.jpg', '2024-08-18 07:32:48', NULL, NULL),
 (0000000044, 33, 6, '1', '40', 7, 95, 8, 'PerDay', 30, 'slip_20240818_213019_66c2057b13e64.jpg', '2024-08-18 07:35:36', NULL, '2024-08-17 21:32:48'),
@@ -200,6 +226,13 @@ CREATE TABLE `booking` (
   `expiration_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`booking_id`, `member_id`, `booking_status`, `booking_type`, `zone_id`, `booking_amount`, `total_price`, `product_type`, `sub_product_type`, `slip_img`, `book_lock_number`, `booking_date`, `expiration_date`) VALUES
+(0000000142, 000019, 4, 'PerDay', 038, 10, 400, 3, 227, 'slip_20240930_150535_66fa5bcfeeb79.png', 'A1, A2, A3, A4, A5, A6, A7, A8, A9, A10', '2024-09-30 15:05:22', '2024-09-30 23:59:58');
+
 -- --------------------------------------------------------
 
 --
@@ -238,19 +271,20 @@ INSERT INTO `booking_status` (`id`, `status`) VALUES
 
 CREATE TABLE `category` (
   `id_category` int(11) NOT NULL,
-  `cat_name` varchar(45) NOT NULL
+  `cat_name` varchar(45) NOT NULL,
+  `zone_allow` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `category`
 --
 
-INSERT INTO `category` (`id_category`, `cat_name`) VALUES
-(3, 'อาหาร'),
-(4, 'เครื่องดื่ม'),
-(6, 'เสื้อผ้าและแฟชั่น'),
-(7, 'จิปาถะ เบ็ดเตล็ด'),
-(8, 'เปิดท้ายของมือสอง');
+INSERT INTO `category` (`id_category`, `cat_name`, `zone_allow`) VALUES
+(3, 'อาหาร', 38),
+(4, 'เครื่องดื่ม', 38),
+(6, 'เสื้อผ้าและแฟชั่น', 29),
+(7, 'จิปาถะ เบ็ดเตล็ด', 30),
+(8, 'เปิดท้ายของมือสอง', 39);
 
 -- --------------------------------------------------------
 
@@ -321,16 +355,16 @@ INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `availabl
 (555, 'B19', 029, NULL, 0),
 (556, 'B20', 029, NULL, 0),
 (557, 'C1', 030, NULL, 0),
-(718, 'A1', 038, NULL, 0),
-(719, 'A2', 038, NULL, 0),
-(720, 'A3', 038, NULL, 0),
-(721, 'A4', 038, NULL, 0),
-(722, 'A5', 038, NULL, 0),
-(723, 'A6', 038, NULL, 0),
-(724, 'A7', 038, NULL, 0),
-(725, 'A8', 038, NULL, 0),
-(726, 'A9', 038, NULL, 0),
-(727, 'A10', 038, NULL, 0),
+(718, 'A1', 038, 0000000142, 1),
+(719, 'A2', 038, 0000000142, 1),
+(720, 'A3', 038, 0000000142, 1),
+(721, 'A4', 038, 0000000142, 1),
+(722, 'A5', 038, 0000000142, 1),
+(723, 'A6', 038, 0000000142, 1),
+(724, 'A7', 038, 0000000142, 1),
+(725, 'A8', 038, 0000000142, 1),
+(726, 'A9', 038, 0000000142, 1),
+(727, 'A10', 038, 0000000142, 1),
 (728, 'A11', 038, NULL, 0),
 (729, 'A12', 038, NULL, 0),
 (730, 'A13', 038, NULL, 0),
@@ -360,6 +394,24 @@ INSERT INTO `locks` (`id_locks`, `lock_name`, `zone_id`, `booking_id`, `availabl
 (787, 'C16', 030, NULL, 0),
 (788, 'C17', 030, NULL, 0),
 (789, 'C18', 030, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `market_maps`
+--
+
+CREATE TABLE `market_maps` (
+  `idmarket_maps` int(11) NOT NULL,
+  `map_image` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `market_maps`
+--
+
+INSERT INTO `market_maps` (`idmarket_maps`, `map_image`) VALUES
+(1, 'maps.img.1.jpg');
 
 -- --------------------------------------------------------
 
@@ -423,11 +475,11 @@ INSERT INTO `sub_category` (`idsub_category`, `id_category`, `sub_cat_name`) VAL
 (193, 8, 'อุปกรณ์อิเล็กทรอนิกส์'),
 (194, 8, 'สินค้าทำมือ'),
 (195, 8, '(Handmade)'),
-(222, 3, 'อาหารคาว'),
-(223, 3, 'อาหารหวาน'),
-(224, 3, 'อาหารทานเล่น'),
-(225, 3, 'อาหารเช้า'),
-(226, 3, 'อาหารจานด่วน');
+(227, 3, 'อาหารคาว'),
+(228, 3, 'อาหารหวาน'),
+(229, 3, 'อาหารทานเล่น'),
+(230, 3, 'อาหารเช้า'),
+(231, 3, 'อาหารจานด่วน');
 
 -- --------------------------------------------------------
 
@@ -455,16 +507,16 @@ CREATE TABLE `tbl_user` (
 --
 
 INSERT INTO `tbl_user` (`user_id`, `prefix`, `firstname`, `lastname`, `tel`, `email`, `username`, `password`, `userrole`, `shop_name`, `token`, `last_login`) VALUES
-(000005, 'นาย', 'แอดมิน', 'admin', '0011212312', 'admin@ex.com', 'admin', 'admin', 1, 'admin', 9999, '2024-09-28 01:32:17'),
+(000005, 'นาย', 'แอดมิน', 'admin', '0011212312', 'admin@ex.com', 'admin', 'admin', 1, 'admin', 9999, '2024-09-30 15:02:38'),
 (000006, 'นาย', 'User', 'Test', '0222222222', 'userTest@gmail.com', 'user', 'user', 0, 'UserShop', 40, '2024-09-12 09:28:49'),
 (000010, 'นาย', 'ทดสอบ', 'ระบบ', '0891247281', 'Test@gmail.com', 'Test', 'test8888', 0, 'TestShop', 80, '2024-08-24 17:02:28'),
 (000013, 'นางสาว', 'ทดสอบ', 'ระบบ', '0123453124', 'usertest@gmail.com', 'usertest', '1212312121a', 0, 'แก้ไขชื่อร้าน', 0, '2024-09-06 16:50:10'),
 (000014, 'นางสาว', 'ณัฐเนตร', 'พยัคฆ์เดช', '0945347566', '66010915510@msu.ac.th', 'Mix', 'nm060847', 0, 'mmiixx', 0, '2024-09-06 23:58:06'),
-(000015, 'นางสาว', 'Kan', 'Ok', '0902738970', 'kanokwan.pd@rmuti.ac.th', 'Pin', 'kanokwan13', 0, 'P', 80, '2024-09-27 17:23:06'),
+(000015, 'นางสาว', 'Kan', 'Ok', '0902738970', 'kanokwan.pd@rmuti.ac.th', 'Pin', 'kanokwan13', 0, 'P', 80, '2024-09-29 23:49:44'),
 (000016, 'นาย', 'นนทชัย', 'โพธิ์ศรี', '0881726738', 'GasUser@gmail.com', 'GasUser', 'nontachai01', 0, 'GasMOdernShop', 80, '2024-09-07 21:43:31'),
 (000017, 'นาย', 'จตุพล', 'สิงห์กระโจม', '064574845', 'Chatupon21396@gmail.com', 'Chatupon', '12345678aa', 0, 'Chatupon Shop', 1000, '2024-09-08 19:45:54'),
 (000018, 'นางสาว', 'พลอยด์', 'ตี้', '0648924402', 'ploitii6@gmail.com', 'Paolow_m', '0258', 0, 'ขายแมลงทอด', 7000, '2024-09-08 19:54:36'),
-(000019, 'นาย', 'นนทชัย', 'โพธิ์ศรี', '0818267489', 'nontachai@ex.com', 'nontachai', '1212312121a', 0, 'GGasShop', 120, '2024-09-27 17:47:49'),
+(000019, 'นาย', 'นนทชัย', 'โพธิ์ศรี', '0818267489', 'nontachai@ex.com', 'nontachai', '1212312121a', 0, 'GGasShop', 120, '2024-09-30 15:04:37'),
 (000020, 'นาย', 'Wwwut', 'Wong', '0933505147', 'Wutthichai@gmail.com', 'Hee', 'bestkung', 0, 'Foodfit', 0, '2024-09-19 02:42:24'),
 (000021, 'นางสาว', 'ธนาภรณ์', 'ผิวขาว', '0984299926', 'tanaphorn.che@gmail.com', 'Kaew', 'kaew180534', 0, 'KT shop', 0, '2024-09-10 07:47:21'),
 (000022, 'นางสาว', 'ปาริชาติ', 'โพธิ์ศรี', '0647765475', 'giftja2547@gmail.com', 'Gifttt', '12345678gg', 0, 'Pividger', 0, '2024-09-10 08:24:09'),
@@ -522,6 +574,12 @@ INSERT INTO `zone_detail` (`zone_id`, `zone_name`, `zone_detail`, `pricePerDate`
 --
 
 --
+-- Indexes for table `banners`
+--
+ALTER TABLE `banners`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `booked`
 --
 ALTER TABLE `booked`
@@ -572,6 +630,12 @@ ALTER TABLE `locks`
   ADD KEY `locks_ibfk_3_idx` (`lock_name`);
 
 --
+-- Indexes for table `market_maps`
+--
+ALTER TABLE `market_maps`
+  ADD PRIMARY KEY (`idmarket_maps`,`map_image`);
+
+--
 -- Indexes for table `operating_hours`
 --
 ALTER TABLE `operating_hours`
@@ -608,6 +672,12 @@ ALTER TABLE `zone_detail`
 --
 
 --
+-- AUTO_INCREMENT for table `banners`
+--
+ALTER TABLE `banners`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `booked`
 --
 ALTER TABLE `booked`
@@ -617,7 +687,7 @@ ALTER TABLE `booked`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=142;
+  MODIFY `booking_id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT COMMENT 'รหัสการจอง', AUTO_INCREMENT=143;
 
 --
 -- AUTO_INCREMENT for table `booking_status`
@@ -644,6 +714,12 @@ ALTER TABLE `locks`
   MODIFY `id_locks` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ไอดีล็อค', AUTO_INCREMENT=792;
 
 --
+-- AUTO_INCREMENT for table `market_maps`
+--
+ALTER TABLE `market_maps`
+  MODIFY `idmarket_maps` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `operating_hours`
 --
 ALTER TABLE `operating_hours`
@@ -653,7 +729,7 @@ ALTER TABLE `operating_hours`
 -- AUTO_INCREMENT for table `sub_category`
 --
 ALTER TABLE `sub_category`
-  MODIFY `idsub_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
+  MODIFY `idsub_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
@@ -675,7 +751,7 @@ ALTER TABLE `zone_detail`
 -- Constraints for table `booked`
 --
 ALTER TABLE `booked`
-  ADD CONSTRAINT `fk_cat` FOREIGN KEY (`product_type`) REFERENCES `category` (`id_category`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_cat` FOREIGN KEY (`product_type`) REFERENCES `category` (`id_category`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `fk_status` FOREIGN KEY (`booking_status`) REFERENCES `booking_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_user` FOREIGN KEY (`member_id`) REFERENCES `tbl_user` (`user_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
