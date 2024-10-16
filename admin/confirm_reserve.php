@@ -554,7 +554,13 @@ if (isset($_GET['category_id'])) {
                                                                         case 4:
                                                                             echo "<td>
                                                                                 <button class='btn btn-primary m-2' type='button' data-bs-toggle='modal' data-bs-target='#viewBookingModal' data-id='" . $row["booking_id"] . "'>ดู</button>
-                                                                                <button class='btn btn-warning m-2' type='button' data-bs-toggle='modal' data-bs-target='#EditLockModal' data-id='" . $row["booking_id"] . "' data-name='" . $row["zone_name"] . "' data-amount='" . $row["booking_amount"] . "'>แก้ไขเลขล็อค</button>
+                                                                                <button class='btn btn-warning m-2' type='button' 
+                                                                                data-bs-toggle='modal' 
+                                                                                data-bs-target='#EditLockModal' 
+                                                                                data-editid='" . $row["booking_id"] . "' 
+                                                                                data-editname='" . $row["zone_name"] . "' 
+                                                                                data-editamount='" . $row["booking_amount"] . "'>
+                                                                                แก้ไขเลขล็อค</button>
                                                                               </td>";
                                                                             break;
 
@@ -884,7 +890,6 @@ if (isset($_GET['category_id'])) {
                                                 echo '<option value="">ไม่มีข้อมูล</option>';
                                             }
 
-                                            $conn->close();
                                             ?>
                                         </select>
                                     </div>
@@ -984,6 +989,139 @@ if (isset($_GET['category_id'])) {
                 </style>
 
             </div>
+
+            <!-- EDIT Modal -->
+            <div class="modal fade" id="EditLockModal" tabindex="-1" aria-labelledby="EditLockModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="EditLockModalLabel"><strong>แก้ไขเลขล็อค</strong></h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <strong>
+                                    <label for="editzoneName" class="form-label">โซนที่ทำการจอง :
+                                        <span id="editzoneName" name="editzoneName" style="color: red;">
+                                        </span>
+                                    </label>
+                                </strong>
+                                <br>
+                                <strong>
+                                    <label for="editbookingAmount" class="form-label">จำนวนการจอง:
+                                        <span id="editbookingAmount" name="editbookingAmount" style="color: red;">
+                                        </span>
+                                    </label>
+                                </strong>
+                            </div>
+                            <div class="mb-3">
+                            </div>
+                            <form id="editupdateForm" method="POST" action="EDIT_locks.php">
+                                <input type="hidden" id="editbookingId" name="editbookingId" value="">
+                                <input type="hidden" id="editzoneId" name="editzoneId" value="">
+                                <div class="mb-3">
+                                    <label for="editzoneSelect" class="form-label">เลือกโซน</label>
+                                    <select class="form-select" id="editzoneSelect" name="editzoneSelect">
+                                        <option value="" selected>กรุณาเลือกโซน</option>
+                                        <?php
+                                        $sql = "SELECT * FROM zone_detail ORDER BY zone_name ";
+                                        $result = $conn->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo '<option value="' . htmlspecialchars($row['zone_id']) . '">' . htmlspecialchars($row['zone_name']) . ' (' . htmlspecialchars($row['zone_detail']) . ')</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="">ไม่มีข้อมูล</option>';
+                                        }
+
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="display_edit_locks">
+                                    <!-- ข้อมูลจะถูกแสดงที่นี่ -->
+                                </div>
+                                <button id="editupdateButton" type="submit" class="btn update-btn btn-primary mt-3" disabled>อัพเดตข้อมูล</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function() {
+                        var editmaxLocks = 0; // ตัวแปรสำหรับเก็บค่าจำนวนล็อคสูงสุดที่สามารถเลือกได้
+
+                        $('#editzoneSelect').on('change', function() {
+                            var editselectedZone = $(this).val();
+
+                            if (editselectedZone) {
+                                $.ajax({
+                                    url: 'edit_fetch_locks.php',
+                                    method: 'POST',
+                                    data: {
+                                        zone_id: editselectedZone
+                                    },
+                                    success: function(response) {
+                                        $('.display_edit_locks').html(response);
+                                    },
+                                    error: function() {
+                                        $('.display_edit_locks').html('<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>');
+                                    }
+                                });
+                            } else {
+                                $('.display_edit_locks').html('กรุณาเลือกโซน');
+                            }
+                        });
+
+                        $(document).on('click', '.editlock-btn', function() {
+                            var editcheckbox = $(this).siblings('.editlock-checkbox');
+                            var editisChecked = editcheckbox.prop('checked');
+                            var editselectedCount = $('.editlock-checkbox:checked').length; // นับจำนวนล็อคที่ถูกเลือก
+                            var editupdateButton = document.getElementById('editupdateButton');
+
+                            if (!editisChecked && editselectedCount >= editmaxLocks) {
+                                alert('ไม่สามารถเลือกล็อคได้เกิน ' + editmaxLocks + ' ล็อค');
+                                return;
+                            }
+
+                            editcheckbox.prop('checked', !editisChecked);
+                            $(this).toggleClass('active', !editisChecked);
+
+                            // อัปเดตสถานะของปุ่มล็อคเมื่อเลือกครบตามจำนวน
+                            editselectedCount = $('.editlock-checkbox:checked').length; // อัปเดตจำนวนการเลือกล็อคอีกครั้ง
+                            if (editselectedCount >= editmaxLocks) {
+                                $('.editlock-btn').not('.active').prop('disabled', true); // ปิดการใช้งานปุ่มที่ยังไม่ถูกเลือก
+                                editupdateButton.disabled = false;
+                            } else {
+                                $('.editlock-btn').prop('disabled', false); // เปิดการใช้งานปุ่มทั้งหมดหากยังไม่ครบ
+                                editupdateButton.disabled = true;
+                            }
+                        });
+
+                        // อัปเดตข้อมูลใน modal และกำหนดค่าจำนวนล็อคสูงสุด
+                        $('#EditLockModal').on('show.bs.modal', function(event) {
+                            var editbutton = $(event.relatedTarget); // ปุ่มที่ถูกกดเพื่อเปิด modal
+                            var editbookingId = editbutton.data('editid'); // ดึงข้อมูลจาก data-* attributes
+                            var editzoneName = editbutton.data('editname'); // ดึงข้อมูลจาก data-* attributes
+                            var editbookingAmount = editbutton.data('editamount'); // ดึงข้อมูลจาก data-* attributes
+
+                            editmaxLocks = parseInt(editbookingAmount); // กำหนดจำนวนล็อคสูงสุดตาม bookingAmount
+
+                            // อัปเดตข้อมูลใน Modal
+                            var modal = $(this);
+                            modal.find('#editbookingId').val(editbookingId);
+                            modal.find('#editzoneId').val(editzoneName); // อัปเดต zoneId ด้วยข้อมูลโซนที่เลือก
+                            modal.find('#editzoneName').text(editzoneName); // แสดงชื่อโซนใน span
+                            modal.find('#editbookingAmount').text(editbookingAmount); // แสดงจำนวนการจองใน span
+
+                            // รีเซ็ตปุ่มล็อคทั้งหมดเมื่อเปิด modal
+                            $('.editlock-btn').prop('disabled', false).removeClass('active');
+                            $('.editlock-checkbox').prop('checked', false);
+                        });
+                    });
+                </script>
+            </div>
+
+
             <div class="modal fade" id="uniqueImageModal" tabindex="-1" aria-labelledby="uniqueImageModalLabel" aria-hidden="true">
                 <div class="modal-dialog unique-modal-dialog modal-dialog-centered">
                     <div class="modal-content unique-modal-content">
